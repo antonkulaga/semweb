@@ -1,0 +1,120 @@
+import sbt._
+import sbt.Keys._
+import bintray.Plugin.bintraySettings
+import bintray.Keys._
+import Def.ScopedKey
+import scala.scalajs.sbtplugin.ScalaJSPlugin._
+import com.typesafe.sbt.packager.universal.UniversalKeys
+import play.Keys._
+
+object Build extends sbt.Build{
+
+ val bintrayPublishIvyStyle = settingKey[Boolean]("=== !publishMavenStyle")
+
+ val scalajsOutputDir = Def.settingKey[File]("directory for javascript files output by scalajs")
+
+
+  lazy val publishSettings = Seq(
+    repository in bintray := "scalax-releases",
+    bintrayOrganization in bintray := Some("scalax"),
+    licenses += ("MPL-2.0", url("http://opensource.org/licenses/MPL-2.0")),
+    Def.derive(bintrayPublishIvyStyle := !publishMavenStyle.value)
+  )
+
+ 
+
+val rdfDeps = Seq(
+//    "com.bigdata" % "bigdata" % "1.3.0",
+    "org.openrdf.sesame" % "sesame-model" % "2.7.10"
+  )
+
+
+  /**
+   * For parts of the project that we will not publish
+   */
+  lazy val noPublishSettings = Seq(
+    publish := (),
+    publishLocal := (),
+    publishArtifact := false
+  )
+
+
+  val sharedSettings = Seq(
+    organization := "org.scalax",
+    name := "semweb",
+    scalaVersion := "2.10.4"
+
+  )
+}
+
+
+
+/**
+ * this files is intended to build the main project
+ * it contains links to all dependencies that are needed
+ * */
+object SemWebBuild extends Build with UniversalKeys
+{
+
+
+
+val scalaVer= "2.10.4"
+val semWebVersion = "0.1"
+
+val scalajsResolver: URLRepository = Resolver.url("scala-js-releases",
+url("http://dl.bintray.com/content/scala-js/scala-js-releases"))(
+Resolver.ivyStylePatterns)
+
+lazy val sharedSettings = Seq(
+   name := "semweb",
+    organization := "org.scalax",
+    scalaVersion:= scalaVer,
+    scalacOptions ++= Seq( "-feature", "-language:_" )
+) ++ net.virtualvoid.sbt.graph.Plugin.graphSettings ++ bintraySettings ++ publishSettings
+
+
+  lazy val semWebSettings = sharedSettings ++ Seq(
+    version := semWebVersion
+  )
+
+  /**
+   * Project that deals with semanticweb stuff
+   */
+  lazy val semWeb = Project(
+    id   = "semweb",
+    base = file(".")
+  ) settings (this.semWebSettings: _*) settings (     
+unmanagedSourceDirectories in Compile += baseDirectory.value / "shared" / "src" / "main" / "scala" ,
+unmanagedSourceDirectories in Test += baseDirectory.value / "shared" / "src" / "test" / "scala" 
+)
+
+
+ lazy val semWebJSSettings =  scalaJSSettings ++ sharedSettings ++ Seq(
+    resolvers +=  scalajsResolver,
+    version := semWebVersion+"-JS"
+  )
+
+  /**
+   * Project that deals with semanticweb stuff
+   */
+  lazy val semWebJS = Project(
+    id   = "semweb",
+    base = file("js")
+  ) settings (this.semWebJSSettings: _*) settings (
+unmanagedSourceDirectories in Compile += baseDirectory.value / ".." / "shared" / "src" / "main" / "scala" ,
+unmanagedSourceDirectories in Test += baseDirectory.value / ".." / "shared" / "src" / "test" / "scala"
+)
+
+  
+  /**
+   * Project that deals with semanticweb stuff
+   */
+  lazy val semWebSesame = Project(
+    id   = "semweb-sesame",
+    base = file("sesame")
+  ) dependsOn(semWeb)
+
+  override def rootProject = Some(semWeb)
+
+
+}
