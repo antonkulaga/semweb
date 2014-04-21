@@ -9,8 +9,7 @@ import play.Keys._
 
 object Build extends sbt.Build{
 
-  val semWebVer = "0.1"
-
+ val semWebVer = "0.1"
 
  val scalajsOutputDir = Def.settingKey[File]("directory for javascript files output by scalajs")
 
