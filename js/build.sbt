@@ -17,7 +17,7 @@ unmanagedSourceDirectories in Compile <+= baseDirectory(_ / ".." / "shared" / "m
 unmanagedSourceDirectories in Test <+= baseDirectory(_ / ".." / "shared" / "test")
 
 libraryDependencies ++= Seq(
-  "com.lihaoyi" % "utest_2.10" % "0.1.2-JS" % "test"
+  "com.lihaoyi" %% "utest" % "0.1.2-JS" % "test"
 )
 
 (loadedTestFrameworks in Test) := {

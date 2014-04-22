@@ -1,7 +1,67 @@
 semweb
 ======
 
-SemWeb (Semantic Web) is a generic Scala/ScalaJS semantic web library that can be used both client and serverside.
+SemWeb (Semantic Web) is a generic Scala/ScalaJS semantic web library that can be used both on client and server sides.
+
+Usage:
+------
+
+1 Add sbt-bintray plugin to your plugins.sbt:
+
+```scala
+
+    resolvers += Resolver.url("bintray-sbt-plugin-releases",url("http://dl.bintray.com/content/sbt/sbt-plugin-releases"))(Resolver.ivyStylePatterns)
+
+    addSbtPlugin("me.lessis" % "bintray-sbt" % "0.1.1")
+```
+
+2 Add scalax resolvers
+```scala
+
+    resolvers += bintray.Opts.resolver.repo("scalax", "scalax-snapshots") //for snapshots
+
+    resolvers += bintray.Opts.resolver.repo("scalax", "scalax-releases") //for releases
+```
+
+3) Add version that you want to use (see published versions at bintray https://bintray.com/scalax )
+If you use release version it looks like:
+
+```scala
+
+    libraryDependencies += "org.scalax" %% "semweb" % "0.2"// for scala projects
+
+    libraryDependencies += "org.scalax" %% "semweb" % "0.2-JS"// for scalajs projects
+```
+
+for snapshots it will look like:
+
+```scala
+
+    libraryDependencies += "org.scalax" %% "semweb" % "0.2-SNAPSHOT"// for scala projects
+
+    libraryDependencies += "org.scalax" %% "semweb" % "0.2-SNAPSHOT-JS"// for scalajs projects
+```
+
+
+NOTES:
+
+semweb-sesame is published as separate artifact
+The lib does not crosscompile to scala 2.11 yet but I am working on that.
+
+Contribution:
+-------------
+
+Ideas and pull-requests are always welcome;
+    git clone https://github.com/scalax/semweb
+    sbt test //to run tests
+
+NOTES: As lib is cross Scala/ScalaJS most of the code including tests is in shared folder. For cross scala/sclaajs testing u-test lib is used,
+for scala-only tests ScalaTest lib is used.
+WARNING: the lib is not well covered with tests, so if you want to change something seriously, ask first
+
+
+semweb packages:
+================
 
 
 org.scalax.semweb.rdf

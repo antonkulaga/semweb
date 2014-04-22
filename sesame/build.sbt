@@ -21,11 +21,11 @@ resolvers += "apache-repo-releases" at "http://repository.apache.org/content/rep
 
 resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
 
-libraryDependencies +="com.bigdata" % "bigdata" % "1.3.0"
+libraryDependencies += "org.openrdf.sesame" % "sesame-sail-memory" % "2.7.11"
 
-libraryDependencies += "org.openrdf.sesame" % "sesame-model" % "2.7.11"
+libraryDependencies += "org.scalatest" %% "scalatest" % "2.1.3"
 
-libraryDependencies += "com.lihaoyi" % "utest_2.10" % "0.1.2-JS" % "test"
+//libraryDependencies += "com.lihaoyi" %% "utest" % "0.1.2" % "test"
 
 autoCompilerPlugins := true
 

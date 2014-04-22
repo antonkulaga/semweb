@@ -12,7 +12,7 @@ import org.openrdf.query.{BindingSet, TupleQueryResult}
 import scala.collection.immutable._
 import scala.collection.JavaConversions._
 import org.openrdf.repository.RepositoryResult
-
+import org.openrdf.model.vocabulary
 
 /**
  * Sesame extensions
@@ -82,13 +82,21 @@ trait Scala2SesameModelImplicits{
 
 
 
-  def lit2Literal(lit:Lit):Literal = lit match {
+  implicit def lit2Literal(lit:Lit):Literal = lit match {
     case null=>null
     case StringLangLiteral(text,lang)=>new LiteralImpl(text,lang)
     case lit:DatatypeLiteral=> new LiteralImpl(lit.label, lit.dataType)
     case other=>new LiteralImpl(other.label)
 
   }
+
+
+  implicit def langLi2Literal(lit:StringLangLiteral):Literal = new LiteralImpl(lit.text,lit.lang)
+
+  implicit def doubleLit2Literal(lit:DoubleLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.DOUBLE)
+  implicit def booleanLit2Literal(lit:BooleanLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.BOOLEAN)
+  implicit def decimalLit2Literal(lit:DecimalLiteral):Literal = new LiteralImpl(lit.value.toString(),vocabulary.XMLSchema.DECIMAL)
+  implicit def longLit2Literal(lit:LongLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.LONG)
 
 
 

@@ -9,14 +9,20 @@ import play.Keys._
 
 object Build extends sbt.Build{
 
- val semWebVer = "0.1"
+ val isRelease = false
+
+ def repo = if(isRelease) "scalax-releases" else "scalax-snapshots"
+
+ val semWebVer = "0.2"
+
+ val currentVersion = if(this.isRelease) semWebVer else semWebVer+"-SNAPSHOT"
 
  val scalajsOutputDir = Def.settingKey[File]("directory for javascript files output by scalajs")
 
   protected val bintrayPublishIvyStyle = settingKey[Boolean]("=== !publishMavenStyle")
 
   lazy val publishSettings = Seq(
-    repository in bintray := "scalax-releases",
+    repository in bintray := this.repo,
     bintrayOrganization in bintray := Some("scalax"),
     licenses += ("MPL-2.0", url("http://opensource.org/licenses/MPL-2.0")),
     Def.derive(bintrayPublishIvyStyle := !publishMavenStyle.value)
