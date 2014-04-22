@@ -6,7 +6,7 @@ SemWeb (Semantic Web) is a generic Scala/ScalaJS semantic web library that can b
 Usage:
 ------
 
-1 Add sbt-bintray plugin to your plugins.sbt:
+1 Add sbt-bintray plugin (for more info see https://github.com/softprops/bintray-sbt ) to your plugins.sbt:
 
 ```scala
 
@@ -15,16 +15,17 @@ Usage:
     addSbtPlugin("me.lessis" % "bintray-sbt" % "0.1.1")
 ```
 
-2 Add scalax resolvers
+2 Add scalax resolvers:
 ```scala
-
-    resolvers += bintray.Opts.resolver.repo("scalax", "scalax-snapshots") //for snapshots
-
-    resolvers += bintray.Opts.resolver.repo("scalax", "scalax-releases") //for releases
+resolvers += bintray.Opts.resolver.repo("scalax", "scalax-snapshots") //for snapshots
+```
+or
+```scala
+resolvers += bintray.Opts.resolver.repo("scalax", "scalax-releases") //for releases
 ```
 
 3) Add version that you want to use (see published versions at bintray https://bintray.com/scalax )
-If you use release version it looks like:
+If you use snapshot version it looks like:
 
 ```scala
 
@@ -32,28 +33,31 @@ If you use release version it looks like:
 
     libraryDependencies += "org.scalax" %% "semweb" % "0.2-JS"// for scalajs projects
 ```
-
-for snapshots it will look like:
+If you use release version it looks like:
 
 ```scala
 
-    libraryDependencies += "org.scalax" %% "semweb" % "0.2-SNAPSHOT"// for scala projects
+    libraryDependencies += "org.scalax" %% "semweb" % "0.1"// for scala projects
 
-    libraryDependencies += "org.scalax" %% "semweb" % "0.2-SNAPSHOT-JS"// for scalajs projects
+    libraryDependencies += "org.scalax" %% "semweb" % "0.1-JS"// for scalajs projects
 ```
 
+4). Use it in your project!
 
 NOTES:
 
-semweb-sesame is published as separate artifact
-The lib does not crosscompile to scala 2.11 yet but I am working on that.
+* The lib does not crosscompile to scala 2.11 yet but I am working on that.
+* Due to the bug in bintray sbt plugin ( https://github.com/softprops/bintray-sbt/issues/17 ) I cannot add "SNAPSHOT" to the version
+that is why I have versions withouth "SNAPSHOT" sufix in scalax-snapshots repo.
 
 Contribution:
 -------------
 
-Ideas and pull-requests are always welcome;
+Ideas and pull-requests are always welcome:
+```
     git clone https://github.com/scalax/semweb
     sbt test //to run tests
+```
 
 NOTES: As lib is cross Scala/ScalaJS most of the code including tests is in shared folder. For cross scala/sclaajs testing u-test lib is used,
 for scala-only tests ScalaTest lib is used.

@@ -15,17 +15,22 @@ object Build extends sbt.Build{
 
  val semWebVer = "0.2"
 
- val currentVersion = if(this.isRelease) semWebVer else semWebVer+"-SNAPSHOT"
+ publishMavenStyle := false
+
+ val currentVersion = semWebVer//if(this.isRelease) semWebVer else semWebVer+"-SNAPSHOT"
 
  val scalajsOutputDir = Def.settingKey[File]("directory for javascript files output by scalajs")
 
-  protected val bintrayPublishIvyStyle = settingKey[Boolean]("=== !publishMavenStyle")
+ protected val bintrayPublishIvyStyle = settingKey[Boolean]("=== !publishMavenStyle") //workaround for sbt-bintray bug
 
   lazy val publishSettings = Seq(
     repository in bintray := this.repo,
+
     bintrayOrganization in bintray := Some("scalax"),
+
     licenses += ("MPL-2.0", url("http://opensource.org/licenses/MPL-2.0")),
-    Def.derive(bintrayPublishIvyStyle := !publishMavenStyle.value)
+
+    bintrayPublishIvyStyle := true
   )
 
 

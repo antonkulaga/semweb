@@ -11,7 +11,7 @@ lazy val sesame = project.in(file("sesame")).dependsOn(root)
 
 Build.sharedSettings
 
-version := Build.semWebVer
+version := Build.currentVersion
 
 unmanagedSourceDirectories in Compile <+= baseDirectory(_ / "shared" / "main" / "scala")
 
