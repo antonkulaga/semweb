@@ -34,7 +34,7 @@ trait QuadPattern extends TripletPattern{
     case _=>false
   }
 
-  def canBind(q:Quad) = super.canBindTriplet(q) && (!this.hasContext || this.canBindContextRes(q.c))
+  def canBind(q:Quad) = super.canBindTriplet(q) && (!this.hasContext || this.canBindContextRes(q.cont))
 
 
 
@@ -71,7 +71,7 @@ trait TripletPattern extends QueryElement
     case _=>false
   }
 
-  def canBindTriplet(trip: BasicTriplet) = canBindSubjectRes(trip.s) && canBindPredicateIri(trip.p) && canBindObjectValue(trip.o)
+  def canBindTriplet(trip: BasicTriplet) = canBindSubjectRes(trip.sub) && canBindPredicateIri(trip.pred) && canBindObjectValue(trip.obj)
 
   def subjectResourceOrNull:Res =sub match {
     case res:Res=>res

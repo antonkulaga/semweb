@@ -8,12 +8,7 @@ implementation of openrdf URI class
 case class IRI(uri:String) extends IRILike
 {
 
-  override def equals(that: Any): Boolean = that match  {
 
-    case value:IRI=>value.stringValue==stringValue
-    case _=>false
-
-  }
   def /(child:String): IRI = IRI( stringValue / child )
   def /(child:IRI): IRI = this / child.stringValue
 

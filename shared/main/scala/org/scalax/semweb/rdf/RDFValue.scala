@@ -7,6 +7,12 @@ trait RDFValue extends ValuePatEl{
 
   def stringValue:String
 
+  override def equals(that: Any): Boolean = that match  {
+
+    case value:RDFValue=>value.stringValue==stringValue
+    case _=>false
+  }
+
   //override def stringValue: String = this.toString
 }
 
