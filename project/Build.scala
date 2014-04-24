@@ -9,11 +9,11 @@ import play.Keys._
 
 object Build extends sbt.Build{
 
- val isRelease = false
+ val isRelease = true //as snapshots are still not supported by bintray-sbt, I mark lib as release
 
  def repo = if(isRelease) "scalax-releases" else "scalax-snapshots"
 
- val semWebVer = "0.2"
+ val semWebVer = "0.2.2"
 
  publishMavenStyle := false
 

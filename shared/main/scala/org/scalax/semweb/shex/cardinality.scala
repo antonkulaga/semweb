@@ -46,7 +46,7 @@ object Cardinality
 
 import Bound._
 
-object ExactlyOne extends Cardinality(Once,Once)
+case object ExactlyOne extends Cardinality(Once,Once)
 {
   override def toQuads(subject: Res)(implicit context: Res): Set[Quad] = Set(
     Quad(subject,rs / "occurs" iri,rs / "Exactly-one" iri,context)
@@ -54,22 +54,22 @@ object ExactlyOne extends Cardinality(Once,Once)
 
 }
 
-object Plus extends Cardinality(Once,Unbound)
+case object Plus extends Cardinality(Once,Unbound)
 {
-  override def toQuads(subject: Res)(implicit context: Res): Set[Quad] = Set(
-    Quad(subject,rs / "occurs" iri,rs / "Zero-or-many" iri,context)
-  )
-
-}
-
-object Start extends Cardinality(Zero,Unbound) {
   override def toQuads(subject: Res)(implicit context: Res): Set[Quad] = Set(
     Quad(subject,rs / "occurs" iri,rs / "One-or-many" iri,context)
   )
 
 }
 
-object Opt extends Cardinality(Zero,Once) {
+case object Star  extends Cardinality(Zero,Unbound) {
+  override def toQuads(subject: Res)(implicit context: Res): Set[Quad] = Set(
+    Quad(subject,rs / "occurs" iri,rs / "Zero-or-many" iri,context)
+  )
+
+}
+
+case object Opt extends Cardinality(Zero,Once) {
   override def toQuads(subject: Res)(implicit context: Res): Set[Quad] = Set(
     Quad(subject,rs / "occurs" iri,rs / "Zero-or-one" iri,context)
   )

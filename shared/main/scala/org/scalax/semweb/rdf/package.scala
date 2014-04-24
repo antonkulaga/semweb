@@ -1,5 +1,7 @@
 package org.scalax.semweb
 
+import scala.annotation.ClassfileAnnotation
+
 package object rdf {
 
   /**
@@ -13,4 +15,7 @@ package object rdf {
       case other=>value.stringValue
     }
   }
+
 }
+
+

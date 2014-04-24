@@ -22,12 +22,12 @@ test in Test <<= (test in Test) dependsOn (test in (sesame, Test)) //run sesame 
 
 
 libraryDependencies ++= Seq(
-  "com.lihaoyi" %% "utest" % "0.1.2" % "test"
+  "com.lihaoyi" %% "utest" % "0.1.3" % "test"
 )
 
 testFrameworks += new TestFramework("utest.runner.JvmFramework")
 
-addCompilerPlugin("com.lihaoyi" %% "acyclic" % "0.1.1")
+addCompilerPlugin("com.lihaoyi" %% "acyclic" % "0.1.2")
 
 autoCompilerPlugins := true
 
