@@ -4,8 +4,8 @@ import bintray.Plugin.bintraySettings
 import bintray.Keys._
 import Def.ScopedKey
 import scala.scalajs.sbtplugin.ScalaJSPlugin._
-import com.typesafe.sbt.packager.universal.UniversalKeys
-import play.Keys._
+// import com.typesafe.sbt.packager.universal.UniversalKeys
+// import play.Keys._
 
 object Build extends sbt.Build{
 

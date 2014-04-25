@@ -17,6 +17,6 @@ resolvers += Resolver.url("bintray-sbt-plugin-releases",url("http://dl.bintray.c
 addSbtPlugin("me.lessis" % "bintray-sbt" % "0.1.1")
 
 // Use the Play sbt plugin for Play projects
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.2.2")
+// addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.2.2")
 
 addSbtPlugin("com.lihaoyi" % "utest-js-plugin" % "0.1.2")
