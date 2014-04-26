@@ -1,6 +1,7 @@
 package org.scalax.semweb.shex
 
-import org.scalax.semweb.rdf.{Quad, Res}
+import org.scalax.semweb.rdf.{BlankNode, Quads, Quad, Res}
+import org.scalax.semweb.rdf.vocabulary._
 
 sealed trait Rule extends ToQuads
 
@@ -12,7 +13,18 @@ case class ArcRule(
                     a: Seq[Action]
                     ) extends Rule
 {
-  override def toQuads(subject: Res)(implicit context: Res): Set[Quad] = ???
+  override def toQuads(subj: Res)(implicit context: Res): Set[Quad] = {
+
+   val me =  id.map(_.asResource).getOrElse(new BlankNode(Math.random().toString))
+
+
+
+  //    Set( Quad(subj, rs / "property", model.sub, context))++ n.toQuads(me)++v.toQuads(me)++c.toQuads(me) //TODO: add actions somewhere
+    ???
+    //c.toQuads(subject)(context)
+  }
+
+  def makeId = Math.random().toString //todo: reimplement with something more reliable
 }
 
 case class AndRule(conjoints: Seq[Rule]) extends Rule

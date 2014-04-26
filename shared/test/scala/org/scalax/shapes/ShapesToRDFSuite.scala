@@ -69,6 +69,10 @@ object ShapesToRDFSuite extends TestSuite{
         }
       }
 
+      "should write simple shape" - {
+
+      }
+
     }
 
 

@@ -1,5 +1,55 @@
 package org.scalax.semweb.rdf
 
+
+/**
+ * Quad builder
+ */
+object Quads{
+
+
+  class WithSubject(val sub:Res) extends RDFBuilder[WithProperty]{
+    def --(prop:IRI):WithProperty = this -- new WithProperty(sub,prop)
+    def triplets: Set[Trip] = this.values.flatMap(_.triplets)
+    def quads: Set[Quad] = this.values.flatMap(_.quads)
+  }
+
+  class WithProperty(sub:Res,prop:IRI) extends RDFBuilder[WithObject]{
+    def --(obj:RDFValue):WithObject = this -- new WithObject(Trip(sub,prop,obj))
+
+    def triplets:Set[Trip] = this.values.map(_.triplet)
+    def quads: Set[Quad] = this.values.flatMap(_.values)
+
+  }
+
+  class WithObject(val triplet:Trip) extends RDFBuilder[Quad]{
+
+    def --(res:Res):Quad = this -- Quad(triplet.sub,triplet.pred,triplet.obj,res)
+
+    def quads = this.values
+  }
+
+
+  abstract class RDFBuilder[T]{
+    var values = Set.empty[T]
+
+    def --(value:T): T = {
+      this.values = values+value
+      value
+    }
+  }
+
+  def model(res:Res):WithSubject  = new WithSubject(res)
+
+  /**
+   * For nice syntax like Quads -- subject -- property -- object -- context
+   * @param res
+   * @return
+   */
+  def --(res:Res) = model(res)
+
+}
+
+
 /** '
   * QUad
   * @param sub subject

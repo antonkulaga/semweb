@@ -1,7 +1,10 @@
 package org.scalax.semweb.shex
 
-import org.scalax.semweb.rdf.{Quad, BlankNode, Res, IRI}
+import org.scalax.semweb.rdf._
+import org.scalax.semweb.rdf.vocabulary._
+
 import org.scalax.semweb.shex.parser.PrefixMap
+import org.scalax.semweb.rdf.vocabulary.{RDF, FOAF}
 
 
 case class Schema(pm: PrefixMap, rules: Seq[Shape])
@@ -9,6 +12,19 @@ case class Schema(pm: PrefixMap, rules: Seq[Shape])
 case class ShEx(rules:Seq[Shape], start: Option[Label])
 
 case class Shape(label: Label, rule: Rule) {
+
+  /**
+   * Turns shape into quad
+   * @param context
+   * @return
+   */
+  def asQuads(implicit context:Res):Set[Quad] =
+  {
+    val model = Quads -- label.asResource
+    model -- RDF.TYPE -- rs / "ResourceShape" -- context
+
+    model.quads ++ rule.toQuads(model.sub)
+  }
 
 
 }

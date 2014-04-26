@@ -1,9 +1,9 @@
+package org.scalax.semweb.sesame.test
+
 import org.scalatest._
-import org.scalax.semweb.rdf
 import org.scalax.semweb.rdf._
 import org.scalax.semweb.sesame._
 import org.openrdf.model
-import org.openrdf.model.vocabulary
 
 
 /**

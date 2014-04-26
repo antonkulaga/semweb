@@ -20,7 +20,7 @@ package object shex {
 
 
 
-  lazy val rs =  "http://open-services.net/ns/core#"
+  lazy val rs =  IRI("http://open-services.net/ns/core#")
 
 
   def range(m: Long, n: Long): Cardinality = {
