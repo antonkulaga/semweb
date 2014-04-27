@@ -21,6 +21,7 @@ package object shex {
 
 
   lazy val rs =  IRI("http://open-services.net/ns/core#")
+  lazy val se =  IRI("http://www.w3.org/2013/ShEx/Definition#") //URL does not work but it is in
 
 
   def range(m: Long, n: Long): Cardinality = {

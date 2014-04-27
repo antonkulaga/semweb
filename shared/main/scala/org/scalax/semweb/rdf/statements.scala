@@ -8,6 +8,7 @@ object Quads{
 
 
   class WithSubject(val sub:Res) extends RDFBuilder[WithProperty]{
+
     def --(prop:IRI):WithProperty = this -- new WithProperty(sub,prop)
     def triplets: Set[Trip] = this.values.flatMap(_.triplets)
     def quads: Set[Quad] = this.values.flatMap(_.quads)

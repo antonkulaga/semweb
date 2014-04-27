@@ -4,6 +4,7 @@ import org.scalax.semweb.rdf.{LongLiteral, AnyLit, Quad, IRI}
 
 import utest._
 import org.scalax.semweb.shex._
+import org.scalax.semweb.rdf.vocabulary._
 
 object ShapesToRDFSuite extends TestSuite{
 
@@ -70,6 +71,9 @@ object ShapesToRDFSuite extends TestSuite{
       }
 
       "should write simple shape" - {
+        val name: IRI = WI / "name" iri
+
+        //ArcRule(Some(IRILabel(name)),NameTerm(FOAF.KNOWS),ValueReference(),ExactlyOne,)
 
       }
 

@@ -13,7 +13,7 @@ object Build extends sbt.Build{
 
  def repo = if(isRelease) "scalax-releases" else "scalax-snapshots"
 
- val semWebVer = "0.2.22"
+ val semWebVer = "0.2.23"
 
  publishMavenStyle := false
 

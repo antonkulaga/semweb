@@ -10,7 +10,7 @@ case class ArcRule(
                     n: NameClass,
                     v: ValueClass,
                     c: Cardinality,
-                    a: Seq[Action]
+                    a: Seq[Action] = List.empty
                     ) extends Rule
 {
   override def toQuads(subj: Res)(implicit context: Res): Set[Quad] = {
@@ -18,10 +18,7 @@ case class ArcRule(
    val me =  id.map(_.asResource).getOrElse(new BlankNode(Math.random().toString))
 
 
-
-  //    Set( Quad(subj, rs / "property", model.sub, context))++ n.toQuads(me)++v.toQuads(me)++c.toQuads(me) //TODO: add actions somewhere
-    ???
-    //c.toQuads(subject)(context)
+   Set(Quad(subj, rs / "property", me, context))++ n.toQuads(me)(context) ++ v.toQuads(me)(context) ++  c.toQuads(me)(context)
   }
 
   def makeId = Math.random().toString //todo: reimplement with something more reliable

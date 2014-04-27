@@ -11,6 +11,9 @@ case class Schema(pm: PrefixMap, rules: Seq[Shape])
 
 case class ShEx(rules:Seq[Shape], start: Option[Label])
 
+
+
+
 case class Shape(label: Label, rule: Rule) {
 
   /**
