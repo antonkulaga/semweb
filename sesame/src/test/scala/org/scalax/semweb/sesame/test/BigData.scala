@@ -108,6 +108,19 @@ class BigData(url:String="./db/test/",dbFileName:String="bigdata.jnl")
       q.evaluate()
   }
 
+
+  /**
+   * Note: for tests only
+   * @param updateStr insert or delete query
+   * @param base base uri,
+   * @return
+   */
+  def update(updateStr:String)(implicit base:String = "http://testme.bigdata.com"): Try[Unit] = this.write{
+    con=>
+      val u = con.prepareNativeSPARQLUpdate(QueryLanguage.SPARQL,updateStr,base)
+      u.execute()
+  }
+
   /**
    * Reads something
    * @param action function that reads

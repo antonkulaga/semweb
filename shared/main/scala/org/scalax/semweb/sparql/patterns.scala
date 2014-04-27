@@ -46,7 +46,7 @@ trait TripletPattern extends QueryElement
   def sub:ResourcePatEl
   def pred:IRIPatEl
   def obj:ValuePatEl
-  override def stringValue: String = s"\n <${sub.stringValue} ${pred.stringValue} ${obj.stringValue} .\n"
+  override def stringValue: String = s"\n ${sub.stringValue} ${pred.stringValue} ${obj.stringValue} .\n"
 
   def canBindSubjectRes(res:Res) = sub match {
     case v:Variable=>true

@@ -11,6 +11,8 @@ case class BlankNode(id:String) extends Res with BNodePatEl{
 
   }
 
+  override def toString = s"_:$id"
+
 }
 
 trait BNodePatEl extends ResourcePatEl

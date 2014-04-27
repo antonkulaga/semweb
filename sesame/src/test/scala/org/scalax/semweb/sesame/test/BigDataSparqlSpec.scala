@@ -13,7 +13,10 @@ import org.openrdf.repository.RepositoryResult
 import org.scalatest.WordSpecLike
 import org.scalatest.Matchers
 import org.scalax.semweb.sparql._
+import org.scalax.semweb.rdf.{Trip, IRI}
 import org.scalax.semweb.rdf.IRI
+import org.scalax.semweb.rdf.Trip
+import org.scalax.semweb.sparql.Pat
 
 /**
  * Tests SPARQL DSL on bigdata
@@ -70,6 +73,48 @@ class BigDataSparqlSpec  extends  WordSpec with Matchers with SimpleTestData {
 
       db.shutDown() // shutting down
     }
+
+
+    val del: Delete = DELETE (
+      DATA (
+        Trip(
+          IRI("http://denigma.org/actors/resources/Daniel"),
+          IRI("http://denigma.org/relations/resources/loves"),
+          IRI("http://denigma.org/actors/resources/RDF")
+        )
+      )
+    )
+
+    val ins: Insert = INSERT (
+      DATA (
+        Trip(
+          IRI("http://denigma.org/actors/resources/Anton"),
+          IRI("http://denigma.org/relations/resources/hates"),
+          IRI("http://denigma.org/actors/resources/Anton")
+        )
+      )
+    )
+
+    "delete and insert data right" in {
+      val db = BigData(true) //cleaning the files and initializing the database
+
+      self.addTestData(db) //add test data ( see SimpleTestData )
+
+      db.read{ con=>con.getStatements(null,loves,null,false).toList }.get.size shouldEqual 6
+      db.read{ con=>con.getStatements(null,hates,null,false).toList }.get.size shouldEqual 1
+
+
+      db.update(del.stringValue)
+
+      db.read{ con=>con.getStatements(null,loves,null,false).toList }.get.size shouldEqual 5
+      db.read{ con=>con.getStatements(null,hates,null,false).toList }.get.size shouldEqual 1
+
+      db.update(ins.stringValue)
+      db.read{ con=>con.getStatements(null,loves,null,false).toList }.get.size shouldEqual 5
+      db.read{ con=>con.getStatements(null,hates,null,false).toList }.get.size shouldEqual 2
+
+    }
+
 
   }
   

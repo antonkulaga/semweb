@@ -5,7 +5,7 @@ import scala.annotation.ClassfileAnnotation
 package object rdf {
 
   /**
-   * TEMPORAL FIX
+   * TEMPORAL FIX TODO: change
    * @param value
    */
   implicit class LabelHolder(value:RDFValue) {

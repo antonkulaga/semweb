@@ -5,17 +5,12 @@ package org.scalax.semweb.rdf
 /*
 implementation of openrdf URI class
  */
-case class IRI(uri:String) extends IRILike
+case class IRI(uri:String) extends IRIPatEl with Res
 {
 
   def /(child:String): IRI = if(stringValue.endsWith("/") || stringValue.endsWith("#")) IRI(stringValue+child) else IRI(stringValue+ "/" +child) //  IRI( stringValue / child )
   def /(child:IRI): IRI = this / child.stringValue
 
-}
-
-trait IRILike extends IRIPatEl with Res{
-
-  def uri:String
 
   require(uri.contains(":"), "uri string must by URL")
 
