@@ -1,38 +1,6 @@
 package org.scalax.semweb.rdf
 
-object xsd
-{
-  val namespace					= "http://www.w3.org/2001/XMLSchema#"
-  def +(str:String) = IRI(namespace+str)
-
-}
-
-/*
-  val rdftype				= IRI(rdfSyntax + "type")
-  val rdfnil					= IRI(rdfSyntax + "nil")
-  val rdffirst			    = IRI(rdfSyntax + "first")
-  val rdfrest			    = IRI(rdfSyntax + "rest")
- */
-
-object Lit {
-  val rdfSyntax				= "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-
-
-
-  val StringDatatypeIRI 		=  xsd + "string"
-  val LangStringDatatypeIRI  = xsd + "language"
-  val BooleanDatatypeIRI 	= xsd + "boolean"
-  val IntegerDatatypeIRI 	= xsd + "integer"
-  val LongDatatypeIRI 	= xsd + "long"
-  val DoubleDatatypeIRI 		= xsd + "double"
-  val DecimalDatatypeIRI 	= xsd + "decimal"
-
-//  val trueLiteral = BooleanLiteral(true)
-//  val falseLiteral = BooleanLiteral(false)
-
-
-}
-
+import org.scalax.semweb.rdf.vocabulary.XSD
 
 //
 trait Lit extends RDFValue {
@@ -77,14 +45,14 @@ abstract class DatatypeLiteral(val label : String, val dataType : IRI) extends L
 
 // It should be better to inherit from DatatypeLiteral,
 // but case-to-case inheritance is prohibited in Scala
-case class IntegerLiteral(value: Integer) extends  DatatypeLiteral(value.toString,Lit.IntegerDatatypeIRI)
-case class LongLiteral(value: Long) extends  DatatypeLiteral(value.toString,Lit.LongDatatypeIRI)
+case class IntegerLiteral(value: Integer) extends  DatatypeLiteral(value.toString,XSD.IntegerDatatypeIRI)
+case class LongLiteral(value: Long) extends  DatatypeLiteral(value.toString,XSD.LongDatatypeIRI)
 
-case class DecimalLiteral(value: BigDecimal) extends DatatypeLiteral(value.toString(),Lit.DecimalDatatypeIRI)
+case class DecimalLiteral(value: BigDecimal) extends DatatypeLiteral(value.toString(),XSD.DecimalDatatypeIRI)
 
-case class DoubleLiteral(value:Double) extends DatatypeLiteral(value.toString,Lit.DoubleDatatypeIRI)
+case class DoubleLiteral(value:Double) extends DatatypeLiteral(value.toString,XSD.DoubleDatatypeIRI)
 
-case class StringLiteral(text: String) extends DatatypeLiteral(text,Lit.StringDatatypeIRI){
+case class StringLiteral(text: String) extends DatatypeLiteral(text,XSD.StringDatatypeIRI){
 
   override def equals(that: Any): Boolean = that match  {
 
@@ -95,7 +63,7 @@ case class StringLiteral(text: String) extends DatatypeLiteral(text,Lit.StringDa
   }
 }
 
-case class StringLangLiteral(text: String, lang : String) extends DatatypeLiteral(text,Lit.StringDatatypeIRI) {
+case class StringLangLiteral(text: String, lang : String) extends DatatypeLiteral(text,XSD.StringDatatypeIRI) {
 
   override def isLangLiteral = true
   override def hasLang(language:String) = lang.toLowerCase == language
@@ -115,7 +83,7 @@ case class StringLangLiteral(text: String, lang : String) extends DatatypeLitera
 
 }
 
-case class BooleanLiteral(value:Boolean) extends DatatypeLiteral(value.toString,Lit.BooleanDatatypeIRI)
+case class BooleanLiteral(value:Boolean) extends DatatypeLiteral(value.toString,XSD.BooleanDatatypeIRI)
 
 
 //case class Lang(lang : String) {

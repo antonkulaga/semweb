@@ -1,26 +1,26 @@
 package org.scalax.semweb.sparql
 
-import org.scalax.semweb.rdf.QueryElement
+import org.scalax.semweb.rdf.RDFElement
 
 
 /**
  * Sparql brackets
  * @param elements elements included
  */
-case class Br(elements:QueryElement*) extends GP
+case class Br(elements:RDFElement*) extends GP
 {
 
   override def stringValue = "\n{"+this.foldChildren+" }"
 
-  override lazy val children: List[QueryElement] = elements.toList
+  override lazy val children: List[RDFElement] = elements.toList
 }
 
 /**
 Group of elements
  */
-trait GP extends QueryElement{
+trait GP extends RDFElement{
 
-  def children:List[QueryElement]
+  def children:List[RDFElement]
 
   def hasChildren = !children.isEmpty
 
@@ -35,7 +35,7 @@ trait GP extends QueryElement{
 /**
 unites to groups together
  */
-case class Union(left:QueryElement,right:QueryElement) extends GP {
+case class Union(left:RDFElement,right:RDFElement) extends GP {
 
   override def stringValue = s" ${left.stringValue} UNION ${right.stringValue}"
 
@@ -44,7 +44,7 @@ case class Union(left:QueryElement,right:QueryElement) extends GP {
 
 }
 
-case class Optional(gp:QueryElement) extends GP
+case class Optional(gp:RDFElement) extends GP
 {
   def stringValue = "\n OPTIONAL "+ gp.toString
 
@@ -54,7 +54,7 @@ case class Optional(gp:QueryElement) extends GP
 
 
 
-trait VarContainer extends QueryElement{
+trait VarContainer extends RDFElement{
 
  var vars = Map.empty[String,Variable]
 

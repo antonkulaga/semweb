@@ -1,10 +1,18 @@
 package org.scalax.shapes
 
-import org.scalax.semweb.rdf.{LongLiteral, AnyLit, Quad, IRI}
+import org.scalax.semweb.rdf._
 
 import utest._
 import org.scalax.semweb.shex._
 import org.scalax.semweb.rdf.vocabulary._
+import org.scalax.semweb.rdf.IRI
+import org.scalax.semweb.rdf.LongLiteral
+import org.scalax.semweb.shex.NameTerm
+import org.scalax.semweb.shex.ValueReference
+import scala.Some
+import org.scalax.semweb.shex.IRILabel
+import org.scalax.semweb.rdf.Quad
+import org.scalax.semweb.shex.ArcRule
 
 object ShapesToRDFSuite extends TestSuite{
 
@@ -24,6 +32,7 @@ object ShapesToRDFSuite extends TestSuite{
     val zeroOrOne = IRI(core+"Zero-or-one")
 
    // val one = IRI(core+"One")
+
 
 
     "quads conversions" - {
@@ -70,12 +79,7 @@ object ShapesToRDFSuite extends TestSuite{
         }
       }
 
-      "should write simple shape" - {
-        val name: IRI = WI / "name" iri
 
-        //ArcRule(Some(IRILabel(name)),NameTerm(FOAF.KNOWS),ValueReference(),ExactlyOne,)
-
-      }
 
     }
 

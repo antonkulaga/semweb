@@ -1,6 +1,6 @@
 package org.scalax.semweb
 
-import org.scalax.semweb.rdf.IRI
+import org.scalax.semweb.rdf.{Res, BlankNode, IRI}
 import org.scalax.semweb.rdf.vocabulary._
 
 /**
@@ -29,8 +29,24 @@ package object shex {
     Cardinality(min = m, max = n)
   }
 
-  /** Utility to generate rules from arcs */
-  def envolve(s: ArcRule): Rule = OrRule(List(AndRule(List(s))))
+  implicit def iri2Label(iri:IRI) = IRILabel(iri)
+  implicit def bNode2Label(b:BlankNode) = BNodeLabel(b)
+
+  implicit def iri2Name(iri:IRI) = NameTerm(iri)
+
+  /**
+   * Converts resource to value type
+   * @param res
+   * @return
+   */
+  implicit def res2ValueType(res:Res)= ValueType(res)
+
+  implicit def res2Label(res:Res) = res match
+  {
+    case iri:IRI=>this.iri2Label(iri)
+    case bnode:BlankNode=>this.bNode2Label(bnode)
+  }
+
 
 
 

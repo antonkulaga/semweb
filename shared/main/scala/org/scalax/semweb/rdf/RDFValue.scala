@@ -2,10 +2,8 @@ package org.scalax.semweb.rdf
 
 /**
 RDF value implementation
- */
-trait RDFValue extends ValuePatEl{
-
-  def stringValue:String
+  */
+trait RDFValue extends CanBeObject{
 
   override def equals(that: Any): Boolean = that match  {
 
@@ -16,14 +14,10 @@ trait RDFValue extends ValuePatEl{
   //override def stringValue: String = this.toString
 }
 
-trait ValuePatEl extends PatternElement
+trait CanBeObject extends RDFElement
 
-/*
- TODO: add binding for vars
- */
-trait PatternElement extends QueryElement
 
-trait QueryElement {
+trait RDFElement {
 
   def stringValue:String
 

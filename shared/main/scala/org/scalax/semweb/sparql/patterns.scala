@@ -11,13 +11,13 @@ import org.scalax.semweb.rdf.IRI
  * @param obj Object (Var,Literal or Resource)
  * @param cont Context (Var,Literal or Resource or Null)
  */
-case class Pat(sub:ResourcePatEl,pred:IRIPatEl,obj:ValuePatEl,cont:ResourcePatEl= null) extends QuadPattern
+case class Pat(sub:CanBeSubject,pred:CanBePredicate,obj:CanBeObject,cont:CanBeSubject= null) extends QuadPattern
 
 
 
 trait QuadPattern extends TripletPattern{
   def hasContext = cont!=null
-  def cont:ResourcePatEl
+  def cont:CanBeSubject
   override def stringValue: String = s"\n ${sub.toString} ${pred.toString} ${obj.toString}" + (if(hasContext) " "+cont.toString+" .\n" else " .\n")
 
   //def contextOrNull = if(this.hasContext) this.c.resourceOrNull else null
@@ -41,11 +41,11 @@ trait QuadPattern extends TripletPattern{
 
 }
 
-trait TripletPattern extends QueryElement
+trait TripletPattern extends RDFElement
 {
-  def sub:ResourcePatEl
-  def pred:IRIPatEl
-  def obj:ValuePatEl
+  def sub:CanBeSubject
+  def pred:CanBePredicate
+  def obj:CanBeObject
   override def stringValue: String = s"\n ${sub.stringValue} ${pred.stringValue} ${obj.stringValue} .\n"
 
   def canBindSubjectRes(res:Res) = sub match {

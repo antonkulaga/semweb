@@ -15,4 +15,4 @@ case class BlankNode(id:String) extends Res with BNodePatEl{
 
 }
 
-trait BNodePatEl extends ResourcePatEl
+trait BNodePatEl extends CanBeSubject

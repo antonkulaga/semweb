@@ -6,6 +6,7 @@ import java.util.Properties
 import org.apache.commons.io.FileUtils
 import scala.util.Try
 import org.openrdf.query.{TupleQueryResult, QueryLanguage}
+import com.bigdata.rdf.vocab.decls
 
 
 /**

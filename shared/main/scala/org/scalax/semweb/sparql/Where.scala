@@ -1,8 +1,8 @@
 package org.scalax.semweb.sparql
 
-import org.scalax.semweb.rdf.QueryElement
+import org.scalax.semweb.rdf.RDFElement
 
-trait WithWhere extends QueryElement
+trait WithWhere extends RDFElement
 {
   self=>
 
@@ -12,7 +12,7 @@ trait WithWhere extends QueryElement
   {
     where=>
 
-    def apply(elements:QueryElement*):self.type = {
+    def apply(elements:RDFElement*):self.type = {
       this.children = elements.toList
       self
     }
@@ -25,7 +25,7 @@ trait WithWhere extends QueryElement
 
 }
 
-class WhereClause(var children:List[QueryElement]) extends GP
+class WhereClause(var children:List[RDFElement]) extends GP
 {
   where=>
 

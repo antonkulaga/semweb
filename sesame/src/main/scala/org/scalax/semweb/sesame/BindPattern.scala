@@ -1,7 +1,7 @@
 package org.scalax.semweb.sesame
 
 import org.openrdf.model._
-import org.scalax.semweb.rdf.PatternElement
+import org.scalax.semweb.rdf.RDFElement
 import org.scalax.semweb.sparql._
 
 object BindPattern {
@@ -11,12 +11,11 @@ object BindPattern {
   def canBindTriplet(p:TripletPattern,st:Statement): Boolean = canBindValue(p.sub,st.getSubject) &&  canBindValue(p.pred,st.getPredicate) &&  canBindValue(p.obj,st.getObject)
 
 
-  def canBindValue(p:PatternElement,value:Value) = p match {
+  def canBindValue(p:RDFElement,value:Value) = p match {
     case v:Variable => true
     case null=> true
     case _ if value==null=>false
     case v:Value=> v.stringValue()==value.stringValue()
   }
-
 
 }

@@ -30,14 +30,7 @@ object Quads{
   }
 
 
-  abstract class RDFBuilder[T]{
-    var values = Set.empty[T]
 
-    def --(value:T): T = {
-      this.values = values+value
-      value
-    }
-  }
 
   def model(res:Res):WithSubject  = new WithSubject(res)
 
@@ -49,7 +42,14 @@ object Quads{
   def --(res:Res) = model(res)
 
 }
+abstract class RDFBuilder[T]{
+  var values = Set.empty[T]
 
+  def --(value:T): T = {
+    this.values = values+value
+    value
+  }
+}
 
 /** '
   * QUad
@@ -76,7 +76,7 @@ case class Quad(sub:Res,pred:IRI,obj:RDFValue,cont:Res = null) extends /*DiHyper
 
 case class Trip(sub:Res,pred:IRI,obj:RDFValue) extends /*DiHyperEdge[RDFValue]((s,p,o)) with*/ BasicTriplet
 
-trait BasicTriplet extends QueryElement
+trait BasicTriplet extends RDFElement
 {
   def hasContext: Boolean = false
 

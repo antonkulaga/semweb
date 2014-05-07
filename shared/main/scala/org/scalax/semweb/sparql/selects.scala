@@ -1,15 +1,15 @@
 package org.scalax.semweb.sparql
 
-import org.scalax.semweb.rdf.QueryElement
+import org.scalax.semweb.rdf.RDFElement
 
 
 object SELECT
 {
 
-  def apply(params:SelectElement*) = new SelectQuery(params.toList)
+  def apply(params:SelectElement*) = new SelectRDF(params.toList)
 }
 
-class SelectQuery(val params:List[SelectElement]) extends WithWhere with VarContainer with Sliced
+class SelectRDF(val params:List[SelectElement]) extends WithWhere with VarContainer with Sliced
 {
   self=>
   object DISTINCT {
@@ -26,7 +26,7 @@ trait Sliced {
   /**
    * Limit object
    */
-  object LIMIT extends QueryElement
+  object LIMIT extends RDFElement
   {
     var limit:Long = Long.MaxValue
     def apply(limitValue:Long):self.type = {
@@ -40,7 +40,7 @@ trait Sliced {
     override def stringValue = if(hasLimit) s" LIMIT $limit" else ""
   }
 
-  object OFFSET extends QueryElement
+  object OFFSET extends RDFElement
   {
     var offset:Long = 0
     def apply(offsetValue:Long):self.type  = {

@@ -9,7 +9,7 @@ import org.scalax.semweb.rdf.vocabulary.{RDF, FOAF}
 
 case class Schema(pm: PrefixMap, rules: Seq[Shape])
 
-case class ShEx(rules:Seq[Shape], start: Option[Label])
+case class ShEx(rules:Seq[Shape], start: Option[Label] = None)
 
 
 

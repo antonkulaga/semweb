@@ -153,14 +153,14 @@ trait Sesame2ScalaModelImplicits{
       Resource2Res(st.getContext))
 
 
-  implicit def URI2PatEl(uri:URI):IRIPatEl = IRI(uri.stringValue)
+  implicit def URI2PatEl(uri:URI):CanBePredicate = IRI(uri.stringValue)
 
   //implicit def URI2ResPatEl(uri:URI):ResourcePatEl = IRI(uri.stringValue)
 
 
   implicit def BNode2PatEl(bn:BNode):BNodePatEl = BlankNode(bn.stringValue)
 
-  implicit def Value2PatEl(value:Value):ValuePatEl = value match {
+  implicit def Value2PatEl(value:Value):CanBeObject = value match {
     case null=>null
     case lit:Literal=>literal2Lit(lit)
     case b:BNode=>this.BNode2PatEl(b)
@@ -168,7 +168,7 @@ trait Sesame2ScalaModelImplicits{
     case _ =>null
   }
 
-  implicit def Resource2PatEl(r:Resource):ResourcePatEl  = r match {
+  implicit def Resource2PatEl(r:Resource):CanBeSubject  = r match {
     case null=>null
     case b:BNode=>this.BNode2PatEl(b)
     case iri:URI => URI2IRI(iri)

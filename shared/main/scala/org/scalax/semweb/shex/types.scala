@@ -34,7 +34,7 @@ case class ValueType(v: Res) extends ValueClass{
   }
 }
 
-case class ValueSet(s: Seq[Res]) extends ValueClass {
+case class ValueSet(s: Set[Res]) extends ValueClass {
   override def toQuads(subject: Res)(implicit context: Res): Set[Quad] = {
 
     val prop =  Quads -- subject -- rs / "allowedValue"
