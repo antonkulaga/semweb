@@ -77,6 +77,54 @@ object ShapesToRDFSuite extends TestSuite{
           assert( q(0) == Quad(subject,minOccurs,LongLiteral(2),context) )
           assert( q(1) == Quad(subject,maxOccurs,LongLiteral(3),context) )
         }
+
+        "write simple shapes" - {
+
+          val page = WI.re("Page")
+
+          object shape extends ShapeBuilder(page)
+
+          val title= shape has WI.pl("title") of XSD.StringDatatypeIRI occurs ExactlyOne result
+          val text = shape has WI.pl("text") of XSD.StringDatatypeIRI occurs ExactlyOne result
+          val author = shape has WI.pl("author") of FOAF.PERSON occurs Plus result
+          //val pub = shape has WI.pl("published") of XSD.Date  occurs ExactlyOne result
+
+          val sh = shape.result
+          val c = WI.re("context")
+          val quads: Set[Quad] = sh.asQuads(c)
+
+
+          assert { quads.exists(v=>v.sub==page&& v.pred==RDF.TYPE && v.obj== rs / "ResourceShape") }
+          val tq = title.get.toQuads(page)(c)
+          assert { tq.size == 4}
+
+          assert { title.get.toQuads(page).exists(v=>v.sub==page && v.obj==title.get.me) }
+
+
+          assert { quads.exists(v=>v.sub==page&& v.pred==rs / "property" && v.obj==title.get.me) }
+          assert { quads.count(v=>v.sub==title.get.me) == 3 }
+          assert { quads.exists(v=>v.sub==title.get.me && v.pred == rs / "valueType" && v.obj ==  XSD.StringDatatypeIRI )}
+          assert { quads.exists(v=>v.sub==title.get.me && v.pred == rs / "propDefinition" && v.obj ==  WI.pl("title") )}
+          assert { quads.exists(v=>v.sub==title.get.me && v.pred == rs / "occurs" && v.obj == rs / "Exactly-one" )}
+
+
+          assert { quads.exists(v=>v.sub==page&& v.pred==rs / "property" && v.obj==text.get.me) }
+          assert { quads.count(v=>v.sub==text.get.me) == 3 }
+          assert { quads.exists(v=>v.sub==text.get.me && v.pred == rs / "valueType" && v.obj ==  XSD.StringDatatypeIRI )}
+          assert { quads.exists(v=>v.sub==text.get.me && v.pred == rs / "propDefinition" && v.obj ==  WI.pl("text") )}
+          assert { quads.exists(v=>v.sub==text.get.me && v.pred == rs / "occurs" && v.obj ==  rs / "Exactly-one" )}
+
+          assert { quads.exists(v=>v.sub==page&& v.pred==rs / "property" && v.obj==author.get.me) }
+          assert { quads.count(v=>v.sub==author.get.me) == 3 }
+          assert { quads.exists(v=>v.sub==author.get.me && v.pred == rs / "valueType" && v.obj ==  FOAF.PERSON )}
+          assert { quads.exists(v=>v.sub==author.get.me && v.pred == rs / "propDefinition" && v.obj ==  WI.pl("author") )}
+          assert { quads.exists(v=>v.sub==author.get.me && v.pred == rs / "occurs" && v.obj ==  rs / "One-or-many" )}
+
+
+
+
+
+        }
       }
 
 

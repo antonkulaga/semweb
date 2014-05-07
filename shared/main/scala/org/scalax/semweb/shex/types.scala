@@ -11,7 +11,7 @@ sealed trait NameClass extends ToQuads
  */
 case class NameTerm(t: IRI) extends NameClass with ToQuads
 {
-  override def toQuads(subject: Res)(implicit context: Res = null)= Set(Quad(subject, rs / "name", t,context ))
+  override def toQuads(subject: Res)(implicit context: Res = null)= Set(Quad(subject, rs / "propDefinition", t,context ))
 }
 
 

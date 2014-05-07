@@ -144,7 +144,6 @@ trait Sesame2ScalaModelImplicits{
   }
 
 
-
   implicit def Statement2Quad(st:Statement) =
     new Quad(
       Resource2Res(st.getSubject),

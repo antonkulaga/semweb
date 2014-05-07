@@ -26,7 +26,7 @@ case class Shape(label: Label, rule: Rule) {
     val model = Quads -- label.asResource
     model -- RDF.TYPE -- rs / "ResourceShape" -- context
 
-    model.quads ++ rule.toQuads(model.sub)
+    model.quads ++ rule.toQuads(model.sub)(context)
   }
 
 

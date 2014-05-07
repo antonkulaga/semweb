@@ -13,10 +13,10 @@ case class ArcRule(
                     actions: Seq[Action] = List.empty
                     ) extends Rule
 {
+
+  lazy val me = id.map(_.asResource).getOrElse(new BlankNode(Math.random().toString))
+
   override def toQuads(subj: Res)(implicit context: Res): Set[Quad] = {
-
-   val me =  id.map(_.asResource).getOrElse(new BlankNode(Math.random().toString))
-
 
    Set(Quad(subj, rs / "property", me, context))++ name.toQuads(me)(context) ++ value.toQuads(me)(context) ++  occurs.toQuads(me)(context)
   }

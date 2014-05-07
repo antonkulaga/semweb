@@ -12,7 +12,7 @@ import org.scalax.semweb.shex.Shape
 class WithShapeProperty(iri:IRI)
 {
 
-  def result:Option[Rule] = if(vc == null) None else Some(ArcRule(None,iri,vc,occ))
+  lazy val result:Option[ArcRule] = if(vc == null) None else Some(ArcRule(None,iri,vc,occ))
 
 
   protected var occ:Cardinality = ExactlyOne
