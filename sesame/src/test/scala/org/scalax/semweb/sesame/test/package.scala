@@ -9,7 +9,7 @@ import scala.collection.JavaConversions._ //converts Java collection into scala'
 
 
 /**
- * Created by antonkulaga on 26.04.14.
+ * Package object
  */
 package object test {
   /**

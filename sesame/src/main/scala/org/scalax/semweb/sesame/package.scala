@@ -98,7 +98,15 @@ trait Scala2SesameModelImplicits{
   implicit def decimalLit2Literal(lit:DecimalLiteral):Literal = new LiteralImpl(lit.value.toString(),vocabulary.XMLSchema.DECIMAL)
   implicit def longLit2Literal(lit:LongLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.LONG)
 
+  implicit class QuadStatement(q:Quad) extends Statement{
+    lazy val  getSubject: Resource = q.sub
 
+    lazy val getContext: Resource = q.cont
+
+    lazy val  getPredicate: URI = q.pred
+
+    lazy val getObject: Value = q.obj
+  }
 
 }
 

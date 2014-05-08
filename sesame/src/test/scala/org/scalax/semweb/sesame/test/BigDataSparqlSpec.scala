@@ -113,6 +113,8 @@ class BigDataSparqlSpec  extends  WordSpec with Matchers with SimpleTestData {
       db.read{ con=>con.getStatements(null,loves,null,false).toList }.get.size shouldEqual 5
       db.read{ con=>con.getStatements(null,hates,null,false).toList }.get.size shouldEqual 2
 
+      db.shutDown()
+
     }
 
 

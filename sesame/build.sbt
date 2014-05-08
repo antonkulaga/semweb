@@ -29,7 +29,7 @@ libraryDependencies += "org.openrdf.sesame" % "sesame-sail-memory" % bigDataSesa
 
 libraryDependencies += "com.bigdata" % "bigdata" % "1.3.0" % "test" //Bigdata for tests
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.1.3"
+libraryDependencies += "org.scalatest" %% "scalatest" % "2.1.5"
 
 parallelExecution in Test := false
 

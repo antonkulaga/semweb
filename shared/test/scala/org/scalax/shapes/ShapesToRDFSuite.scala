@@ -120,10 +120,6 @@ object ShapesToRDFSuite extends TestSuite{
           assert { quads.exists(v=>v.sub==author.get.me && v.pred == rs / "propDefinition" && v.obj ==  WI.pl("author") )}
           assert { quads.exists(v=>v.sub==author.get.me && v.pred == rs / "occurs" && v.obj ==  rs / "One-or-many" )}
 
-
-
-
-
         }
       }
 

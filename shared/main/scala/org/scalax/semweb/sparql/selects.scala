@@ -6,10 +6,10 @@ import org.scalax.semweb.rdf.RDFElement
 object SELECT
 {
 
-  def apply(params:SelectElement*) = new SelectRDF(params.toList)
+  def apply(params:SelectElement*) = new SelectQuery(params.toList)
 }
 
-class SelectRDF(val params:List[SelectElement]) extends WithWhere with VarContainer with Sliced
+class SelectQuery(val params:List[SelectElement]) extends WithWhere with VarContainer with Sliced
 {
   self=>
   object DISTINCT {

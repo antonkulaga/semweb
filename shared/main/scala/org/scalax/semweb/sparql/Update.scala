@@ -74,6 +74,7 @@ object DATA {
 
 object GRAPH {
 
+  def apply(id:CanBePredicate,triplets:List[Trip]) = new TripletGraph(id)(triplets)
   def apply(id:CanBePredicate,triplets:Trip*) = new TripletGraph(id)(triplets.toList)
   def apply(id:CanBePredicate,patterns:TripletPattern*) = new PatternGraph(id)(patterns.toList)
 }

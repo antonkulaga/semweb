@@ -85,6 +85,7 @@ class BigData(url:String="./sesame/db/test",dbFileName:String="bigdata.jnl")
     repo
   }
 
+
   def readConnection: BigdataSailRepositoryConnection = repo.getReadOnlyConnection //for convenience, provides read connection
 
   /**
