@@ -23,11 +23,16 @@ abstract class Cardinality(min: Bound,max: Bound) extends ToQuads
   require(min.limit<=max.limit) //check that minimum is lower that maximum
 }
 
+object Range {
+  val minProperty = rs / "minoccurs"
+  val maxProperty = rs / "maxoccurs"
+}
+
 case class Range(min:Long,max:Long) extends Cardinality(Bound(min),Bound(max))
 {
   override def toQuads(subject: Res)(implicit context: Res): Set[Quad] = Set(
-    Quad(subject,rs / "minoccurs",LongLiteral(min),context),
-    Quad(subject,rs / "maxoccurs",LongLiteral(max),context)
+    Quad(subject,Range.minProperty,LongLiteral(min),context),
+    Quad(subject,Range.maxProperty,LongLiteral(max),context)
   )
 }
 
@@ -48,30 +53,43 @@ import Bound._
 
 case object ExactlyOne extends Cardinality(Once,Once)
 {
+  val property = rs / "occurs"
+  val obj = rs / "Exactly-one"
+
   override def toQuads(subject: Res)(implicit context: Res): Set[Quad] = Set(
-    Quad(subject,rs / "occurs",rs / "Exactly-one",context)
+    Quad(subject,property,obj,context)
   )
 
 }
 
 case object Plus extends Cardinality(Once,Unbound)
 {
+  val property = rs / "occurs"
+  val obj = rs / "One-or-many"
+
   override def toQuads(subject: Res)(implicit context: Res): Set[Quad] = Set(
-    Quad(subject,rs / "occurs",rs / "One-or-many",context)
+    Quad(subject,this.property,rs / "One-or-many",context)
   )
 
 }
 
 case object Star  extends Cardinality(Zero,Unbound) {
+  val property = rs / "occurs"
+  val obj = rs / "Zero-or-many"
+
   override def toQuads(subject: Res)(implicit context: Res): Set[Quad] = Set(
-    Quad(subject,rs / "occurs",rs / "Zero-or-many",context)
+    Quad(subject,property,rs / obj,context)
   )
 
 }
 
 case object Opt extends Cardinality(Zero,Once) {
+
+  val property = rs / "occurs"
+  val obj = rs / "Zero-or-one"
+
   override def toQuads(subject: Res)(implicit context: Res): Set[Quad] = Set(
-    Quad(subject,rs / "occurs",rs / "Zero-or-one",context)
+    Quad(subject,property,rs / obj,context)
   )
 
 }

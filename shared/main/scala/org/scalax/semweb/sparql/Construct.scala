@@ -5,13 +5,13 @@ import org.scalax.semweb.rdf.RDFElement
 
 object CONSTRUCT {
 
-  def apply(triplets:TripletPattern*) = new ConstructRDF()
+  def apply(triplets:TripletPattern*) = new ConstructQuery()
 
 }
 
 
 
-class ConstructRDF(triplets:TripletPattern*) extends  WithWhere with GP{
+class ConstructQuery(triplets:TripletPattern*) extends  WithWhere with GP{
   //TODO implement
   override def stringValue: String = s"CONSTRUCT"
 

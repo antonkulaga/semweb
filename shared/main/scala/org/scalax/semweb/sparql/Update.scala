@@ -8,15 +8,15 @@ case class DeleteQuery(delete:Delete)
 case class InsertDeleteQuery(insert:Insert,delete:Delete)
 case class DeleteInsertQuery(delete:Delete,insert:Insert)
 
-case class InsertOnlyIf(insert:Insert,question:AskRDF)
-case class DeleteOnlyIf(delete:Delete,question:AskRDF)
-case class InsertDeleteOnlyIf(insert:Insert,delete:Delete,question:AskRDF)
-case class DeleteInsertOnlyIf(delete:Delete,insert:Insert,question:AskRDF)
+case class InsertOnlyIf(insert:Insert,question:AskQuery)
+case class DeleteOnlyIf(delete:Delete,question:AskQuery)
+case class InsertDeleteOnlyIf(insert:Insert,delete:Delete,question:AskQuery)
+case class DeleteInsertOnlyIf(delete:Delete,insert:Insert,question:AskQuery)
 
-case class InsertUnless(insert:Insert,question:AskRDF)
-case class DeleteUnless(delete:Delete,question:AskRDF)
-case class InsertDeleteUnless(insert:Insert,delete:Delete,question:AskRDF)
-case class DeleteInsertUnless(delete:Delete,insert:Insert,question:AskRDF)
+case class InsertUnless(insert:Insert,question:AskQuery)
+case class DeleteUnless(delete:Delete,question:AskQuery)
+case class InsertDeleteUnless(insert:Insert,delete:Delete,question:AskQuery)
+case class DeleteInsertUnless(delete:Delete,insert:Insert,question:AskQuery)
 
 
 class Insert(var children: List[RDFElement]) extends GP with WithWhere

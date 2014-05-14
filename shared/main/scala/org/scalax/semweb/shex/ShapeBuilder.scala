@@ -9,10 +9,10 @@ import org.scalax.semweb.shex.Shape
  * For nice shape building
  * @param iri
  */
-class WithShapeProperty(iri:IRI)
+class WithShapeProperty(id:Option[Res],iri:IRI)
 {
 
-  lazy val result:Option[ArcRule] = if(vc == null) None else Some(ArcRule(None,iri,vc,occ))
+  lazy val result:Option[ArcRule] = if(vc == null) None else Some(ArcRule(id.map(Label.apply),iri,vc,occ))
 
 
   protected var occ:Cardinality = ExactlyOne
@@ -42,7 +42,19 @@ class WithShapeProperty(iri:IRI)
  */
 class ShapeBuilder(res:Res) extends RDFBuilder[WithShapeProperty]{
 
-  def has(iri:IRI) = this -- new WithShapeProperty(iri)
+  def has(iri:IRI) = this -- new WithShapeProperty(None,iri)
+
+  def hasProperty(res:Res,iri:IRI) = this -- new WithShapeProperty(Some(res),iri)
+
+  def hasRule(rule:Rule):this.type  = {
+    this.rules = this.rules + rule
+    this
+  }
+
+  //TODO: rewrite
+  protected var rules:Set[Rule] = Set.empty
+
+
 
 
   /**
@@ -50,8 +62,8 @@ class ShapeBuilder(res:Res) extends RDFBuilder[WithShapeProperty]{
    * @return
    */
   def result:Shape = {
-    val rules: Set[Rule] = this.values.filter(_.result.isDefined).map(_.result.get)
-    val and = new AndRule(rules)
+    val allRules: Set[Rule] = this.values.filter(_.result.isDefined).map(_.result.get) ++ this.rules
+    val and = new AndRule(allRules)
     Shape(res,and)
   }
 

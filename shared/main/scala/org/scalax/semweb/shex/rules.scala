@@ -5,6 +5,14 @@ import org.scalax.semweb.rdf.vocabulary._
 
 sealed trait Rule extends ToQuads
 
+
+object ArcRule {
+
+  val property = rs / "property"
+
+}
+
+
 case class ArcRule(
                     id: Option[Label],
                     name: NameClass,
@@ -18,15 +26,10 @@ case class ArcRule(
 
   override def toQuads(subj: Res)(implicit context: Res): Set[Quad] = {
 
-   Set(Quad(subj, rs / "property", me, context))++ name.toQuads(me)(context) ++ value.toQuads(me)(context) ++  occurs.toQuads(me)(context)
+   Set(Quad(subj, ArcRule.property, me, context))++ name.toQuads(me)(context) ++ value.toQuads(me)(context) ++  occurs.toQuads(me)(context)
   }
 
-  /**
-   * For easy generation
-   * @param occ
-   * @return
-   */
-  def occurs(occ:Cardinality) = this.copy(occurs = occ)
+//  def occurs(occ:Cardinality) = this.copy(occurs = occ)
 
   def makeId = Math.random().toString //todo: reimplement with something more reliable
 }

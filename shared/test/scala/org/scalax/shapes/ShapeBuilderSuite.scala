@@ -46,6 +46,7 @@ object ShapeBuilderSuite extends TestSuite{
       val and = res.rule.asInstanceOf[AndRule]
       assert(and.conjoints.size==2)
       val rules = and.conjoints.collect{case arc:ArcRule=>arc}
+
       assert{ rules.size == 2 }
       assert ( rules.exists(r=>
           r.name match {

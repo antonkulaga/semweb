@@ -117,6 +117,28 @@ class BigDataSparqlSpec  extends  WordSpec with Matchers with SimpleTestData {
 
     }
 
+    "insert blank nodes write" in {
+      val db = BigData(true) //cleaning the files and initializing the database
+
+      self.addTestData(db) //add test data ( see SimpleTestData )
+
+      db.read{ con=>con.getStatements(null,loves,null,false).toList }.get.size shouldEqual 6
+      db.read{ con=>con.getStatements(null,hates,null,false).toList }.get.size shouldEqual 1
+
+
+      db.update(del.stringValue)
+
+      db.read{ con=>con.getStatements(null,loves,null,false).toList }.get.size shouldEqual 5
+      db.read{ con=>con.getStatements(null,hates,null,false).toList }.get.size shouldEqual 1
+
+      db.update(ins.stringValue)
+      db.read{ con=>con.getStatements(null,loves,null,false).toList }.get.size shouldEqual 5
+      db.read{ con=>con.getStatements(null,hates,null,false).toList }.get.size shouldEqual 2
+
+      db.shutDown()
+
+    }
+
 
   }
   

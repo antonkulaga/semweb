@@ -89,12 +89,15 @@ trait BasicTriplet extends RDFElement
 //    case lit:LitStr=> "\""+lit.stringValue()+"\""
 //    case lit:LitString=> "\""+lit.stringValue()+"\""
 //    case lit:Literal=> "\""+lit.stringValue()+"\""
-    case uri:IRI => s"<${uri.stringValue}>"
+    case uri:IRI => s"${uri.toString}"
     //case l:Literal if l.getDatatype==null=>"\""+l.stringValue()+"\""
-    case other=>other.stringValue
+    case other=>other.toString
   }
 
-  override def stringValue: String = s"\n <${sub.stringValue}> <${pred.stringValue}> $objectString .\n"
+  //override def stringValue: String = s"\n <${sub.stringValue}> <${pred.stringValue}> $objectString .\n"
+
+  override def stringValue: String = s"\n ${sub.toString} ${pred.toString} $objectString .\n"
+
 
   override def equals(that: Any): Boolean = that match  {
 
