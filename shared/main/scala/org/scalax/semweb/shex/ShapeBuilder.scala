@@ -1,9 +1,7 @@
 package org.scalax.semweb.shex
 
-import org.scalax.semweb.rdf.{BlankNode, RDFBuilder, Res, IRI}
+import org.scalax.semweb.rdf.{RDFBuilder, Res, IRI}
 import scala.collection.immutable._
-import org.scalax.semweb.shex.Shape
-import org.scalax.semweb.shex.Shape
 
 /**
  * For nice shape building

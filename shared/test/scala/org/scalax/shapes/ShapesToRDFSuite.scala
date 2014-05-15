@@ -59,6 +59,7 @@ object ShapesToRDFSuite extends TestSuite{
 
           assert( q3.sub == subject)
           assert( q3.pred == occurs)
+          (q3.obj.stringValue)
           assert( q3.obj == zeroOrMany)
           assert( q3.cont == context)
 

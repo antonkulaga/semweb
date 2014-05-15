@@ -8,7 +8,7 @@ import org.openrdf.repository.RepositoryConnection
 import org.scalax.semweb.shex._
 import org.scalax.semweb.shex
 import scala.util.Try
-import org.scalax.semweb.rdf.vocabulary.{WI, RDF}
+import org.scalax.semweb.rdf.vocabulary.{RDFS, WI, RDF}
 
 
 /**
@@ -35,6 +35,44 @@ trait ShapeReader extends SesameReader{
   def loadShape(iri:Res)(implicit contexts:Seq[Resource] = List.empty[Resource]): Try[Shape] =this.read{con=>
     this.getShape(iri,con)(contexts)
   }
+
+  /**
+   * Functions to load properties by shape
+   * WARNING: BUGGY!
+   * @param sh
+   * @param res
+   * @param contexts
+   * @return
+   */
+  def loadPropertiesByShape(sh:Shape,res:Resource)(implicit contexts:Seq[Resource] = List.empty[Resource]) = this.read{con=>
+    sh.rule match {
+      case and:AndRule=>
+        val arcs = and.conjoints.collect{   case arc:ArcRule=>  arc }
+
+
+      case r => lg.warn(s"or rule is not yet supported, passed rule is ${r.toString}")
+    }
+
+
+  }
+
+
+  /**
+   * Loads shapes that are associated with this type
+   * @param tp RDF type
+   * @param contexts named graphs
+   * @return Seq of Shapes
+   */
+  def loadShapesForType(tp:URI)(implicit contexts:Seq[Resource] = List.empty) = this.read{implicit con=>
+    con.resources(tp,WI.PLATFORM.HAS_SHAPE,contexts).map(getShape(_,con))
+
+  }
+//  def loadShapesFor(res:URI)(implicit contexts:Seq[Resource] = List.empty) = this.read{implicit con=>
+//    for {
+//      tp <-con.resources(res,RDF.TYPE:URI,contexts)
+//      sh <- con.resources(tp,WI.PLATFORM.HAS_SHAPE)
+//    } yield this.getShape(sh,con)(contexts)
+//  }
 
   def getShape(shapeRes:Res,con:ReadConnection)(implicit contexts:Seq[Resource] = List.empty[Resource]): Shape = {
     object shape extends ShapeBuilder(shapeRes)

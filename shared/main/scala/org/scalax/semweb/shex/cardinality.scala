@@ -1,7 +1,7 @@
 package org.scalax.semweb.shex
 
 import org.scalax.semweb.rdf.vocabulary._
-import org.scalax.semweb.rdf.{LongLiteral, Quad, Res}
+import org.scalax.semweb.rdf.{Trip, LongLiteral, Quad, Res}
 
 
 object Bound {
@@ -18,7 +18,7 @@ class Bound(val limit:Long) {
 }
 
 
-abstract class Cardinality(min: Bound,max: Bound) extends ToQuads
+abstract class Cardinality(min: Bound,max: Bound) extends ToQuads with ToTriplets
 {
   require(min.limit<=max.limit) //check that minimum is lower that maximum
 }
@@ -34,6 +34,12 @@ case class Range(min:Long,max:Long) extends Cardinality(Bound(min),Bound(max))
     Quad(subject,Range.minProperty,LongLiteral(min),context),
     Quad(subject,Range.maxProperty,LongLiteral(max),context)
   )
+
+  override def toTriplets(subject: Res): Set[Trip] = Set(
+    Trip(subject,Range.minProperty,LongLiteral(min)),
+    Trip(subject,Range.maxProperty,LongLiteral(max))
+  )
+
 }
 
 
@@ -60,6 +66,9 @@ case object ExactlyOne extends Cardinality(Once,Once)
     Quad(subject,property,obj,context)
   )
 
+  override def toTriplets(subject: Res): Set[Trip] = Set(
+    Trip(subject,property,obj)
+  )
 }
 
 case object Plus extends Cardinality(Once,Unbound)
@@ -68,7 +77,11 @@ case object Plus extends Cardinality(Once,Unbound)
   val obj = rs / "One-or-many"
 
   override def toQuads(subject: Res)(implicit context: Res): Set[Quad] = Set(
-    Quad(subject,this.property,rs / "One-or-many",context)
+    Quad(subject,this.property,obj,context)
+  )
+
+  override def toTriplets(subject: Res): Set[Trip] = Set(
+   Trip(subject,this.property,obj)
   )
 
 }
@@ -78,9 +91,12 @@ case object Star  extends Cardinality(Zero,Unbound) {
   val obj = rs / "Zero-or-many"
 
   override def toQuads(subject: Res)(implicit context: Res): Set[Quad] = Set(
-    Quad(subject,property,rs / obj,context)
+    Quad(subject,property, obj,context)
   )
 
+  override def toTriplets(subject: Res): Set[Trip] = Set(
+    Trip(subject,property, obj)
+  )
 }
 
 case object Opt extends Cardinality(Zero,Once) {
@@ -89,9 +105,12 @@ case object Opt extends Cardinality(Zero,Once) {
   val obj = rs / "Zero-or-one"
 
   override def toQuads(subject: Res)(implicit context: Res): Set[Quad] = Set(
-    Quad(subject,property,rs / obj,context)
+    Quad(subject,property, obj,context)
   )
 
+  override def toTriplets(subject: Res): Set[Trip] = Set(
+    Trip(subject,property, obj)
+  )
 }
 
 // lazy val NoId : Label =Label(iri =(""))

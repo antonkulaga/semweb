@@ -12,7 +12,12 @@ object WI extends PrefixConfig("http://webintelligence.eu/"){
 
   val PAGES = this /+ "pages"
 
-  val PLATFORM: PrefixConfig = this /+ "platform"
+  object PLATFORM extends PrefixConfig(WI.namespace / "platform"){
+
+    val SHAPE_FOR = IRI(this / "shapeFor")
+    val HAS_SHAPE = IRI(this / "hasShape")
+  }
+
 
   val POLICY: PrefixConfig = this /+"policy"
 

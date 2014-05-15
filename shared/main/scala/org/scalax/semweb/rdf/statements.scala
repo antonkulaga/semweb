@@ -11,7 +11,11 @@ object Quads{
 
     def --(prop:IRI):WithProperty = this -- new WithProperty(sub,prop)
     def triplets: Set[Trip] = this.values.flatMap(_.triplets)
+
+
     def quads: Set[Quad] = this.values.flatMap(_.quads)
+    //def quads(context:Res): Set[Quad] = this.values.flatMap(_.quads(context))
+
   }
 
   class WithProperty(sub:Res,prop:IRI) extends RDFBuilder[WithObject]{
@@ -19,6 +23,8 @@ object Quads{
 
     def triplets:Set[Trip] = this.values.map(_.triplet)
     def quads: Set[Quad] = this.values.flatMap(_.values)
+    //def quads(context:Res): Set[Quad] = this.values.flatMap(_.quads(context))
+
 
   }
 
@@ -27,6 +33,9 @@ object Quads{
     def --(res:Res):Quad = this -- Quad(triplet.sub,triplet.pred,triplet.obj,res)
 
     def quads = this.values
+
+    //TODO;test that it works in a right way
+    //def quads(context:Res): Set[Quad] = if(values.isEmpty) Set(Quad(triplet.sub,triplet.pred,triplet.obj,context)) else quads
   }
 
 

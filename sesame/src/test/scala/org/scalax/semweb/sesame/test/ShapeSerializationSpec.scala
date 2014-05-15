@@ -115,41 +115,7 @@ class ShapeSerializationSpec extends  WordSpec with Matchers {
 
       con.hasStatement(tlt,NameTerm.property,null,true,c) shouldEqual true
 
-      //      con.hasObjectFor(tlt,NameTerm.property,c) shouldEqual true
-//
-//
-//
-//      val txt = con.subjects(NameTerm.property , text,c).head
-//      val au = con.subjects(NameTerm.property , author,c).head
-//
-//
       val props = con resources(page,ArcRule.property,List(c:Resource))
-//      props.size shouldEqual(3)
-//      println("props = " + props.toString())
-//
-//      val un = (props++subs).toSet
-//      un.size shouldEqual 3
-//
-//      con.hasSubjectFor(NameTerm.property,title,c) shouldEqual true
-//      con.hasSubjectFor(NameTerm.property,text,c) shouldEqual true
-//      con.hasSubjectFor(NameTerm.property,author,c) shouldEqual true
-//
-//      val r = props.find(_==tlt)
-//      r.isDefined shouldEqual true
-//
-//      props.contains(tlt) shouldEqual true
-//      props.contains(txt) shouldEqual true
-//      props.contains(au) shouldEqual true
-
-
-
-
-//      con.hasObjectFor(props(0),null,c) shouldEqual true
-//      con.hasObjectFor(props(0),NameTerm.property,c) shouldEqual true
-//      con.hasObjectFor(props(1),null) shouldEqual true
-//      con.hasObjectFor(props(1),NameTerm.property,c) shouldEqual true
-//      con.hasObjectFor(props(2),null,c) shouldEqual true
-//      con.hasObjectFor(props(2),NameTerm.property,c) shouldEqual true
 
      val terms = props.flatMap{case p=>con objects(p,NameTerm.property:URI,List(c:Resource))}
      terms.size shouldEqual(3)
@@ -176,8 +142,6 @@ class ShapeSerializationSpec extends  WordSpec with Matchers {
         case _ =>false
       }
       } shouldEqual 1
-
-      val occs =  arcs.map(_.occurs)
 
 
       val shape = db.getShape(page,con)(List(c:Resource))
@@ -207,7 +171,11 @@ class ShapeSerializationSpec extends  WordSpec with Matchers {
       db.shutDown()
 
     }
+
+
   }
+
+
 
 
 
