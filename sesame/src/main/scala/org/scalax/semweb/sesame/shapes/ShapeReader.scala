@@ -1,15 +1,12 @@
 package org.scalax.semweb.sesame.shapes
 
 import org.scalax.semweb.sesame._
-import org.scalax.semweb.shex._
 import org.scalax.semweb.rdf._
-import org.openrdf.model.{URI, Literal, Resource}
-import org.openrdf.repository.RepositoryConnection
+import org.openrdf.model.{Value, URI, Literal, Resource}
 import org.scalax.semweb.shex._
-import org.scalax.semweb.shex
-import scala.util.Try
-import org.scalax.semweb.rdf.vocabulary.{RDFS, WI, RDF}
-
+import scala.util.{Success, Try}
+import org.scalax.semweb.rdf.vocabulary.{WI, RDF}
+import org.scalax.semweb.shex.validation.{ValidationResult, Valid, Failed}
 
 /**
  * Ugly written
@@ -37,6 +34,60 @@ trait ShapeReader extends SesameReader{
   }
 
   /**
+   * Checks if there is violation with occurence
+   * @param c
+   * @param prop
+   * @param values
+   * @return
+   */
+  def checkOccurrence(c:Cardinality,prop:IRI, values:Seq[Value]):ValidationResult= c match {
+
+    case ExactlyOne=>if(values.size!=1) Failed(s"exactly-one rule",prop) else Valid
+    case Plus=>if(values.size<1) Failed(s"one or more rule",prop) else Valid
+    case Opt=>if(values.size>1) Failed(s"optional rule",prop) else Valid
+    case Star=>Valid
+    case Range(min,max)=>if(values.size<min || values.size>max) Failed(s"range rule",prop) else Valid
+    case _=> Failed(s"uknown cardinality type",prop)
+
+      //    case Plus=> if(prop._2.size<1) throw new Exception(s"one-or-many rule is broken for ${prop._1.toString}") else prop
+//    case Opt=> if(prop._2.size>1) throw new Exception(s"zero-or-one rule is broken for ${prop._1.toString}") else prop
+//    case Star=> prop
+//    case Range(min,max)=> if(prop._2.size<min || prop._2.size>max) throw new Exception(s"cardinality rule is broken for ${prop._1.toString}") else prop
+//    case _=>throw new Exception("uknown cardinality type")
+//
+ }
+
+  def propertyByArc(res:Res,p:IRI,arc:ArcRule)(implicit con:ReadConnection, contexts:Seq[Resource] = List.empty[Resource]): (IRI, Seq[Value]) =  arc.value match {
+      case ValueSet(s)=>
+        p -> con.objects(res, p,contexts).filter(o => s.contains(o: RDFValue))
+
+      case ValueType(i)=>
+      if(i.stringValue.contains(vocabulary.XSD.namespace)) {
+        lg.warn("XSD IS NOT YET CHECKED")
+        p ->con.objects(res,p,contexts)
+
+      }
+      else {
+      p -> con.resources(res,p,contexts).filter(o=>con.hasStatement(o,RDF.TYPE,i,true,contexts:_*))
+      }
+
+      case _ => ???
+
+  }
+
+
+//  def propertyByArc(res:Res,arc:ArcRule)(implicit con:ReadConnection, contexts:Seq[Resource] = List.empty[Resource]): (IRI, Seq[Value]) = arc.name match  {
+//
+//    case NameTerm(p)=>
+//     this.propertyByArc(res,p,arc)
+//
+//    case _ =>
+//      lg.error("names other then nameterm are not implemented in arc")
+//      ???
+//
+//  }
+
+  /**
    * Functions to load properties by shape
    * WARNING: BUGGY!
    * @param sh
@@ -44,13 +95,30 @@ trait ShapeReader extends SesameReader{
    * @param contexts
    * @return
    */
-  def loadPropertiesByShape(sh:Shape,res:Resource)(implicit contexts:Seq[Resource] = List.empty[Resource]) = this.read{con=>
+  def loadPropertiesByShape(sh:Shape,res:Resource)(implicit contexts:Seq[Resource] = List.empty[Resource]): Try[PropertyModel] = this.read{con=>
     sh.rule match {
       case and:AndRule=>
         val arcs = and.conjoints.collect{   case arc:ArcRule=>  arc }
 
+        val result = arcs.foldLeft[PropertyModel](PropertyModel.empty){ case (model,arc)=>
+          arc.name match {
+            case NameTerm(prop)=>
+              val (pr:IRI, values:Seq[Value]) = this.propertyByArc(res,prop,arc)(con,contexts)
+              val v = this.checkOccurrence(arc.occurs,pr,values)
+              val vals: Set[RDFValue] = values.map(v=>v:RDFValue).toSet
+              model.copy(properties = model.properties + (pr -> vals) , model.validation.and(v))
 
-      case r => lg.warn(s"or rule is not yet supported, passed rule is ${r.toString}")
+            case _=>model
+          }
+        }
+        result
+
+
+
+
+      case r =>
+        lg.warn(s"or rule is not yet supported, passed rule is ${r.toString}")
+        ???
     }
 
 

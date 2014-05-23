@@ -27,7 +27,7 @@ resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositori
 
 libraryDependencies += "org.openrdf.sesame" % "sesame-sail-memory" % bigDataSesameVersion
 
-libraryDependencies += "com.bigdata" % "bigdata" % "1.3.0" % "test" //Bigdata for tests
+libraryDependencies += "com.bigdata" % "bigdata" % "1.3.1" % "test" //Bigdata for tests
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "2.1.5"
 

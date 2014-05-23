@@ -43,7 +43,7 @@ class BigDataSparqlSpec  extends  WordSpec with Matchers with SimpleTestData {
         .stripMargin('|')
 
       //UNCOMMENT FOLLOWING LINES TO SEE TIMEOUTS
-     val queryFreeze= db.select(wrongQuery)
+     val queryFreeze= db.justSelect(wrongQuery)
      queryFreeze.isFailure shouldBe true
      db.shutDown() // shutting down
 
@@ -67,7 +67,7 @@ class BigDataSparqlSpec  extends  WordSpec with Matchers with SimpleTestData {
 
       //"SELECT ?s ?o WHERE { ?s <http://denigma.org/relations/resources/loves>  ?o }"
       val query =  SELECT(?("s"), ?("o") ) WHERE Pat(?("s"), IRI("http://denigma.org/relations/resources/loves"), ?("o"))
-      val queryLove= db.select(query.stringValue)
+      val queryLove= db.justSelect(query.stringValue)
       queryLove.isSuccess shouldBe  true
       queryLove.get.toList.size shouldEqual 6
 

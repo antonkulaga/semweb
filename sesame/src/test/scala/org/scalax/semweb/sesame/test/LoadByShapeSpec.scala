@@ -5,13 +5,14 @@ import org.scalax.semweb.rdf.vocabulary._
 import org.scalax.semweb.shex._
 import org.scalax.semweb.rdf._
 import org.scalax.semweb.sparql.{GRAPH, DATA, INSERT}
-import org.openrdf.model.{URI, Resource}
+import org.openrdf.model.{Value, URI, Resource}
 import org.scalax.semweb.shex._
 import org.scalax.semweb.rdf.IRI
 import org.scalax.semweb.rdf.StringLiteral
 import org.scalax.semweb.rdf.Quad
 import org.scalax.semweb.rdf.Trip
 import org.scalax.semweb.sesame._
+import scala.util.Try
 
 
 class LoadByShapeSpec extends  WordSpec with Matchers {
@@ -69,13 +70,15 @@ class LoadByShapeSpec extends  WordSpec with Matchers {
     val draft = WI.re("draft")
 
     val dAuthor = WI.re("Daniel_Wuttke")
+    val dTitle = StringLiteral("Draft title")
+    val extras = WI.re("extras")
 
 
     val dm = Quads --draft
     dm --RDF.TYPE--paperType--c
-    dm -- title -- pTitle--c
+    dm -- title -- dTitle--c
     dm -- author -- dAuthor--c
-    dm -- WI.re("extras")--StringLiteral("extra information 2")--c
+    dm -- extras--StringLiteral("extra information 2")--c
     val draftQuads = dm.quads
 
     val insertDraft = INSERT (
@@ -134,7 +137,60 @@ class LoadByShapeSpec extends  WordSpec with Matchers {
 
       val rco: Option[ArcRule] = rls.collectFirst{case rule if rule.name.isInstanceOf[NameTerm] && rule.name.asInstanceOf[NameTerm].t == author =>rule}
       rco.isDefined shouldEqual true
+      val aur = rco.get
 
+      val rco2: Option[ArcRule] = rls.collectFirst{case rule if rule.name.isInstanceOf[NameTerm] && rule.name.asInstanceOf[NameTerm].t == title =>rule}
+      rco2.isDefined shouldEqual true
+      val pt = rco2.get
+
+
+      val con2 = db.readConnection
+
+      val pau: (IRI, Seq[Value]) = db.propertyByArc(paper,author,aur)(con2)
+      pau._2.size shouldEqual 1
+      pau._2.head.stringValue() shouldEqual pAuthor.stringValue
+
+
+      val pat: (IRI, Seq[Value]) = db.propertyByArc(paper,title,pt)(con2)
+      pat._2.size shouldEqual 1
+      pTitle.stringValue.contains(pat._2.head.stringValue()) shouldEqual true
+
+
+
+      val dau: (IRI, Seq[Value]) = db.propertyByArc(draft,author,aur)(con2)
+      dau._2.size shouldEqual 1
+      dau._2.head.stringValue() shouldEqual dAuthor.stringValue
+
+      val dat: (IRI, Seq[Value]) = db.propertyByArc(draft,title,pt)(con2)
+      dat._2.size shouldEqual 1
+      //dat._2.head.stringValue() shouldEqual dTitle
+
+      con2.close()
+
+
+      val ops: Try[PropertyModel] = db.loadPropertiesByShape(sl,paper)
+      ops.isSuccess shouldBe(true)
+      val op = ops.get
+      op.isValid shouldEqual true
+      op.properties(author).head shouldEqual pAuthor
+      pTitle shouldEqual op.properties(title).head
+      pText shouldEqual op.properties(text).head
+
+
+
+      val ods: Try[PropertyModel] = db.loadPropertiesByShape(sl,draft)
+      ods.isSuccess shouldBe(true)
+      val od = ods.get
+
+      od.isValid shouldEqual false
+      od.properties(author).head shouldEqual dAuthor
+      dTitle shouldEqual od.properties(title).head
+      od.properties(text).isEmpty shouldEqual true
+      od.properties.get(extras).isEmpty shouldEqual true
+
+      val vio = od.violations
+      vio.size shouldEqual 1
+      vio.head.value shouldEqual(text)
 
       db.shutDown()
 

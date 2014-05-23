@@ -77,7 +77,7 @@ trait SelectReader extends CanReadSesame
 
   }
 
-  def select(select:String): Try[TupleQueryResult] = this.selectQuery(select){ (str,con,q)=>q.evaluate() }
+  def justSelect(select:String): Try[TupleQueryResult] = this.selectQuery(select){ (str,con,q)=>q.evaluate() }
 }
 
 /*
@@ -92,7 +92,7 @@ trait ConstructReader extends CanReadSesame {
   def makeConstructQuery(con:ReadConnection,query:String)(implicit base:String = WI.RESOURCE):ConstructQuery //con.prepareTupleQuery(QueryLanguage.SPARQL,str,base)
 
 
-  def construct(query:String) = this.graphQuery(query){ (str,con,q)=>q.evaluate() }
+  def justConstruct(query:String) = this.graphQuery(query){ (str,con,q)=>q.evaluate() }
 
   def graphQuery[T](query:String)(selectGraph:ConstructHandler[T])(implicit base:String= WI.RESOURCE): Try[T] = {
     val con= this.readConnection
@@ -120,7 +120,7 @@ trait AskReader extends CanReadSesame
 
   def makeAskQuery(con:ReadConnection,query:String)(implicit base:String = WI.RESOURCE):AskQuery //con.prepareTupleQuery(QueryLanguage.SPARQL,str,base)
 
-  def question(query:String): Try[Boolean] = this.askQuery(query){ (str,con,q)=>q.evaluate() }
+  def justAsk(query:String): Try[Boolean] = this.askQuery(query){ (str,con,q)=>q.evaluate() }
   /**
    * Ask
    * @param query query string

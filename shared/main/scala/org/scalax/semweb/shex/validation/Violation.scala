@@ -1,6 +1,7 @@
 package org.scalax.semweb.shex.validation
 
 
+
 /** A base trait for all violation types. */
 trait Violation {
   /** The actual runtime value of the object under validation. */

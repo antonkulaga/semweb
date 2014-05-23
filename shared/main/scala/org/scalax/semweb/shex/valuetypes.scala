@@ -58,7 +58,7 @@ object ValueSet {
   val property =  rs / "allowedValue"
 }
 
-case class ValueSet(s: Set[Res]) extends ValueClass {
+case class ValueSet(s: Set[RDFValue]) extends ValueClass {
   override def toQuads(subject: Res)(implicit context: Res): Set[Quad] = {
 
     val prop =  Quads -- subject -- ValueSet.property
