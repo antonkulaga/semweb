@@ -22,7 +22,7 @@ test in Test <<= (test in Test) dependsOn (test in (sesame, Test)) //run sesame 
 
 
 libraryDependencies ++= Seq(
-  "com.lihaoyi" %% "utest" % "0.1.4" % "test"
+  "com.lihaoyi" %% "utest" % "0.1.6-RC1" % "test"
 )
 
 testFrameworks += new TestFramework("utest.runner.JvmFramework")

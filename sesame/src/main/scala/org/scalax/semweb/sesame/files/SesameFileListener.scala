@@ -3,7 +3,8 @@ package org.scalax.semweb.sesame.files
 import org.{openrdf=>se}
 import org.openrdf.model._
 import se.rio._
-import org.scalax.semweb.sesame.{CanWriteSesame, LogLike}
+import org.scalax.semweb.sesame.CanWriteSesame
+import org.scalax.semweb.commons.LogLike
 
 
 /**

@@ -1,4 +1,4 @@
-package org.scalax.semweb.sesame
+package org.scalax.semweb.commons
 
 /*
 wrapper for logger (used to abstract from play logger as akka logger adapter is different

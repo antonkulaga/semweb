@@ -2,6 +2,7 @@ package org.scalax.semweb.sesame
 
 import org.openrdf.repository.RepositoryConnection
 import scala.util.Try
+import org.scalax.semweb.commons.Logged
 
 
 /**

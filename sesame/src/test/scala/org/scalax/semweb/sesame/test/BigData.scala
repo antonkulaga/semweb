@@ -11,6 +11,7 @@ import org.openrdf.repository.RepositoryConnection
 import org.scalax.semweb.sesame._
 import org.scalax.semweb.rdf.IRI
 import org.scalax.semweb.sesame.shapes.ShapeReader
+import org.scalax.semweb.commons.LogLike
 
 
 /**

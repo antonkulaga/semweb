@@ -3,7 +3,10 @@ import sbt.Keys._
 import bintray.Plugin.bintraySettings
 import bintray.Keys._
 import Def.ScopedKey
+import sbt.URLRepository
 import scala.scalajs.sbtplugin.ScalaJSPlugin._
+import scala.Some
+
 // import com.typesafe.sbt.packager.universal.UniversalKeys
 // import play.Keys._
 
@@ -13,7 +16,7 @@ object Build extends sbt.Build{
 
  def repo = if(isRelease) "scalax-releases" else "scalax-snapshots"
 
- val semWebVer = "0.3.0"
+ val semWebVer = "0.4.6"
 
  publishMavenStyle := false
 
@@ -46,9 +49,12 @@ object Build extends sbt.Build{
 
   val sharedSettings = Seq(
       organization := "org.scalax",
+      //scalaVersion :="2.11.1",
+      scalaVersion :="2.10.4",
       name := "semweb",
-      scalaVersion := "2.10.4"
-    )
+      version := Build.semWebVer
+
+  )
 
   val scalajsResolver: URLRepository = Resolver.url("scala-js-releases",
     url("http://dl.bintray.com/content/scala-js/scala-js-releases"))(

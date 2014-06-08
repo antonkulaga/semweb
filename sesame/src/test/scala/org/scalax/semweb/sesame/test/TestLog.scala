@@ -1,6 +1,6 @@
 package org.scalax.semweb.sesame.test
 
-import org.scalax.semweb.sesame.LogLike
+import org.scalax.semweb.commons.LogLike
 
 object TestLog extends LogLike{
   override def isDebugEnabled: Boolean = true

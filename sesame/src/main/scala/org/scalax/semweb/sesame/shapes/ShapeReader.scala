@@ -35,9 +35,9 @@ trait ShapeReader extends SesameReader{
 
   /**
    * Checks if there is violation with occurence
-   * @param c
-   * @param prop
-   * @param values
+   * @param c cardinality values against the check should be done
+   * @param prop property IRI
+   * @param values values that were found
    * @return
    */
   def checkOccurrence(c:Cardinality,prop:IRI, values:Seq[Value]):ValidationResult= c match {
@@ -100,13 +100,13 @@ trait ShapeReader extends SesameReader{
       case and:AndRule=>
         val arcs = and.conjoints.collect{   case arc:ArcRule=>  arc }
 
-        val result = arcs.foldLeft[PropertyModel](PropertyModel.empty){ case (model,arc)=>
+        val result = arcs.foldLeft[PropertyModel](PropertyModel.clean(res)){ case (model,arc)=>
           arc.name match {
             case NameTerm(prop)=>
               val (pr:IRI, values:Seq[Value]) = this.propertyByArc(res,prop,arc)(con,contexts)
               val v = this.checkOccurrence(arc.occurs,pr,values)
               val vals: Set[RDFValue] = values.map(v=>v:RDFValue).toSet
-              model.copy(properties = model.properties + (pr -> vals) , model.validation.and(v))
+              model.copy(properties = model.properties + (pr -> vals) ,validation =  model.validation.and(v))
 
             case _=>model
           }

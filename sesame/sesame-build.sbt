@@ -7,7 +7,9 @@ organization := "org.scalax"
 
 name := "semweb-sesame"
 
-scalaVersion := "2.10.4"
+scalaVersion :="2.10.4"
+
+//scalaVersion :="2.11.1"
 
 version := Build.semWebVer
 
@@ -32,8 +34,6 @@ libraryDependencies += "com.bigdata" % "bigdata" % "1.3.1" % "test" //Bigdata fo
 libraryDependencies += "org.scalatest" %% "scalatest" % "2.1.5"
 
 parallelExecution in Test := false
-
-//libraryDependencies += "com.lihaoyi" %% "utest" % "0.1.2" % "test"
 
 autoCompilerPlugins := true
 

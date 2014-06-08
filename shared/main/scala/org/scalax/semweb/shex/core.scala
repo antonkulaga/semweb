@@ -3,7 +3,6 @@ package org.scalax.semweb.shex
 import org.scalax.semweb.rdf._
 import org.scalax.semweb.rdf.vocabulary._
 
-import org.scalax.semweb.shex.parser.PrefixMap
 import org.scalax.semweb.rdf.vocabulary.{RDF, FOAF}
 import org.scalax.semweb.sparql.Pat
 
@@ -42,9 +41,10 @@ trait ToPatterns extends WithPatterns
 
 }
 
-case class Schema(pm: PrefixMap, rules: Seq[Shape])
 
-case class ShEx(rules:Seq[Shape], start: Option[Label] = None)
+case class ShEx(rules:Seq[Shape], start: Option[Label] = None) extends {
+
+}
 
 object Shape {
 
@@ -104,6 +104,11 @@ case class BNodeLabel(bnode:BlankNode) extends Label
 
 }
 
-case class IRIStem(iri: IRI, isStem: Boolean)
+case class IRIStem(iri: IRI, isStem: Boolean) {
+  def matchStem(other: Res): Boolean = other match {
+    case prop:IRI=>prop.stringValue.startsWith(iri.stringValue)
+    case _=>false
+  }
+}
 
 case class Action(label: Label, code: String)

@@ -5,6 +5,7 @@ import org.openrdf.repository.RepositoryConnection
 import org.scalax.semweb.rdf.vocabulary.WI
 import org.openrdf.query._
 import org.scalax.semweb.rdf.IRI
+import org.scalax.semweb.commons.Logged
 
 
 trait CanReadSesame  extends Logged{

@@ -93,6 +93,11 @@ trait BasicTriplet extends RDFElement
   val pred:IRI
   val obj:RDFValue
 
+  def toSet: Set[RDFValue] = Set(sub,pred,obj)
+  def toList: List[RDFValue] = List(sub,pred,obj)
+  def allResources: Set[Res] = this.toSet.collect{case r:Res=>r}
+  def allIRIs: Set[IRI] = this.toSet.collect{case iri:IRI=>iri}
+
 
   def objectString: String = obj   match {
 //    case lit:LitStr=> "\""+lit.stringValue()+"\""
