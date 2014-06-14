@@ -7,9 +7,7 @@ organization := "org.scalax"
 
 name := "semweb-sesame"
 
-scalaVersion :="2.10.4"
-
-//scalaVersion :="2.11.1"
+scalaVersion :="2.11.1"
 
 version := Build.semWebVer
 

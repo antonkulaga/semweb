@@ -16,7 +16,7 @@ object Build extends sbt.Build{
 
  def repo = if(isRelease) "scalax-releases" else "scalax-snapshots"
 
- val semWebVer = "0.4.6"
+ val semWebVer = "0.5.0"
 
  publishMavenStyle := false
 
@@ -49,8 +49,7 @@ object Build extends sbt.Build{
 
   val sharedSettings = Seq(
       organization := "org.scalax",
-      //scalaVersion :="2.11.1",
-      scalaVersion :="2.10.4",
+      scalaVersion :="2.11.1",
       name := "semweb",
       version := Build.semWebVer
 

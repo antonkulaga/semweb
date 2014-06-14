@@ -33,16 +33,13 @@ If you use release version it looks like:
 
 ```scala
 
-    libraryDependencies += "org.scalax" %% "semweb" % "0.2.2"// for scala projects
+    libraryDependencies += "org.scalax" %% "semweb" % "0.5.0"// for scala projects
 
-    libraryDependencies += "org.scalax" %% "semweb" % "0.2.2-JS"// for scalajs projects
+    libraryDependencies += "org.scalax" %%% "semweb" % "0.5.0"// for scalajs projects, note %%% is used
 ```
 
 4). Use it in your project!
 
-NOTES:
-
-* The lib does not crosscompilable to scala 2.11 yet but I am working on that.
 
 
 Contribution:
