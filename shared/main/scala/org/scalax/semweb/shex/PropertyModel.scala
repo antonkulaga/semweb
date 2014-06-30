@@ -9,9 +9,15 @@ import org.scalax.semweb.rdf.DoubleLiteral
 import org.scalax.semweb.rdf.StringLangLiteral
 
 object PropertyModel {
-  def clean(res:Res) = PropertyModel(res,Map.empty,Valid)
+  def clean(res:Res) = PropertyModel(res,Map.empty[IRI,Set[RDFValue]],Valid)
 
   val empty = PropertyModel.clean(null)
+
+  def apply(resource:Res,props:(IRI,RDFValue)*): PropertyModel = {
+    PropertyModel(resource,props.map{case (key,value)=>key->Set(value)}.toMap)
+  }
+
+
 }
 
 trait Model {

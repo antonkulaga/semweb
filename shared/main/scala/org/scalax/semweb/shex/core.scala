@@ -1,13 +1,8 @@
 package org.scalax.semweb.shex
 
 import org.scalax.semweb.rdf._
-import org.scalax.semweb.rdf.vocabulary._
-
-import org.scalax.semweb.rdf.vocabulary.{RDF, FOAF}
-import org.scalax.semweb.sparql.Pat
-
+import org.scalax.semweb.rdf.vocabulary.RDF
 import org.scalax.semweb.sparql._
-import scala.util.Try
 
 
 
@@ -53,6 +48,11 @@ object Shape {
 }
 
 
+/**
+ * Shape expression
+ * @param label
+ * @param rule
+ */
 case class Shape(label: Label, rule: Rule) {
 
   /**
@@ -68,6 +68,14 @@ case class Shape(label: Label, rule: Rule) {
     model.quads ++ rule.toQuads(model.sub)(context)
   }
 
+
+  def asPropertyModel(implicit context:Res):PropertyModel = {
+    val res = label.asResource
+    val props: Map[IRI, Set[RDFValue]] = rule.toQuads(res)(context).map(q=>(q.pred,Set(q.obj))).toMap
+    PropertyModel(res,props)
+
+  }
+
   def loadProperties(res:Res) =  this.rule match {
     case and:AndRule=> and.conjoints.map{
       case arc:ArcRule=>
@@ -75,6 +83,17 @@ case class Shape(label: Label, rule: Rule) {
       case r =>print(s"nonArc conjoints are not yet supported, passed rule is ${r.toString}")
     }
     case r => print(s"or rule is not yet supported, passed rule is ${r.toString}")
+  }
+
+  def arcSorted(implicit context:Res) = this.arcRules(this.rule).sortBy(f=>f.priority)
+
+  def arcRules(rl:Rule = this.rule)(implicit context:Res):List[ArcRule] = {
+    rl match {
+      case arc:ArcRule=> List(arc)
+      case  and:AndRule=> and.conjoints.flatMap(v=>arcRules(v)(context)).toList
+      case _=> List.empty[ArcRule]
+    }
+
   }
 
 

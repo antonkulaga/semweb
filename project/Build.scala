@@ -1,11 +1,6 @@
-import sbt._
-import sbt.Keys._
-import bintray.Plugin.bintraySettings
 import bintray.Keys._
-import Def.ScopedKey
-import sbt.URLRepository
-import scala.scalajs.sbtplugin.ScalaJSPlugin._
-import scala.Some
+import sbt.Keys._
+import sbt._
 
 // import com.typesafe.sbt.packager.universal.UniversalKeys
 // import play.Keys._
@@ -16,7 +11,7 @@ object Build extends sbt.Build{
 
  def repo = if(isRelease) "scalax-releases" else "scalax-snapshots"
 
- val semWebVer = "0.5.0"
+ val semWebVer = "0.6.0"
 
  publishMavenStyle := false
 

@@ -1,10 +1,7 @@
 package org.scalax.semweb.shex
 
 import org.scalax.semweb.rdf._
-import org.scalax.semweb.rdf.vocabulary._
-import org.scalax.semweb.rdf.BlankNode
-import org.scalax.semweb.rdf.Quad
-import org.scalax.semweb.sparql.{Variable, GP, Pat}
+import org.scalax.semweb.sparql.{GP, Variable}
 
 
 trait ToGroupPatter {
@@ -27,7 +24,8 @@ case class ArcRule(
                     name: NameClass,
                     value: ValueClass,
                     occurs: Cardinality,
-                    actions: Seq[Action] = List.empty
+                    actions: Seq[Action] = List.empty,
+                    priority:Int = Int.MaxValue //the smaller the more important
                     ) extends Rule
 {
 

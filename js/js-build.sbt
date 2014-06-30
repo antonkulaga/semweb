@@ -15,6 +15,8 @@ unmanagedSourceDirectories in Test <+= baseDirectory(_ / ".." / "shared" / "test
 
 autoCompilerPlugins := true
 
+libraryDependencies += "org.scalajs" %%% "scalajs-pickling" % "0.3.1"
+
 bintraySettings
 
 Build.publishSettings
