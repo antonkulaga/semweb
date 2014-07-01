@@ -1,35 +1,8 @@
 package org.scalax.shapes
-import org.scalax.semweb.rdf._
-
+import org.scalax.semweb.rdf.IRI
+import org.scalax.semweb.rdf.vocabulary.{FOAF, XSD}
+import org.scalax.semweb.shex.{AndRule, ArcRule, ExactlyOne, NameTerm, Plus, Shape, ShapeBuilder, _}
 import utest._
-import org.scalax.semweb.shex._
-import org.scalax.semweb.rdf.vocabulary._
-import org.scalax.semweb.rdf.IRI
-import org.scalax.semweb.rdf.LongLiteral
-import org.scalax.semweb.shex.NameTerm
-import org.scalax.semweb.shex.ValueReference
-import scala.Some
-import org.scalax.semweb.shex.IRILabel
-import org.scalax.semweb.rdf.Quad
-import org.scalax.semweb.shex.ArcRule
-import org.scalax.semweb.rdf.IRI
-import org.scalax.semweb.shex.ExactlyOne
-import org.scalax.semweb.shex.Plus
-import org.scalax.semweb.shex.Star
-import org.scalax.semweb.shex.Opt
-import org.scalax.semweb.rdf.Quad
-import org.scalax.semweb.shex.Cardinality
-import org.scalax.semweb.rdf.LongLiteral
-import org.scalax.semweb.rdf.vocabulary.WI
-import org.scalax.semweb.shex.ArcRule
-import org.scalax.semweb.shex.IRILabel
-import org.scalax.semweb.shex.NameTerm
-import org.scalax.semweb.rdf.vocabulary.FOAF
-import org.scalax.semweb.shex.ValueReference
-import org.scalax.semweb.shex.ShapeBuilder
-import org.scalax.semweb.rdf.vocabulary.XSD
-import org.scalax.semweb.shex.Shape
-import org.scalax.semweb.shex.AndRule
 
 object ShapeBuilderSuite extends TestSuite{
 

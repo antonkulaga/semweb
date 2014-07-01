@@ -9,6 +9,7 @@ object Bound {
   case object Zero extends Bound(0)
   case object Once extends Bound(1)
   case object Unbound extends Bound(Long.MaxValue)
+  case class Bounded(override val limit:Long) extends Bound(limit)
 
 
 }

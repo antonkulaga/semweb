@@ -1,5 +1,7 @@
 package org.scalax.semweb.sesame
 
+import java.util.GregorianCalendar
+
 import org.scalax.semweb.rdf._
 import org.openrdf.model.impl.{LiteralImpl, BNodeImpl, URIImpl}
 import org.openrdf.model._
@@ -55,6 +57,8 @@ trait Scala2SesameModelImplicits{
   implicit def booleanLit2Literal(lit:BooleanLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.BOOLEAN)
   implicit def decimalLit2Literal(lit:DecimalLiteral):Literal = new LiteralImpl(lit.value.toString(),vocabulary.XMLSchema.DECIMAL)
   implicit def longLit2Literal(lit:LongLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.LONG)
+  implicit def dateLit2Literal(lit:DateLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.DATE)
+
 
 
   implicit class QuadStatement(q:Quad) extends Statement{
@@ -99,6 +103,17 @@ trait Sesame2ScalaModelImplicits{
     l.getDatatype == xe.DAYTIMEDURATION ||
     l.getDatatype == xe.GYEARMONTH
 
+  def isCalendar(uri:URI) =
+    uri == xe.DATETIME ||
+    uri == xe.DATE ||
+    uri == xe.GMONTH ||
+    uri == xe.GMONTHDAY ||
+    uri == xe.GDAY ||
+    uri == xe.GYEAR ||
+    uri == xe.TIME ||
+    uri == xe.DAYTIMEDURATION ||
+    uri == xe.GYEARMONTH
+
   implicit def literal2Lit(l:Literal):Lit = l.getDatatype match {
     case null=>if(l==null) null else AnyLit(l.getLabel)
     case xe.BOOLEAN => BooleanLiteral(l.booleanValue())
@@ -106,6 +121,8 @@ trait Sesame2ScalaModelImplicits{
     case xe.DOUBLE => DoubleLiteral(l.doubleValue())
     case xe.LONG => LongLiteral(l.longValue())
     case xe.INT => IntegerLiteral(l.intValue())
+
+    case d if this.isCalendar(d) =>  DateLiteral(l.calendarValue().toGregorianCalendar.getTime)
     case xe.STRING | xe.NORMALIZEDSTRING=> if(l.getLanguage!="") StringLangLiteral(l.getLabel,l.getLanguage) else StringLiteral(l.getLabel)
     case other => AnyLit(l.getLabel)
   }

@@ -5,6 +5,7 @@ import org.scalajs.spickling.PicklerRegistry._
 import org.scalajs.spickling._
 import scala.collection.immutable.Nil
 import org.scalajs.spickling.PicklerRegistry
+import java.util.Date
 
 /**
  * Picklers for some common classes like list
@@ -14,18 +15,25 @@ trait CommonPicklers {
 
   self:PicklerRegistry=>
 
+  implicit object DatePickler extends Pickler[Date] {
+    def pickle[P](value: Date)(implicit registry: PicklerRegistry,
+                               builder: PBuilder[P]): P = {
+      builder.makeObject {
 
-  def registerCommon() = {
-    //
-    // Utils
-    register(Nil)
-    register[::[Any]]
-    register(None)
-
-    //register[(_,_)]
-
+        "date"-> builder.makeObject("time" ->   builder.makeNumber(value.getTime))
+      }
+    }
   }
 
+  implicit object DateUnpickler extends Unpickler[Date] {
+    def unpickle[P](pickle: P)(implicit registry: PicklerRegistry,
+                               reader: PReader[P]): Date = {
+      val tp = reader.readObjectField(pickle, "date")
+
+      new Date(Math.round(reader.readNumber(reader.readObjectField(tp,"time"))))
+
+    }
+  }
 
   implicit object ConsPickler extends Pickler[::[_]] {
     def pickle[P](value: ::[_])(implicit registry: PicklerRegistry,
@@ -44,4 +52,19 @@ trait CommonPicklers {
       }).asInstanceOf[::[Any]]
     }
   }
+  def registerCommon() = {
+    //
+    // Utils
+    register(Nil)
+    register[::[Any]]
+    register(None)
+    register[Date]
+
+    //register[(_,_)]
+
+  }
+
+
+
+
 }

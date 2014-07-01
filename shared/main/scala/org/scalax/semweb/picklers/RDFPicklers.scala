@@ -1,25 +1,17 @@
 package org.scalax.semweb.picklers
 
-import org.scalajs.spickling.PicklerRegistry._
-import org.scalax.semweb.rdf._
-import org.scalax.semweb.sparql.Pat
-import org.scalax.semweb.rdf.IRI
-import org.scalax.semweb.rdf.Trip
-import org.scalax.semweb.sparql.Pat
-import org.scalax.semweb.rdf.BlankNode
-import org.scalax.semweb.rdf.StringLiteral
-import org.scalax.semweb.shex.validation.{JustFailure, Valid}
-import org.scalax.semweb.shex.PropertyModel
 import org.scalajs.spickling.PicklerRegistry
+import org.scalajs.spickling.PicklerRegistry._
+import org.scalax.semweb.rdf.{BlankNode, IRI, StringLiteral, Trip, _}
+import org.scalax.semweb.shex.validation.{JustFailure, Valid}
+import org.scalax.semweb.shex.{ArcRule, PropertyModel, Shape, _}
+import org.scalax.semweb.sparql.Pat
 
 trait RDFPicklers extends CommonPicklers{
 
   self:PicklerRegistry=>
 
-
-  def registerRdf() = {
-
-
+  def registerRdfValues() = {
     //Semantic
     register[IRI]
     register[BlankNode]
@@ -30,9 +22,13 @@ trait RDFPicklers extends CommonPicklers{
     register[StringLangLiteral]
     register[LongLiteral]
     register[IntegerLiteral]
+    register[DateLiteral]
     register[AnyLit]
 
 
+  }
+
+  def registerStatements() = {
     register[Pat]
     register[Trip]
     register[Quad]
@@ -42,6 +38,51 @@ trait RDFPicklers extends CommonPicklers{
 
     //register[Map[IRI,RDFValue]]
     register[PropertyModel]
+
+  }
+
+  def registerShapes() = {
+
+    register(Bound.Zero)
+    register(Bound.Once)
+    register(Bound.Unbound)
+    register[Bound.Bounded]
+
+    register(ExactlyOne)
+    register(Plus)
+    register(Star)
+    register(Opt)
+
+    register[Range]
+    register[AndRule]
+    register[ArcRule]
+
+    register[NameTerm]
+    register[NameStem]
+    register[NameAny]
+
+    register[ValueAny]
+    register[ValueStem]
+    register[ValueSet]
+    register[ValueReference]
+    register[ValueType]
+
+
+    register[IRILabel]
+    register[BNodeLabel]
+    register[IRIStem]
+    register[Action]
+
+    register[Shape]
+
+  }
+
+
+  def registerRdf() = {
+
+    this.registerRdfValues()
+    this.registerStatements()
+    this.registerShapes()
 
 
 

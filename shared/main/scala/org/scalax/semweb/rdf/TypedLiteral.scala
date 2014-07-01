@@ -1,5 +1,7 @@
 package org.scalax.semweb.rdf
 
+import java.util.Date
+
 import org.scalax.semweb.rdf.vocabulary.XSD
 
 //
@@ -84,6 +86,16 @@ case class StringLangLiteral(text: String, lang : String) extends DatatypeLitera
 }
 
 case class BooleanLiteral(value:Boolean) extends DatatypeLiteral(value.toString,XSD.BooleanDatatypeIRI)
+
+case class DateLiteral(value:Date) extends DatatypeLiteral(value.toString,XSD.Date) {
+
+  override def equals(that: Any): Boolean = that match  {
+    case DateLiteral(d)=>value==d
+    case l:DatatypeLiteral=>l.label==label && l.dataType ==this.dataType
+    case _=>false
+
+  }
+}
 
 
 //case class Lang(lang : String) {
