@@ -9,12 +9,15 @@ object SELECT
   def apply(params:SelectElement*) = new SelectQuery(params.toList)
 }
 
-class SelectQuery(val params:List[SelectElement]) extends WithWhere with VarContainer with Sliced
+class SelectQuery(val params:List[SelectElement]) extends WithWhere with Sliced
 {
-  self=>
+  lazy val vars: Map[String, Variable] = params.collect{case v:Variable=>v.name->v}.toMap
+
   object DISTINCT {
     //TODO: complete
   }
+
+
 
   def stringValue = s"SELECT ${params.foldLeft("")( (acc,el)=>acc+" "+el.stringValue)} \n${WHERE.stringValue}\n ${LIMIT.stringValue} ${OFFSET.stringValue}"
 

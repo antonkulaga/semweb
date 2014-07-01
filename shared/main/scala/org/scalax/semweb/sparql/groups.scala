@@ -54,8 +54,8 @@ case class Optional(gp:RDFElement) extends GP
 
 
 
-trait VarContainer extends RDFElement{
-
- var vars = Map.empty[String,Variable]
-
-}
+//trait VarContainer extends RDFElement{
+//
+// var vars = Map.empty[String,Variable]
+//
+//}

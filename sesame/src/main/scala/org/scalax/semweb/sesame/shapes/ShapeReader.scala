@@ -1,12 +1,14 @@
 package org.scalax.semweb.sesame.shapes
 
-import org.scalax.semweb.sesame._
+import org.openrdf.model.{Literal, Resource, URI, Value}
 import org.scalax.semweb.rdf._
-import org.openrdf.model.{Value, URI, Literal, Resource}
+import org.scalax.semweb.rdf.vocabulary.{XSD, RDF, WI}
+import org.scalax.semweb.sesame._
 import org.scalax.semweb.shex._
-import scala.util.{Success, Try}
-import org.scalax.semweb.rdf.vocabulary.{WI, RDF}
-import org.scalax.semweb.shex.validation.{ValidationResult, Valid, Failed}
+import org.scalax.semweb.shex.validation.{Failed, Valid, ValidationResult}
+import org.openrdf.model.vocabulary
+
+import scala.util.Try
 
 /**
  * Ugly written
@@ -57,21 +59,36 @@ trait ShapeReader extends SesameReader{
 //
  }
 
+
   def propertyByArc(res:Res,p:IRI,arc:ArcRule)(implicit con:ReadConnection, contexts:Seq[Resource] = List.empty[Resource]): (IRI, Seq[Value]) =  arc.value match {
       case ValueSet(s)=>
         p -> con.objects(res, p,contexts).filter(o => s.contains(o: RDFValue))
 
-      case ValueType(i)=>
-      if(i.stringValue.contains(vocabulary.XSD.namespace)) {
-        lg.warn("XSD IS NOT YET CHECKED")
-        p ->con.objects(res,p,contexts)
+      case ValueType(i)=> i match {
+        case RDF.VALUE=> p -> con.objects(res,p,contexts)
+        case XSD.StringDatatypeIRI=>
 
-      }
-      else {
-      p -> con.resources(res,p,contexts).filter(o=>con.hasStatement(o,RDF.TYPE,i,true,contexts:_*))
+          p->con.objects(res,p,contexts).filter
+          {
+            case l:Literal=>
+              l.getDatatype match {
+                case null=>true
+                case vocabulary.XMLSchema.STRING=>true
+                case vocabulary.XMLSchema.NORMALIZEDSTRING=>true
+                case vocabulary.XMLSchema.LANGUAGE=>true
+                case vocabulary.XMLSchema.NAME=>true
+                case _=>false
+              }
+            case other=>false
+          }
+        case x if x.stringValue.contains(XSD.namespace)=> p-> con.objects(res,p,contexts)  //TODO: check XSDs
+
+        case tp=>      p -> con.resources(res,p,contexts).filter(o=>con.hasStatement(o,RDF.TYPE,tp,true,contexts:_*))
       }
 
-      case _ => ???
+      case _ =>
+        lg.error("another unknown ARC case")
+        ???
 
   }
 

@@ -36,6 +36,17 @@ case class PropertyModel(resource:Res,properties:Map[IRI,Set[RDFValue]],validati
     case _=>Set.empty[Violation]
   }
 
+  /**
+   * Checkf if property with some name contains value
+   * @param property
+   * @param value
+   * @return
+   */
+  def contains(property:IRI,value:RDFValue) = properties.get(property) match {
+    case Some(ps)=> ps.contains(value)
+    case _ => false
+  }
+
   def isEmpty = resource == null
 
   def isClean = properties.isEmpty

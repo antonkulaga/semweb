@@ -1,11 +1,13 @@
 package org.scalax.semweb.sesame
 
-import org.openrdf.query.{GraphQueryResult, BindingSet, TupleQueryResult}
-import scala.collection.immutable._
-import org.openrdf.model.{URI, Resource, Statement, Value}
+import org.openrdf.model.{Resource, Statement, URI, Value}
+import org.openrdf.query.{BindingSet, GraphQueryResult, TupleQueryResult}
 import org.openrdf.repository.RepositoryResult
+import org.scalax.semweb.messages.Results
+import org.scalax.semweb.rdf.RDFValue
+
 import scala.collection.JavaConversions._
-import org.scalax.semweb.rdf.{Res, IRI}
+import scala.collection.immutable._
 
 trait ResultsImplicits extends Sesame2ScalaModelImplicits {
   /**
@@ -20,6 +22,12 @@ trait ResultsImplicits extends Sesame2ScalaModelImplicits {
     def binding2Map(b:BindingSet): Map[String, Value] = b.iterator().map(v=>v.getName->v.getValue).toMap
 
     lazy val toListMap: List[Map[String, Value]] = this.map(v=>binding2Map(v)).toList
+
+    lazy val toSelectResults = Results.SelectResults(
+      results.getBindingNames.toList,
+      results.toList.map{case b=>   b.iterator().map(v=>(v.getName,v.getValue:RDFValue)).toMap }
+    )
+
 
 
     override def next(): BindingSet = results.next()

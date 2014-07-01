@@ -1,6 +1,7 @@
 package org.scalax.semweb.shex
 
 import org.scalax.semweb.rdf._
+import org.scalax.semweb.rdf.vocabulary.RDF
 import org.scalax.semweb.sparql.{GP, Variable}
 
 
@@ -16,6 +17,12 @@ object ArcRule {
 
   val property = rs / "property"
 
+}
+object AndRule{
+
+  def apply(propertyName:IRI,tp:IRI = RDF.VALUE,card:Cardinality = Star,priority:Int = Int.MaxValue) = {
+    ArcRule(None, NameTerm(propertyName),ValueType(tp),card, priority = priority)
+  }
 }
 
 

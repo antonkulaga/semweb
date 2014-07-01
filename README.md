@@ -33,9 +33,9 @@ If you use release version it looks like:
 
 ```scala
 
-    libraryDependencies += "org.scalax" %% "semweb" % "0.5.0"// for scala projects
+    libraryDependencies += "org.scalax" %% "semweb" % "0.6.1"// for scala projects
 
-    libraryDependencies += "org.scalax" %%% "semweb" % "0.5.0"// for scalajs projects, note %%% is used
+    libraryDependencies += "org.scalax" %%% "semweb" % "0.6.1"// for scalajs projects, note %%% is used
 ```
 
 4). Use it in your project!

@@ -1,5 +1,6 @@
 package org.scalax.semweb.shex
 
+import org.scalax.semweb.rdf.vocabulary.RDF
 import org.scalax.semweb.rdf.{RDFBuilder, Res, IRI}
 import scala.collection.immutable._
 
@@ -10,11 +11,11 @@ import scala.collection.immutable._
 class WithShapeProperty(id:Option[Res],iri:IRI)
 {
 
-  lazy val result:Option[ArcRule] = if(vc == null) None else Some(ArcRule(id.map(Label.apply),iri,vc,occ))
+  lazy val result:Option[ArcRule] = Some(ArcRule(id.map(Label.apply),iri,vc,occ))
 
 
   protected var occ:Cardinality = ExactlyOne
-  protected var vc:ValueClass = null
+  protected var vc:ValueClass = ValueType(RDF.VALUE)
 
 
   def of(tp:IRI) = {
