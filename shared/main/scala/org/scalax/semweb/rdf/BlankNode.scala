@@ -13,6 +13,11 @@ case class BlankNode(id:String) extends Res with BNodePatEl{
 
   override def toString = s"_:$id"
 
+  /**
+   * Just fot the sake of nice input
+   * @return
+   */
+  override def label: String = this.id
 }
 
 trait BNodePatEl extends CanBeSubject

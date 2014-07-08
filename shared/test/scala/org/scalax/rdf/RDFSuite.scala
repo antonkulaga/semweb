@@ -19,6 +19,19 @@ object RDFSuite extends TestSuite{
 
       }
 
+      "have nice localname and namespace" - {
+
+        val bob = IRI("http://foo.com/resource/Bob")
+        assert(bob.namespace=="http://foo.com/resource/")
+        assert(bob.localName=="Bob")
+
+        val alice = IRI("http://foo.com/resource#Alice")
+        assert(alice.namespace=="http://foo.com/resource#")
+        assert(alice.localName=="Alice")
+
+
+      }
+
 
 
     }

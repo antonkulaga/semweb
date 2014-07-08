@@ -1,18 +1,9 @@
 package org.scalax.shapes
 
-import org.scalax.semweb.rdf._
-
-import utest._
-import org.scalax.semweb.shex._
+import org.scalax.semweb.rdf.{IRI, LongLiteral, Quad}
 import org.scalax.semweb.rdf.vocabulary._
-import org.scalax.semweb.rdf.IRI
-import org.scalax.semweb.rdf.LongLiteral
-import org.scalax.semweb.shex.NameTerm
-import org.scalax.semweb.shex.ValueReference
-import scala.Some
-import org.scalax.semweb.shex.IRILabel
-import org.scalax.semweb.rdf.Quad
-import org.scalax.semweb.shex.ArcRule
+import org.scalax.semweb.shex._
+import utest._
 
 object ShapesToRDFSuite extends TestSuite{
 
@@ -59,7 +50,7 @@ object ShapesToRDFSuite extends TestSuite{
 
           assert( q3.sub == subject)
           assert( q3.pred == occurs)
-          (q3.obj.stringValue)
+
           assert( q3.obj == zeroOrMany)
           assert( q3.cont == context)
 

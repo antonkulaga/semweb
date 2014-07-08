@@ -1,9 +1,8 @@
 package org.scalax.semweb.sesame
 
-import org.openrdf.repository.{RepositoryResult, RepositoryConnection}
+import org.openrdf.model.{Resource, URI, Value}
+import org.openrdf.repository.RepositoryConnection
 import org.scalax.semweb.rdf._
-import org.scalax.semweb.sesame._
-import org.openrdf.model.{URI, Value, Resource, Statement}
 
 trait ConnectionImplicits {
 
@@ -15,7 +14,9 @@ trait ConnectionImplicits {
   implicit class ConnectionImplicit[TCon<:RepositoryConnection](con:TCon){
 
     def hasSubjectFor(prop:IRI,obj:Value,context:Res): Boolean = con.hasStatement(null,prop,obj,true,context)
-    def hasObjectFor(sub:Res,prop:IRI,context:Res = null): Boolean = con.hasStatement(sub,prop,null,true,context)
+
+    def hasObjectFor(sub:Resource,prop:URI,contexts:Seq[Resource]): Boolean = con.hasStatement(sub,prop,null,true,contexts:_*)
+    def hasObjectFor(sub:Res,prop:IRI,contexts:Seq[Res]): Boolean = hasObjectFor(sub:Resource,prop:URI,contexts)
 
 
 

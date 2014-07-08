@@ -7,11 +7,13 @@ import org.scalax.semweb.rdf.LongLiteral
 import org.scalax.semweb.rdf.StringLiteral
 import org.scalax.semweb.rdf.DoubleLiteral
 import org.scalax.semweb.rdf.StringLangLiteral
+import org.scalax.semweb.rdf.vocabulary
 
 object PropertyModel {
+
   def clean(res:Res) = PropertyModel(res,Map.empty[IRI,Set[RDFValue]],Valid)
 
-  val empty = PropertyModel.clean(null)
+  val empty = PropertyModel.clean(vocabulary.RDF.NIL)
 
   def apply(resource:Res,props:(IRI,RDFValue)*): PropertyModel = {
     PropertyModel(resource,props.map{case (key,value)=>key->Set(value)}.toMap)

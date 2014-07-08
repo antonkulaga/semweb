@@ -8,31 +8,47 @@ import scala.collection.immutable._
  * For nice shape building
  * @param iri
  */
-class WithShapeProperty(id:Option[Res],iri:IRI)
-{
-
-  lazy val result:Option[ArcRule] = Some(ArcRule(id.map(Label.apply),iri,vc,occ))
-
-
-  protected var occ:Cardinality = ExactlyOne
-  protected var vc:ValueClass = ValueType(RDF.VALUE)
+class WithShapeProperty(id:Option[Res],iri:IRI) {
+  protected var occ: Cardinality = ExactlyOne
+  protected var vc: ValueClass = ValueType(RDF.VALUE)
+  protected var priority: Option[Int] = None
+  protected var title: Option[String] = None
+  lazy val result: Option[ArcRule] = Some(ArcRule(id.map(Label.apply), iri, vc, occ, Seq.empty, this.priority, this.title))
 
 
-  def of(tp:IRI) = {
-    vc =tp
+
+
+
+
+  def of(tp: IRI) = {
+    vc = tp
     this
   }
 
-  def oneOf(params:IRI*) = {
+  def oneOf(params: IRI*) = {
     vc = ValueSet(params.toSet)
     this
   }
 
-  def occurs(c:Cardinality) = {
+  def occurs(c: Cardinality) = {
     occ = c
     this
   }
 
+  def isCalled(tlt:String) = {
+    title = Some(tlt)
+    this
+  }
+
+  def hasPriority(prior: Int) = {
+    this.priority = Some(prior)
+    this
+  }
+
+  def hasNoPriority = {
+    this.priority = None
+    this
+  }
 
 
 }

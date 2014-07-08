@@ -5,6 +5,12 @@ RDF value implementation
   */
 trait RDFValue extends CanBeObject{
 
+  /**
+   * Just fot the sake of nice input
+   * @return
+   */
+  def label:String
+
   override def equals(that: Any): Boolean = that match  {
 
     case value:RDFValue=>value.stringValue==stringValue

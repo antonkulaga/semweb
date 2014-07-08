@@ -35,9 +35,11 @@ case class IRI(uri:String) extends CanBePredicate with Res
    */
   lazy val lastSegment = Math.max(uri.lastIndexOf("#"),uri.lastIndexOf("/"))
 
-  lazy val localName: String = uri.substring(lastSegment)
+  lazy val localName: String = uri.substring(Math.min(lastSegment+1,uri.length-1))
 
-  lazy val namespace: String = uri.substring(0,this.lastSegment)
+  lazy val namespace: String = uri.substring(0,Math.min(lastSegment+1,uri.length-1))
+
+  lazy val label = this.localName.replace("_"," ")
 
   override lazy val stringValue: String = this.uri
 

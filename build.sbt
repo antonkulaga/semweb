@@ -1,8 +1,6 @@
-import sbt._
-import sbt.Keys._
 import bintray.Plugin.bintraySettings
-import bintray.Keys._
-import scala.scalajs.sbtplugin.ScalaJSPlugin.ScalaJSKeys._
+import sbt.Keys._
+import sbt._
 
 lazy val root = project.in(file("."))//.settings(crossScalaVersions := Seq("2.10.4", "2.11.0"))
 
@@ -26,9 +24,6 @@ libraryDependencies ++= Seq(
 )
 
 testFrameworks += new TestFramework("utest.runner.JvmFramework")
-
-addCompilerPlugin("com.lihaoyi" %% "acyclic" % "0.1.2")
-
 
 libraryDependencies += "org.scalajs" %% "scalajs-pickling-play-json" % "0.3.1"
 

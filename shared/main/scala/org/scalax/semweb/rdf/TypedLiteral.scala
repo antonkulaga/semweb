@@ -6,8 +6,6 @@ import org.scalax.semweb.rdf.vocabulary.XSD
 
 //
 trait Lit extends RDFValue {
-  def label : String
-
 
   def isLangLiteral = false
   def hasLang(language:String) = false
@@ -25,7 +23,7 @@ trait Lit extends RDFValue {
 
 case class AnyLit(value:Any) extends Lit{
 
-  val label = value.toString
+  override val label = value.toString
 
   override def stringValue : String = "\"" + label + "\""
 }

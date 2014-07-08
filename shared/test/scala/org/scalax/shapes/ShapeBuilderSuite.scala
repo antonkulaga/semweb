@@ -1,7 +1,7 @@
 package org.scalax.shapes
 import org.scalax.semweb.rdf.IRI
 import org.scalax.semweb.rdf.vocabulary.{FOAF, XSD}
-import org.scalax.semweb.shex.{AndRule, ArcRule, ExactlyOne, NameTerm, Plus, Shape, ShapeBuilder, _}
+import org.scalax.semweb.shex._
 import utest._
 
 object ShapeBuilderSuite extends TestSuite{
@@ -34,7 +34,7 @@ object ShapeBuilderSuite extends TestSuite{
       assert ( rules.exists(r=>
         r.name match {
           case NameTerm(uri) if uri==FOAF.KNOWS=> r.value match {
-            case ValueSet(vs)=>vs.exists(v=>v==FOAF.PERSON) && vs.exists(v=>v==FOAF.Group) && r.occurs == Plus
+            case ValueSet(vs)=>vs.contains(FOAF.PERSON) && vs.contains(FOAF.Group) && r.occurs == Plus
             case _ =>false
           }
           case _=>false

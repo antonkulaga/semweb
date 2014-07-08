@@ -10,12 +10,14 @@ import org.openrdf.model.vocabulary
 
 import scala.util.Try
 
+
+
 /**
  * Ugly written
  * TODO: rewrite in future
  * Class that reads shapes from the database and does some other operations (like  loading props from shape)
  */
-trait ShapeReader extends SesameReader{
+trait ShapeReader extends SesameReader with ArcExtractor{
 
 
 
@@ -60,50 +62,6 @@ trait ShapeReader extends SesameReader{
  }
 
 
-  def propertyByArc(res:Res,p:IRI,arc:ArcRule)(implicit con:ReadConnection, contexts:Seq[Resource] = List.empty[Resource]): (IRI, Seq[Value]) =  arc.value match {
-      case ValueSet(s)=>
-        p -> con.objects(res, p,contexts).filter(o => s.contains(o: RDFValue))
-
-      case ValueType(i)=> i match {
-        case RDF.VALUE=> p -> con.objects(res,p,contexts)
-        case XSD.StringDatatypeIRI=>
-
-          p->con.objects(res,p,contexts).filter
-          {
-            case l:Literal=>
-              l.getDatatype match {
-                case null=>true
-                case vocabulary.XMLSchema.STRING=>true
-                case vocabulary.XMLSchema.NORMALIZEDSTRING=>true
-                case vocabulary.XMLSchema.LANGUAGE=>true
-                case vocabulary.XMLSchema.NAME=>true
-                case _=>false
-              }
-            case other=>false
-          }
-        case x if x.stringValue.contains(XSD.namespace)=> p-> con.objects(res,p,contexts)  //TODO: check XSDs
-
-        case tp=>      p -> con.resources(res,p,contexts).filter(o=>con.hasStatement(o,RDF.TYPE,tp,true,contexts:_*))
-      }
-
-      case _ =>
-        lg.error("another unknown ARC case")
-        ???
-
-  }
-
-
-//  def propertyByArc(res:Res,arc:ArcRule)(implicit con:ReadConnection, contexts:Seq[Resource] = List.empty[Resource]): (IRI, Seq[Value]) = arc.name match  {
-//
-//    case NameTerm(p)=>
-//     this.propertyByArc(res,p,arc)
-//
-//    case _ =>
-//      lg.error("names other then nameterm are not implemented in arc")
-//      ???
-//
-//  }
-
   /**
    * Functions to load properties by shape
    * WARNING: BUGGY!
@@ -113,31 +71,73 @@ trait ShapeReader extends SesameReader{
    * @return
    */
   def loadPropertiesByShape(sh:Shape,res:Resource)(implicit contexts:Seq[Resource] = List.empty[Resource]): Try[PropertyModel] = this.read{con=>
+
     sh.rule match {
       case and:AndRule=>
         val arcs = and.conjoints.collect{   case arc:ArcRule=>  arc }
 
-        val result = arcs.foldLeft[PropertyModel](PropertyModel.clean(res)){ case (model,arc)=>
-          arc.name match {
-            case NameTerm(prop)=>
-              val (pr:IRI, values:Seq[Value]) = this.propertyByArc(res,prop,arc)(con,contexts)
-              val v = this.checkOccurrence(arc.occurs,pr,values)
-              val vals: Set[RDFValue] = values.map(v=>v:RDFValue).toSet
-              model.copy(properties = model.properties + (pr -> vals) ,validation =  model.validation.and(v))
-
-            case _=>model
-          }
-        }
+        val result: PropertyModel = arcs.foldLeft[PropertyModel](PropertyModel.clean(res)){ case (model: PropertyModel,arc)=> this.modelByArc(model,arc)(con,contexts)}
         result
-
-
-
 
       case r =>
         lg.warn(s"or rule is not yet supported, passed rule is ${r.toString}")
         ???
     }
 
+
+  }
+
+  protected def modelByArc(model:PropertyModel,arc:ArcRule)(implicit con:ReadConnection, contexts:Seq[Resource] = List.empty[Resource]) = {
+    arc.name match {
+      case NameTerm(prop)=>
+        val (pr:IRI, values:Seq[Value]) = this.propertyByArc(model.resource,prop,arc)(con,contexts)
+        val v = this.checkOccurrence(arc.occurs,pr,values)
+        val vals: Set[RDFValue] = values.map(v=>v:RDFValue).toSet
+        model.copy(properties = model.properties + (pr -> vals) ,validation =  model.validation.and(v))
+      case NameStem(stem)=>
+        lg.error("Name stems property extraction not implemented")
+        ??? //TODO complete
+    }
+  }
+
+  /**
+   * Loads a property by arc rule
+   * @param res
+   * @param p
+   * @param arc
+   * @param con
+   * @param contexts
+   * @return
+   */
+  def propertyByArc(res:Res,p:IRI,arc:ArcRule)(implicit con:ReadConnection, contexts:Seq[Resource] = List.empty[Resource]): (IRI, Seq[Value]) =  arc.value match {
+    case ValueSet(s)=>
+      p -> con.objects(res, p,contexts).filter(o => s.contains(o: RDFValue))
+
+    case ValueType(i)=> i match {
+      case RDF.VALUE=> p -> con.objects(res,p,contexts)
+      case XSD.StringDatatypeIRI=>
+
+        p->con.objects(res,p,contexts).filter
+        {
+          case l:Literal=>
+            l.getDatatype match {
+              case null=>true
+              case vocabulary.XMLSchema.STRING=>true
+              case vocabulary.XMLSchema.NORMALIZEDSTRING=>true
+              case vocabulary.XMLSchema.LANGUAGE=>true
+              case vocabulary.XMLSchema.NAME=>true
+              case _=>false
+            }
+          case other=>false
+        }
+      case x if x.stringValue.contains(XSD.namespace)=> p-> con.objects(res,p,contexts)  //TODO: check XSDs
+
+      case tp=>      p -> con.resources(res,p,contexts).filter(o=>con.hasStatement(o,RDF.TYPE,tp,true,contexts:_*))
+    }
+
+    case _ =>
+      lg.error("another unknown ARC case")
+      ???
 
   }
 
@@ -171,51 +171,6 @@ trait ShapeReader extends SesameReader{
   }
 
 
-  /**
-   * Extracts Arc rule
-   * @param id id of the arc rule
-   * @param con connection
-   * @param contexts context (optional)
-   * @return
-   */
-  def getArc(id:Resource,con:ReadConnection)(implicit contexts:Seq[Resource] = List.empty[Resource]):Option[ArcRule] = {
-    val term: Option[URI] = con firstURI (id,NameTerm.property:URI,contexts)
-    term.map{name=>
-      val value = con firstURI(id,ValueType.property:URI,contexts)
-      val occurs = this.getOccurs(id,con)(contexts)
-      ArcRule(Some(id:Res),NameTerm(name),value.fold(ValueType(RDF.VALUE))(v => ValueType(v)),occurs)
-    }
-  }
-
-  def getOccurs(id:Resource,con:ReadConnection)(implicit contexts:Seq[Resource] = List.empty[Resource]):Cardinality = {
-    if(con.hasStatement(id,ExactlyOne.property,ExactlyOne.obj,true,contexts:_*)) ExactlyOne else
-    if(con.hasStatement(id,Plus.property,Plus.obj,true,contexts:_*)) Plus else
-    if(con.hasStatement(id,Star.property,Star.obj,true,contexts:_*)) Star else
-    if(con.hasStatement(id,Opt.property,Opt.obj,true,contexts:_*)) Opt else
-    {
-      val min: Option[Long] = con.getStatements(id,Range.minProperty,null,true,contexts:_*)
-        .collectFirst{
-        case st if st.getObject.isInstanceOf[Literal]=>
-          val lit = st.getObject.asInstanceOf[Literal]
-          Try(lit.longValue()).getOrElse{ lg.error(s"cannot load literal for minOccurs"); 0:Long}
-      }
-
-      val max: Option[Long] = con.getStatements(id,Range.maxProperty,null,true,contexts:_*)
-        .collectFirst{
-        case st if st.getObject.isInstanceOf[Literal]=>
-          val lit = st.getObject.asInstanceOf[Literal]
-          Try(lit.longValue()).getOrElse{ lg.error(s"cannot load literal for maxOccurs"); Long.MaxValue}
-      }
-      Cardinality(min.getOrElse(Long.MinValue),max.getOrElse(Long.MaxValue))
-
-    }
-
-  }
-
-//
-//  id: Option[Label],
-//  name: NameClass,
-//  value: ValueClass,
-//  occurs: Cardinality,
-//  actions: Seq[Action] = List.empty
 }
+
+

@@ -1,20 +1,12 @@
 package org.scalax.semweb.sesame.test
 
-import org.scalatest.{Matchers, WordSpec}
 import org.openrdf.model._
+import org.scalatest.{Matchers, WordSpec}
 import org.scalax.semweb.rdf._
-import org.scalax.semweb.shex._
-import org.scalax.semweb.sparql._
 import org.scalax.semweb.rdf.vocabulary._
 import org.scalax.semweb.sesame._
-import org.scalax.semweb.rdf.IRI
-import org.scalax.semweb.rdf.BlankNode
-import org.scalax.semweb.rdf.Trip
-import org.scalax.semweb.rdf.Quad
-import org.openrdf.model.impl.{URIImpl, BNodeImpl}
-import com.bigdata.rdf.model.BigdataBNodeImpl
-import org.scalax.semweb.rdf.vocabulary.USERS.props
-
+import org.scalax.semweb.shex._
+import org.scalax.semweb.sparql._
 /**
  *
  */
@@ -28,9 +20,9 @@ class ShapeSerializationSpec extends  WordSpec with Matchers {
     object shape extends ShapeBuilder(page)
 
     val title = WI.pl("title")
-    shape has title of XSD.StringDatatypeIRI occurs ExactlyOne result
+    shape has title of XSD.StringDatatypeIRI occurs ExactlyOne hasPriority 1 result
     val text = WI.pl("text")
-    shape has text of XSD.StringDatatypeIRI occurs ExactlyOne result
+    shape has text of XSD.StringDatatypeIRI occurs ExactlyOne isCalled ("text") result
     val author = WI.pl("author")
     shape has author of FOAF.PERSON occurs Plus result
 
@@ -62,12 +54,17 @@ class ShapeSerializationSpec extends  WordSpec with Matchers {
       con.hasStatement(page,ArcRule.property,null,true,c) shouldEqual true
 
       con.hasStatement(null, NameTerm.property,   WI.pl("title"), true, c) shouldEqual true
+      con.hasStatement(null, ArcRule.priority ,   IntegerLiteral(1) , true, c) shouldEqual true
+
 
       con.hasStatement(null, rs / "valueType" ,   XSD.StringDatatypeIRI, true, c) shouldEqual true
       con.hasStatement(null, rs / "occurs" ,   rs / "Exactly-one" , true, c) shouldEqual true
+      con.hasStatement(null, DCElements.title,   StringLiteral("text") , true, c) shouldEqual true
+
 
       con.hasStatement(null, rs / "valueType" ,   FOAF.PERSON, true, c) shouldEqual true
       con.hasStatement(null, rs / "occurs" ,   rs / "One-or-many" , true, c) shouldEqual true
+
 
       val props = con.getStatements(page,ArcRule.property,null,false,c).filter{case st => st.getObject.isInstanceOf[Resource]}
       props.size shouldEqual(3)

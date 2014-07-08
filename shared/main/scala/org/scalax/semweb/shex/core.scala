@@ -85,12 +85,12 @@ case class Shape(label: Label, rule: Rule) {
     case r => print(s"or rule is not yet supported, passed rule is ${r.toString}")
   }
 
-  def arcSorted(implicit context:Res) = this.arcRules(this.rule).sortBy(f=>f.priority)
+  def arcSorted()= this.arcRules(this.rule).sortBy(f=>f.priority)
 
-  def arcRules(rl:Rule = this.rule)(implicit context:Res):List[ArcRule] = {
+  def arcRules(rl:Rule = this.rule):List[ArcRule] = {
     rl match {
       case arc:ArcRule=> List(arc)
-      case  and:AndRule=> and.conjoints.flatMap(v=>arcRules(v)(context)).toList
+      case  and:AndRule=> and.conjoints.flatMap(v=>arcRules(v)).toList
       case _=> List.empty[ArcRule]
     }
 

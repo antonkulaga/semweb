@@ -5,7 +5,7 @@ import java.util.Date
 import org.scalajs.spickling.playjson._
 import org.scalax.semweb.picklers.SemanticRegistry
 import org.scalax.semweb.rdf.IRI
-import org.scalax.semweb.rdf.vocabulary.{WI, FOAF, XSD}
+import org.scalax.semweb.rdf.vocabulary.{FOAF, XSD}
 import org.scalax.semweb.shex._
 import play.api.libs.json.JsValue
 import utest._
@@ -54,7 +54,7 @@ object PicklingSuite extends TestSuite{
         val p: JsValue = SemanticRegistry.pickle(res)
         val sh = SemanticRegistry.unpickle(p).asInstanceOf[Shape]
         assert(sh!=null)
-        val rules = sh.arcRules()(IRI(WI.RESOURCE))
+        val rules = sh.arcRules()//(IRI(WI.RESOURCE))
         assert (rules.length ==2)
         val a = rules.head
         assert(a.occurs == ExactlyOne)

@@ -1,17 +1,16 @@
 package org.scalax.semweb.sesame.test
 
-import com.bigdata.rdf.sail._
 import java.io.File
 import java.util.Properties
+
+import com.bigdata.rdf.sail._
 import org.apache.commons.io.FileUtils
-import scala.util.Try
-import org.openrdf.query.{TupleQueryResult, QueryLanguage}
-import com.bigdata.rdf.vocab.decls
-import org.openrdf.repository.RepositoryConnection
-import org.scalax.semweb.sesame._
-import org.scalax.semweb.rdf.IRI
-import org.scalax.semweb.sesame.shapes.ShapeReader
+import org.openrdf.query.QueryLanguage
 import org.scalax.semweb.commons.LogLike
+import org.scalax.semweb.sesame._
+import org.scalax.semweb.sesame.shapes.ShapeReader
+
+import scala.util.Try
 
 
 /**
@@ -78,6 +77,8 @@ with SesameReader with SelectReader with AskReader with ConstructReader with Sha
     val props = new Properties()
     props.setProperty("com.bigdata.rdf.store.AbstractTripleStore.quadsMode","true")
     props.setProperty("com.bigdata.rdf.store.AbstractTripleStore.textIndex","true")
+    props.setProperty("com.bigdata.rdf.store.AbstractTripleStore.storeBlankNodes","true")
+
     props.setProperty("com.bigdata.rdf.sail.truthMaintenance","false")
     props.setProperty("com.bigdata.rdf.sail.statementIdentifiers","false")
     props.setProperty("com.bigdata.journal.AbstractJournal.file",url+"/"+dbFileName)

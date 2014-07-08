@@ -1,12 +1,6 @@
 package org.scalax.semweb.shex
 
-import org.scalax.semweb.rdf.vocabulary._
-
 import org.scalax.semweb.rdf._
-import org.scalax.semweb.rdf.IRI
-import org.scalax.semweb.rdf.Quad
-import org.scalax.semweb.sparql.{Variable, Pat}
-import scala.util.{Success, Failure, Try}
 
 
 
@@ -55,7 +49,7 @@ case class ValueType(v: Res) extends ValueClass{
 
 object ValueSet {
 
-  val property =  rs / "allowedValue"
+  val property: IRI =  rs / "allowedValue"
 }
 
 case class ValueSet(s: Set[RDFValue]) extends ValueClass {
@@ -70,6 +64,8 @@ case class ValueSet(s: Set[RDFValue]) extends ValueClass {
   }
 
 }
+object ValueAny
+
 case class ValueAny(stem: IRIStem) extends ValueClass {
   override def toQuads(subject: Res)(implicit context: Res): Set[Quad] = ???
 
@@ -77,20 +73,30 @@ case class ValueAny(stem: IRIStem) extends ValueClass {
 
 
 }
+
+object ValueStem {
+  val property = se / "stem"
+}
+
 case class ValueStem(s: IRI) extends ValueClass {
   override def toQuads(subject: Res)(implicit context: Res): Set[Quad] = {
-    Set(Quad(subject,se / "stem", s, context)) //TODO change
+    Set(Quad(subject,ValueStem.property, s, context))
   }
 
-  override def toTriplets(subject: Res): Set[Trip] = ???
+  override def toTriplets(subject: Res): Set[Trip] =Set( Trip(subject, ValueStem.property,s) )
 
 }
+object ValueReference {
+  val property = se / "valueShape"
+}
+
 case class ValueReference(l: Label) extends ValueClass {
   override def toQuads(subject: Res)(implicit context: Res): Set[Quad] = {
-    Set(Quad(subject,se / "valueShape", l.asResource, context))
+    Set(Quad(subject,ValueReference.property, l.asResource, context))
   }
 
-  override def toTriplets(subject: Res): Set[Trip] = ???
-
+  override def toTriplets(subject: Res): Set[Trip] = {
+    Set(Trip(subject,ValueReference.property, l.asResource))
+  }
 
 }

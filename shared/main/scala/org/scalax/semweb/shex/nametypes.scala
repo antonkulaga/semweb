@@ -1,13 +1,6 @@
 package org.scalax.semweb.shex
 
 import org.scalax.semweb.rdf._
-import org.scalax.semweb.sparql.{Pat, Variable}
-import scala.util.{Failure, Success, Try}
-import org.scalax.semweb.rdf.IRI
-import org.scalax.semweb.rdf.Trip
-import org.scalax.semweb.sparql.Variable
-import org.scalax.semweb.sparql.Pat
-import org.scalax.semweb.rdf.Quad
 
 
 sealed trait NameClass extends ToQuads with ToTriplets with WithPatterns
@@ -37,10 +30,13 @@ case class NameAny(excl: Set[IRIStem]) extends NameClass{
   override def toTriplets(subject: Res): Set[Trip] = ???
 
 }
+object NameStem {
 
+  val property: IRI = se / "stem"
+}
 case class NameStem(s: IRI) extends NameClass{
-  override def toQuads(subject: Res)(implicit context: Res): Set[Quad] =   Set(Quad(subject, se / "stem", s,context ))
+  override def toQuads(subject: Res)(implicit context: Res): Set[Quad] =   Set(Quad(subject, NameStem.property , s,context ))
 
-  override def toTriplets(subject: Res): Set[Trip] = ???
+  override def toTriplets(subject: Res): Set[Trip] = Set(Trip(subject,NameStem.property, s))
 
 }
