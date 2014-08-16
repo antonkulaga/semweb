@@ -1,6 +1,36 @@
 package org.scalax.semweb.sparql
 
 import org.scalax.semweb.rdf.IRI
+import org.scalax.semweb.rdf.vocabulary
+import org.scalax.semweb.rdf.vocabulary._
+import scala.text.DocCons
+
+
+case class Prologue(base:Base,prefixes:List[Prefix] = List.empty[Prefix]) extends PrologueDecl
+{
+
+}
+
+case object DefaultPrologue extends PrologueDecl{
+  override def base: Base = Base(IRI(WI.RESOURCE))
+
+  override val prefixes: List[Prefix] = List(
+  Prefix("de",IRI("http://denigma.org/resource/")),
+  Prefix("dc",vocabulary.DCElements.elems),
+  Prefix("foaf",FOAF.foaf),
+  Prefix("owl",vocabulary.OWL.owl),
+  Prefix("xsd",vocabulary.XSD.xsd),
+  Prefix("rdf",vocabulary.RDF.ns),
+  Prefix("rdfs",vocabulary.RDFS.rdfs)
+
+  )
+}
+
+trait PrologueDecl {
+  def base:Base
+  val prefixes:List[Prefix]
+
+}
 
 
 /**
@@ -25,6 +55,8 @@ abstract class NameSpace(prefix:String,iri:IRI)
 
 
 case class Base(iri:IRI) extends NameSpace("",iri){
-  override def toString = s"\nBASE <$getName>"
+  //override def toString = s"\nBASE <$getName>"
+
+  override def toString:String = ":"+iri.toString
 
 }

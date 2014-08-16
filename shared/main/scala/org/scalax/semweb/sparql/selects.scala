@@ -1,15 +1,15 @@
 package org.scalax.semweb.sparql
 
-import org.scalax.semweb.rdf.RDFElement
+import org.scalax.semweb.rdf.{IRI, RDFElement}
 
 
 object SELECT
 {
-
-  def apply(params:SelectElement*) = new SelectQuery(params.toList)
+  def apply(params:SelectElement*) = new SelectQuery(params = params.toList)
 }
 
-class SelectQuery(val params:List[SelectElement]) extends WithWhere with Sliced
+
+case class SelectQuery(params:List[SelectElement]) extends WithWhere with Sliced
 {
   lazy val vars: Map[String, Variable] = params.collect{case v:Variable=>v.name->v}.toMap
 

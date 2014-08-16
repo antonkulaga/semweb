@@ -20,12 +20,14 @@ test in Test <<= (test in Test) dependsOn (test in (sesame, Test)) //run sesame 
 
 
 libraryDependencies ++= Seq(
-  "com.lihaoyi" %% "utest" % "0.1.7" % "test"
+  "com.lihaoyi" %% "utest" % "0.2.0" % "test"
 )
 
 testFrameworks += new TestFramework("utest.runner.JvmFramework")
 
 libraryDependencies += "org.scalajs" %% "scalajs-pickling-play-json" % "0.3.1"
+
+libraryDependencies += "org.parboiled" %% "parboiled" % "2.0.0"
 
 autoCompilerPlugins := true
 

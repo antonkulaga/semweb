@@ -3,6 +3,25 @@ package org.scalax.semweb.rdf
 import java.util.Date
 
 import org.scalax.semweb.rdf.vocabulary.XSD
+//
+//object Lit {
+//
+//  def apply(string:String) = if(!string.contains("^^")) AnyLit(string) else
+//    string.substring(string.indexOf("^^"),string.length-1)
+//  match
+//  {
+//    case str
+//    case str if
+//
+//  }
+//
+//  def apply(content:String,dataType:IRI) = dataType match {
+//    case XSD.BooleanDatatypeIRI=>BooleanLiteral(content.toBoolean)
+//    case XSD.DecimalDatatypeIRI=>DecimalLiteral(BigDecimal)
+//
+//
+//  }
+//}
 
 //
 trait Lit extends RDFValue {
@@ -36,6 +55,7 @@ abstract class DatatypeLiteral(val label : String, val dataType : IRI) extends L
     case _=>false
 
   }
+
 
   override def stringValue : String = if(dataType!=null) "\"" + label + "\"^^" + "<"+dataType.stringValue+">" else
     "\"" + label + "\""

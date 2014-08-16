@@ -7,11 +7,11 @@ organization := "org.scalax"
 
 name := "semweb-sesame"
 
-scalaVersion :="2.11.1"
+scalaVersion :="2.11.2"
 
 version := Build.semWebVer
 
-val currentSesameVersion = "2.7.12"
+val currentSesameVersion = "2.7.13"
 
 val bigDataSesameVersion = "2.6.10" //BigData devs are lazy to update, but I have to use their sesame in order no to brake my apps that depend on sesame
 
@@ -29,7 +29,7 @@ libraryDependencies += "org.openrdf.sesame" % "sesame-sail-memory" % bigDataSesa
 
 libraryDependencies += "com.bigdata" % "bigdata" % "1.3.1" % "test" //Bigdata for tests
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.0"
+libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.1"
 
 parallelExecution in Test := false
 
