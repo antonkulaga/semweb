@@ -18,8 +18,9 @@ class BasicParser(val input: ParserInput) extends Parser{
 
 }
 
-class ExpressionParser(input:ParserInput) extends BasicParser(input)
+class BasicElementsParser(input:ParserInput) extends BasicParser(input)
 {
+
 
   def TRUE = rule {
     ignoreCaseWS("TRUE")
@@ -64,6 +65,16 @@ class ExpressionParser(input:ParserInput) extends BasicParser(input)
         oneOrMore(CharPredicate.Digit) ~ EXPONENT
       ) ~ WS
   }
+
+
+  def DOUBLE_POSITIVE = rule{
+    PLUS ~ DOUBLE
+  }
+
+  def DOUBLE_NEGATIVE = rule{
+    MINUS ~DOUBLE
+  }
+
 
 
   def EXPONENT = rule{
@@ -113,7 +124,7 @@ class ExpressionParser(input:ParserInput) extends BasicParser(input)
   def MINUS = this.ChWS('-')
 
 
-  def ASTERIX = this.ChWS('*')
+  def ASTERISK = this.ChWS('*')
 
   def COMMA = this.ChWS(',')
 
@@ -125,6 +136,11 @@ class ExpressionParser(input:ParserInput) extends BasicParser(input)
   def EQUAL = this.ChWS('=')
 
   def LESS = this.ChWS('<')
+
+  def COMMENT = rule {
+    "#" ~ this.zeroOrMore(EOL | (ANY ~ EOL) )
+  }
+
 
   def LESS_NO_COMMENT  = rule {
     ch('<') ~ zeroOrMore(WS_NO_COMMENT)
