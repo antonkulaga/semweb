@@ -1,6 +1,6 @@
-package org.scalax.semweb.shex
+package org.scalax.semweb.shex.validation
 
-import org.scalax.semweb.rdf.{Res, IRI}
+import org.scalax.semweb.rdf.{IRI, Res}
 
 trait ShExResult
 

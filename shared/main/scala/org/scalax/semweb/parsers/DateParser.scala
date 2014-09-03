@@ -4,7 +4,8 @@ import org.parboiled2._
 import org.scalax.semweb.sparql
 import org.scalax.semweb.sparql._
 import java.util.Date
-class DateParser(input:ParserInput) extends BasicParser(input) {
+
+class DateParser(val input:ParserInput) extends BasicParser {
 
   def InputLine = rule {
     NormalDate ~ EOI

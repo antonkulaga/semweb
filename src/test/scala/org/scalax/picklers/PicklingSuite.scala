@@ -40,7 +40,7 @@ object PicklingSuite extends TestSuite{
         var a = ao.get
         assert(a.occurs == ExactlyOne)
         assert(a.name.isInstanceOf[NameTerm])
-        assert(a.name.asInstanceOf[NameTerm].t == FOAF.NAME)
+        assert(a.name.asInstanceOf[NameTerm].property == FOAF.NAME)
 
       }
 
@@ -59,7 +59,7 @@ object PicklingSuite extends TestSuite{
         val a = rules.head
         assert(a.occurs == ExactlyOne)
         assert(a.name.isInstanceOf[NameTerm])
-        assert(a.name.asInstanceOf[NameTerm].t == FOAF.NAME)
+        assert(a.name.asInstanceOf[NameTerm].property == FOAF.NAME)
 
       }
     }

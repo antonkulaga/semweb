@@ -27,7 +27,7 @@ trait ArcExtractor {
     nco.map{ nameClass =>
       val occurs = this.getOccurs(id,con)(contexts)
       val valueClass = extractValueClass(id,con)(contexts)
-      ArcRule(Some(id:Res),nameClass,valueClass,occurs)
+      ArcRule(Label.apply(id:Res),nameClass,valueClass,occurs)
     }
   }
 
@@ -69,20 +69,23 @@ trait ArcExtractor {
     if(con.hasStatement(id,Star.property,Star.obj,true,contexts:_*)) Star else
     if(con.hasStatement(id,Opt.property,Opt.obj,true,contexts:_*)) Opt else
     {
-      val min: Option[Long] = con.getStatements(id,Range.minProperty,null,true,contexts:_*)
+      val min = con.getStatements(id,Range.minProperty,null,true,contexts:_*)
         .collectFirst{
         case st if st.getObject.isInstanceOf[Literal]=>
           val lit = st.getObject.asInstanceOf[Literal]
-          Try(lit.longValue()).getOrElse{ lg.error(s"cannot load literal for minOccurs"); 0:Long}
+          Try(lit.intValue()).getOrElse{ lg.error(s"cannot load literal for minOccurs"); 0}
       }
 
-      val max: Option[Long] = con.getStatements(id,Range.maxProperty,null,true,contexts:_*)
+      val max= con.getStatements(id,Range.maxProperty,null,true,contexts:_*)
         .collectFirst{
         case st if st.getObject.isInstanceOf[Literal]=>
           val lit = st.getObject.asInstanceOf[Literal]
-          Try(lit.longValue()).getOrElse{ lg.error(s"cannot load literal for maxOccurs"); Long.MaxValue}
+          Try(lit.intValue()).getOrElse{
+            lg.error(s"cannot load literal for maxOccurs")
+            Int.MaxValue
+          }
       }
-      Cardinality(min.getOrElse(Long.MinValue),max.getOrElse(Long.MaxValue))
+      Cardinality(min.getOrElse(Int.MinValue),max.getOrElse(Int.MaxValue))
 
     }
 

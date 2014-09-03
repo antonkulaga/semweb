@@ -5,30 +5,49 @@ import org.scalax.semweb.rdf.vocabulary.{WI, RDF}
 import org.scalax.semweb.sparql.{GP, Variable}
 
 
-trait ToGroupPatter {
+
+trait ToGroupPattern {
 
   def toGroupPattern(res:Res):(GP,Set[Variable])
 }
 
-sealed trait Rule extends ToQuads with ToTriplets
+trait Labeled {
+  def id:Label
+}
+
+object Rule {
+  def genRuleRes():BlankNode = new BlankNode(Math.random().toString)
+
+  def genRuleLabel():Label = BNodeLabel( genRuleRes())
+}
+
+sealed trait Rule extends ToQuads with ToTriplets with Labeled
 
 
 object ArcRule {
 
   val property = rs / "property"
+
   val priority: IRI = WI.pl("priority")
 
-}
-object AndRule{
 
-  def apply(propertyName:IRI,tp:IRI = RDF.VALUE,card:Cardinality = Star,priority:Option[Int] = None) = {
-    ArcRule(None, NameTerm(propertyName),ValueType(tp),card, priority = priority)
+
+}
+
+object AndRule
+{
+
+  def apply(propertyName:IRI,tp:IRI = RDF.VALUE,card:Cardinality = Star, priority:Option[Int] = None): ArcRule =
+  {
+    ArcRule(Rule.genRuleLabel(), NameTerm(propertyName),ValueType(tp),card, priority = priority)
   }
 }
 
 
+
+
 case class ArcRule(
-                    id: Option[Label],
+                    id: Label =Rule.genRuleLabel(),
                     name: NameClass,
                     value: ValueClass,
                     occurs: Cardinality,
@@ -38,7 +57,7 @@ case class ArcRule(
                     ) extends Rule
 {
 
-  lazy val me = id.map(_.asResource).getOrElse(new BlankNode(Math.random().toString))
+  lazy val me = id.asResource
 
 //  override def toQuads(subj: Res)(implicit context: Res): Set[Quad] = {
 //   Set(Quad(subj, ArcRule.property, me, context))++ name.toQuads(me)(context) ++ value.toQuads(me)(context) ++  occurs.toQuads(me)(context)
@@ -46,7 +65,7 @@ case class ArcRule(
 
     override def toQuads(subj: Res)(implicit context: Res): Set[Quad] = {
       val tlt: Set[Quad] =  this.title.fold(Set.empty[Quad])(t=>Set(Quad(me, vocabulary.DCElements.title,t,context)))
-      val prior: Set[Quad] = this.priority.fold(Set.empty[Quad])(p=>Set(Quad(me, ArcRule.priority,IntegerLiteral(p),context)))
+      val prior: Set[Quad] = this.priority.fold(Set.empty[Quad])(p=>Set(Quad(me, ArcRule.priority,IntLiteral(p),context)))
 
       Set(Quad(subj, ArcRule.property, me, context)) ++ tlt ++ prior ++   name.toQuads(me)(context) ++ value.toQuads(me)(context) ++  occurs.toQuads(me)(context)
 
@@ -56,32 +75,58 @@ case class ArcRule(
   override def toTriplets(subj:Res):Set[Trip] = {
 
     val tlt: Set[Trip] =  this.title.fold(Set.empty[Trip])(t=>Set(Trip(me, vocabulary.DCElements.title,t)))
-    val prior: Set[Trip] = this.priority.fold(Set.empty[Trip])(p=>Set(Trip(me, ArcRule.priority,IntegerLiteral(p))))
+    val prior: Set[Trip] = this.priority.fold(Set.empty[Trip])(p=>Set(Trip(me, ArcRule.priority,IntLiteral(p))))
     Set(Trip(subj, ArcRule.property, me))++ tlt ++ prior   ++  name.toTriplets(me) ++ value.toTriplets(me) ++  occurs.toTriplets(me)
   }
 
 //  def occurs(occ:Cardinality) = this.copy(occurs = occ)
 
   def makeId = Math.random().toString //todo: reimplement with something more reliable
+
+  def propertiesByNameClass(properties:Map[IRI,RDFValue]) = properties.filter(kv=>name.matches(kv._1))
+
+
+}
+
+trait RuleContainer extends Rule {
+  def items:Set[Rule]
+
+
+
+ // def updated(rule:Rule):Option[this.type ]
+
 }
 
 /**
  * TODO: decide about the type
  * @param conjoints
  */
-case class AndRule(conjoints: Set[Rule]) extends Rule
+case class AndRule(conjoints: Set[Rule], id:Label) extends RuleContainer
 {
   def toQuads(subject:Res)(implicit context:Res = null):Set[Quad] =  this.conjoints.flatMap(c=>c.toQuads(subject)(context)).toSet
 
   override def toTriplets(subject: Res): Set[Trip] = this.conjoints.flatMap(c=>c.toTriplets(subject)).toSet
+
+  def items = conjoints
+
+ def updated(rule:Rule):Option[AndRule] =   this.items.find(c=>c.id.asResource==rule.id.asResource)
+  .map(r=>this.copy(conjoints = conjoints - r + rule))
 }
-case class OrRule(disjoints: Set[Rule]) extends Rule {
+
+
+case class OrRule(disjoints: Set[Rule], id:Label = Rule.genRuleLabel()) extends RuleContainer {
 
   def toQuads(subject:Res)(implicit context:Res = null):Set[Quad] = ???
 
   override def toTriplets(subject: Res): Set[Trip] = ???
+
+  def items = disjoints
+
+   def updated(rule: Rule): Option[OrRule] =   this.items.find(c=>c.id.asResource==rule.id.asResource)
+    .map(r=>this.copy(disjoints = disjoints - r + rule))
 }
-case class GroupRule(rule: Rule, opt: Boolean, a: Set[Action]) extends Rule
+
+case class GroupRule(rule: Rule, opt: Boolean, a: Set[Action], id:Label = Rule.genRuleLabel()) extends Rule
 {
   def toQuads(subject:Res)(implicit context:Res = null):Set[Quad] = ???
 

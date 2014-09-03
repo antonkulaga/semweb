@@ -1,9 +1,6 @@
-package org.scalax.semweb.parsers
-import org.parboiled2.RuleFrame.ZeroOrMore
+package org.scalax.semweb.parsers.sample
+
 import org.parboiled2._
-import org.scalax.semweb.sparql
-import org.scalax.semweb.sparql._
-import java.util.Date
 
 
 class Calculator(val input: ParserInput) extends Parser {

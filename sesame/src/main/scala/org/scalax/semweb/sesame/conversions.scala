@@ -1,13 +1,12 @@
 package org.scalax.semweb.sesame
 
 import java.util.GregorianCalendar
-
 import org.scalax.semweb.rdf._
 import org.openrdf.model.impl.{LiteralImpl, BNodeImpl, URIImpl}
 import org.openrdf.model._
 import org.scalax.semweb.rdf.IRI
-import org.scalax.semweb.rdf.LongLiteral
-import org.scalax.semweb.rdf.IntegerLiteral
+//import org.scalax.semweb.rdf.LongLiteral
+import org.scalax.semweb.rdf.IntLiteral
 import org.scalax.semweb.rdf.StringLiteral
 import org.scalax.semweb.rdf.AnyLit
 import org.scalax.semweb.rdf.DoubleLiteral
@@ -56,7 +55,7 @@ trait Scala2SesameModelImplicits{
   implicit def doubleLit2Literal(lit:DoubleLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.DOUBLE)
   implicit def booleanLit2Literal(lit:BooleanLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.BOOLEAN)
   implicit def decimalLit2Literal(lit:DecimalLiteral):Literal = new LiteralImpl(lit.value.toString(),vocabulary.XMLSchema.DECIMAL)
-  implicit def longLit2Literal(lit:LongLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.LONG)
+  //implicit def longLit2Literal(lit:LongLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.LONG)
   implicit def dateLit2Literal(lit:DateLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.DATE)
 
 
@@ -119,8 +118,8 @@ trait Sesame2ScalaModelImplicits{
     case xe.BOOLEAN => BooleanLiteral(l.booleanValue())
     case xe.DECIMAL => DecimalLiteral(l.decimalValue())
     case xe.DOUBLE => DoubleLiteral(l.doubleValue())
-    case xe.LONG => LongLiteral(l.longValue())
-    case xe.INT => IntegerLiteral(l.intValue())
+  //  case xe.LONG => LongLiteral(l.longValue())
+    case xe.INT => IntLiteral(l.intValue())
 
     case d if this.isCalendar(d) =>  DateLiteral(l.calendarValue().toGregorianCalendar.getTime)
     case xe.STRING | xe.NORMALIZEDSTRING=> if(l.getLanguage!="") StringLangLiteral(l.getLabel,l.getLanguage) else StringLiteral(l.getLabel)

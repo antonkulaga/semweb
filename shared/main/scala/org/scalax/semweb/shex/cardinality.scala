@@ -1,20 +1,20 @@
 package org.scalax.semweb.shex
 
 import org.scalax.semweb.rdf.vocabulary._
-import org.scalax.semweb.rdf.{Trip, LongLiteral, Quad, Res}
+import org.scalax.semweb.rdf.{Trip, IntLiteral, Quad, Res}
 
 
 object Bound {
-  def apply(limit:Long) = new Bound(limit)
+  def apply(limit:Int) = new Bound(limit)
   case object Zero extends Bound(0)
   case object Once extends Bound(1)
-  case object Unbound extends Bound(Long.MaxValue)
-  case class Bounded(override val limit:Long) extends Bound(limit)
+  case object Unbound extends Bound(Int.MaxValue)
+  case class Bounded(override val limit:Int) extends Bound(limit)
 
 
 }
-class Bound(val limit:Long) {
-  def isUnbound = limit==Long.MaxValue
+class Bound(val limit:Int) {
+  def isUnbound = limit==Int.MaxValue
   def isZero = limit==0
 }
 
@@ -29,16 +29,16 @@ object Range {
   val maxProperty = rs / "maxoccurs"
 }
 
-case class Range(min:Long,max:Long) extends Cardinality(Bound(min),Bound(max))
+case class Range(min:Int,max:Int) extends Cardinality(Bound(min),Bound(max))
 {
   override def toQuads(subject: Res)(implicit context: Res): Set[Quad] = Set(
-    Quad(subject,Range.minProperty,LongLiteral(min),context),
-    Quad(subject,Range.maxProperty,LongLiteral(max),context)
+    Quad(subject,Range.minProperty,IntLiteral(min),context),
+    Quad(subject,Range.maxProperty,IntLiteral(max),context)
   )
 
   override def toTriplets(subject: Res): Set[Trip] = Set(
-    Trip(subject,Range.minProperty,LongLiteral(min)),
-    Trip(subject,Range.maxProperty,LongLiteral(max))
+    Trip(subject,Range.minProperty,IntLiteral(min)),
+    Trip(subject,Range.maxProperty,IntLiteral(max))
   )
 
 }
@@ -47,7 +47,7 @@ case class Range(min:Long,max:Long) extends Cardinality(Bound(min),Bound(max))
 object Cardinality
 {
   //def apply(min: Bound,max: Bound) = new Cardinality(min,max)
-  def apply(min: Long,max:Long) = Range(min,max)
+  def apply(min: Int,max:Int) = Range(min,max)
 
 }
 

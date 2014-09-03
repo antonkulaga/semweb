@@ -16,11 +16,11 @@ unmanagedSourceDirectories in Compile <+= baseDirectory(_ / "shared" / "main" / 
 
 unmanagedSourceDirectories in Test <+= baseDirectory(_ / "shared" / "test" / "scala")
 
-test in Test <<= (test in Test) dependsOn (test in (sesame, Test)) //run sesame tests when rdfs are tested
+//test in Test <<= (test in Test) dependsOn (test in (sesame, Test)) //run sesame tests when rdfs are tested
 
 
 libraryDependencies ++= Seq(
-  "com.lihaoyi" %% "utest" % "0.2.0" % "test"
+  "com.lihaoyi" %% "utest" % "0.2.2" % "test"
 )
 
 testFrameworks += new TestFramework("utest.runner.JvmFramework")

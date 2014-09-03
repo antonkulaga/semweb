@@ -2,39 +2,6 @@ package org.scalax.semweb.shex
 
 import org.scalax.semweb.rdf._
 import org.scalax.semweb.rdf.vocabulary.RDF
-import org.scalax.semweb.sparql._
-
-
-
-trait ToTriplets{
-  def toTriplets(subject:Res):Set[Trip]
-}
-
-trait ToQuads
-{
-  def toQuads(subject:Res)(implicit context:Res = null):Set[Quad]
-}
-
-trait WithPatterns {
-  def empty:PatternResult = (Set.empty[Pat],Map.empty[String,Variable])
-
-  type PatternResult = (Set[Pat],Map[String,Variable])
-
-}
-
-trait ToPatterns extends WithPatterns
-{
-  /**
-   * Tries to make patterns with provided variables
-   * @param res
-   * @return
-   */
-  //def toPatterns(res:Res,vars:Map[String,Variable] = Map.empty):Try[Set[Pat]]
-
-  def toPatterns(res:Res):PatternResult
-
-
-}
 
 
 case class ShEx(rules:Seq[Shape], start: Option[Label] = None) extends {
@@ -50,10 +17,12 @@ object Shape {
 
 /**
  * Shape expression
- * @param label
+ * @param id
  * @param rule
  */
-case class Shape(label: Label, rule: Rule) {
+case class Shape(id: Label, rule: Rule)  extends Labeled
+{
+
 
   /**
    * Turns shape into quad
@@ -62,7 +31,7 @@ case class Shape(label: Label, rule: Rule) {
    */
   def asQuads(implicit context:Res):Set[Quad] =
   {
-    val model = Quads -- label.asResource
+    val model = Quads -- id.asResource
     model -- RDF.TYPE -- Shape.rdfType -- context
 
     model.quads ++ rule.toQuads(model.sub)(context)
@@ -70,18 +39,24 @@ case class Shape(label: Label, rule: Rule) {
 
 
   def asPropertyModel(implicit context:Res):PropertyModel = {
-    val res = label.asResource
+    val res = id.asResource
     val props: Map[IRI, Set[RDFValue]] = rule.toQuads(res)(context).map(q=>(q.pred,Set(q.obj))).toMap
     PropertyModel(res,props)
 
   }
 
+
   def loadProperties(res:Res) =  this.rule match {
+      //TODO: delete or figure out what I need it for
+
     case and:AndRule=> and.conjoints.map{
+
+
       case arc:ArcRule=>
 
       case r =>print(s"nonArc conjoints are not yet supported, passed rule is ${r.toString}")
     }
+
     case r => print(s"or rule is not yet supported, passed rule is ${r.toString}")
   }
 
@@ -91,43 +66,32 @@ case class Shape(label: Label, rule: Rule) {
     rl match {
       case arc:ArcRule=> List(arc)
       case  and:AndRule=> and.conjoints.flatMap(v=>arcRules(v)).toList
+      case  orRule:OrRule=> orRule.disjoints.flatMap(v=>arcRules(v)).toList //TODO: figure out what to do with ors
       case _=> List.empty[ArcRule]
     }
 
   }
 
-
-}
-
-object Label {
-
-  def apply(res:Res) = res match{
-    case b:BlankNode=>BNodeLabel(b)
-    case iri:IRI => IRILabel(iri)
+  def updated[TR<:Rule](change:PartialFunction[Rule,TR]) =  if(change.isDefinedAt(rule))
+    Some(this.copy(rule = change(rule)))
+  else  rule match
+  {
+    case and:AndRule=>
+    case orRule:OrRule=>
+    case _=> None
   }
-}
 
-trait Label{
 
-  def asResource:Res
-}
+  def updated(newRule:Rule):Option[Shape] = this.rule match {
+    case r if this.id.asResource==newRule.id.asResource=> Some(Shape(newRule.id,newRule))
+    case r if r.id==newRule.id && r!=newRule=> Some(this.copy(rule = newRule))
+    case and:AndRule=> and.updated(newRule).map(r=>this.copy(rule = r))
 
-case class IRILabel(iri: IRI) extends Label
-{
-  def asResource:Res = iri
+    case or:OrRule=> or.updated(newRule).map(r=>this.copy(rule = r))
+    case _ => None
 
-}
-case class BNodeLabel(bnode:BlankNode) extends Label
-{
-  def asResource:Res = bnode
-
-}
-
-case class IRIStem(iri: IRI, isStem: Boolean) {
-  def matchStem(other: Res): Boolean = other match {
-    case prop:IRI=>prop.stringValue.startsWith(iri.stringValue)
-    case _=>false
   }
-}
 
-case class Action(label: Label, code: String)
+
+
+}

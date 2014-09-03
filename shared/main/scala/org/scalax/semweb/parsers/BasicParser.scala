@@ -5,7 +5,9 @@ import org.scalax.semweb.sparql
 import org.scalax.semweb.sparql._
 import java.util.Date
 
-class BasicParser(val input: ParserInput) extends Parser{
+trait BasicParser extends Parser{
+
+
   def ChWS(s:Char) = rule {
     this.ch(s) ~ WS
   }
@@ -16,65 +18,64 @@ class BasicParser(val input: ParserInput) extends Parser{
 
   def ignoreCaseWS(string:String) = rule { ignoreCase(string) ~ WS }
 
+  def EOL = rule { anyOf("\n\r") }
 }
 
-class BasicElementsParser(input:ParserInput) extends BasicParser(input)
-{
 
+trait NumericParser extends BasicParser {
 
   def TRUE = rule {
-    ignoreCaseWS("TRUE")
+    ignoreCaseWS("true")~push(true)
   }
 
   def FALSE = rule{
-    ignoreCaseWS("FALSE")
+    ignoreCaseWS("false")~push(false)
   }
 
-  def INTEGER = rule{
-    oneOrMore(CharPredicate.Digit)~WS
+  def INTEGER_NEGATIVE= rule {
+    MINUS ~ INTEGER_UNSIGNED ~>(i=>0-i)
   }
 
-  def INTEGER_POSITIVE()  = rule {
-    PLUS ~ INTEGER
+  def INTEGER_UNSIGNED: Rule1[Int] = rule{
+    capture(oneOrMore(CharPredicate.Digit))~>(v=>v.toInt)~WS
   }
 
-  def INTEGER_NEGATIVE()  = rule {
-    MINUS ~ INTEGER
+  def INTEGER = rule {
+    INTEGER_UNSIGNED | INTEGER_NEGATIVE
   }
 
-  def DECIMAL = rule {
+  /**
+   * Is in fact double as it is easier to go this way
+   * @return
+   */
+  def DECIMAL_UNSIGNED = rule {
     (
-      oneOrMore(CharPredicate.Digit) ~ DOT ~ zeroOrMore(CharPredicate.Digit) |
-    DOT ~ oneOrMore(CharPredicate.Digit)
+      ( capture(oneOrMore(CharPredicate.Digit))~ DOT ~ capture(zeroOrMore(CharPredicate.Digit)) ~>((a,b)=> (a+"."+b).toDouble) ) |
+      ( DOT ~ capture(oneOrMore(CharPredicate.Digit)) ~>(b=>("."+b).toDouble ) )
     ) ~ WS
-  }
 
-  def DECIMAL_POSITIVE = rule {
-    PLUS ~ DECIMAL
   }
 
   def DECIMAL_NEGATIVE = rule {
-    MINUS ~ DECIMAL
+    MINUS ~ DECIMAL_UNSIGNED ~>(d=>0.0-d)
+  }
+
+  def DECIMAL = rule {
+    DECIMAL_UNSIGNED | DECIMAL_NEGATIVE
   }
 
 
-  def DOUBLE() = rule{ //todo: rewrite
-    (
-      oneOrMore(CharPredicate.Digit) ~ DOT ~ zeroOrMore(CharPredicate.Digit) ~  EXPONENT |
-      DOT ~ oneOrMore(CharPredicate.Digit) ~ EXPONENT |
-        oneOrMore(CharPredicate.Digit) ~ EXPONENT
-      ) ~ WS
-  }
+  def PLUS = this.ChWS('!')
 
 
-  def DOUBLE_POSITIVE = rule{
-    PLUS ~ DOUBLE
-  }
+  def MINUS = this.ChWS('-')
 
-  def DOUBLE_NEGATIVE = rule{
-    MINUS ~DOUBLE
-  }
 
+  def DOT = this.ChWS('.')
+
+}
+
+trait ExpressionParser extends NumericParser {
 
 
   def EXPONENT = rule{
@@ -82,7 +83,6 @@ class BasicElementsParser(input:ParserInput) extends BasicParser(input)
   }
 
 
-  def EOL = rule { anyOf("\n\r") }
 
   def LESS_EQUAL = StringWS("<=")
 
@@ -115,14 +115,6 @@ class BasicElementsParser(input:ParserInput) extends BasicParser(input)
 
   def SEMICOLON = this.ChWS(';')
 
-  def DOT = this.ChWS('.')
-
-
-  def PLUS = this.ChWS('!')
-
-
-  def MINUS = this.ChWS('-')
-
 
   def ASTERISK = this.ChWS('*')
 
@@ -153,3 +145,7 @@ class BasicElementsParser(input:ParserInput) extends BasicParser(input)
   def GREATER = this.ChWS('>')
 
 }
+
+
+
+

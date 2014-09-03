@@ -135,11 +135,11 @@ class LoadByShapeSpec extends  WordSpec with Matchers {
       val rls: Set[ArcRule] = sl.rule.asInstanceOf[AndRule].conjoints.collect{case r:ArcRule=>r}
       rls.size shouldEqual 3
 
-      val rco: Option[ArcRule] = rls.collectFirst{case rule if rule.name.isInstanceOf[NameTerm] && rule.name.asInstanceOf[NameTerm].t == author =>rule}
+      val rco: Option[ArcRule] = rls.collectFirst{case rule if rule.name.isInstanceOf[NameTerm] && rule.name.asInstanceOf[NameTerm].property == author =>rule}
       rco.isDefined shouldEqual true
       val aur = rco.get
 
-      val rco2: Option[ArcRule] = rls.collectFirst{case rule if rule.name.isInstanceOf[NameTerm] && rule.name.asInstanceOf[NameTerm].t == title =>rule}
+      val rco2: Option[ArcRule] = rls.collectFirst{case rule if rule.name.isInstanceOf[NameTerm] && rule.name.asInstanceOf[NameTerm].property == title =>rule}
       rco2.isDefined shouldEqual true
       val pt = rco2.get
 

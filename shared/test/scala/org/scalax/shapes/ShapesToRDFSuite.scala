@@ -1,6 +1,6 @@
 package org.scalax.shapes
 
-import org.scalax.semweb.rdf.{IRI, LongLiteral, Quad}
+import org.scalax.semweb.rdf.{IRI, IntLiteral, Quad}
 import org.scalax.semweb.rdf.vocabulary._
 import org.scalax.semweb.shex._
 import utest._
@@ -66,8 +66,8 @@ object ShapesToRDFSuite extends TestSuite{
           val q5: Set[Quad] = Cardinality(2,3).toQuads(subject)
           val q = q5.toList
           assert(q.size==2)
-          assert( q(0) == Quad(subject,minOccurs,LongLiteral(2),context) )
-          assert( q(1) == Quad(subject,maxOccurs,LongLiteral(3),context) )
+          assert( q(0) == Quad(subject,minOccurs,IntLiteral(2),context) )
+          assert( q(1) == Quad(subject,maxOccurs,IntLiteral(3),context) )
         }
 
         "write simple shapes" - {

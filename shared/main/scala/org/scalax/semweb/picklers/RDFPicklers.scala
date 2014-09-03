@@ -20,8 +20,9 @@ trait RDFPicklers extends CommonPicklers{
     register[DoubleLiteral]
     register[DecimalLiteral]
     register[StringLangLiteral]
-    register[LongLiteral]
-    register[IntegerLiteral]
+   // register[LongLiteral]
+    register[TypedLiteral]
+    register[IntLiteral]
     register[DateLiteral]
     register[AnyLit]
 
@@ -71,7 +72,7 @@ trait RDFPicklers extends CommonPicklers{
 
     register[IRILabel]
     register[BNodeLabel]
-    register[IRIStem]
+    //register[IRIStem]
     register[Action]
 
     register[Shape]

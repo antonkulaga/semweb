@@ -14,6 +14,7 @@ object ShapeBuilderSuite extends TestSuite{
       object shape extends ShapeBuilder(IRI("http://myshape.com"))
       shape has FOAF.NAME of XSD.StringDatatypeIRI occurs ExactlyOne
       shape has FOAF.KNOWS oneOf (FOAF.PERSON,FOAF.Group) occurs Plus
+
       val res: Shape = shape.result
       assert(res.rule.isInstanceOf[AndRule])
       val and = res.rule.asInstanceOf[AndRule]

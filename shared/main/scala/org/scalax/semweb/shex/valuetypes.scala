@@ -66,7 +66,7 @@ case class ValueSet(s: Set[RDFValue]) extends ValueClass {
 }
 object ValueAny
 
-case class ValueAny(stem: IRIStem) extends ValueClass {
+case class ValueAny(stem: ValueStem) extends ValueClass {
   override def toQuads(subject: Res)(implicit context: Res): Set[Quad] = ???
 
   override def toTriplets(subject: Res): Set[Trip] = ???

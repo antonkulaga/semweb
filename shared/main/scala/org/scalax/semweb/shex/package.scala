@@ -24,7 +24,7 @@ package object shex {
   lazy val se =  IRI("http://www.w3.org/2013/ShEx/Definition#") //URL does not work but it is in
 
 
-  def range(m: Long, n: Long): Cardinality = {
+  def range(m: Int, n: Int): Cardinality = {
     require(n > m)
     Cardinality(min = m, max = n)
   }

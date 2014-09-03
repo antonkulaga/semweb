@@ -2,7 +2,8 @@ package org.scalax.parsers
 
 import java.util.Date
 
-import org.scalax.semweb.parsers.{DateParser, Calculator}
+import org.scalax.semweb.parsers.DateParser
+import org.scalax.semweb.parsers.sample.Calculator
 import utest._
 import org.scalax.semweb._
 

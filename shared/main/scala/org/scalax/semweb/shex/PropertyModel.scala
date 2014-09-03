@@ -3,7 +3,7 @@ package org.scalax.semweb.shex
 import org.scalax.semweb.rdf._
 import org.scalax.semweb.shex.validation._
 import org.scalax.semweb.rdf.IRI
-import org.scalax.semweb.rdf.LongLiteral
+//import org.scalax.semweb.rdf.LongLiteral
 import org.scalax.semweb.rdf.StringLiteral
 import org.scalax.semweb.rdf.DoubleLiteral
 import org.scalax.semweb.rdf.StringLangLiteral
@@ -59,13 +59,13 @@ case class PropertyModel(resource:Res,properties:Map[IRI,Set[RDFValue]],validati
   def replace(iri:IRI,text:String,lang:String):  PropertyModel  = this.replace(iri,StringLangLiteral(text,lang))
   def replace(iri:IRI,text:String):  PropertyModel  = this.replace(iri,StringLiteral(text))
   def replace(iri:IRI,value:Double):  PropertyModel = this.replace(iri,DoubleLiteral(value))
-  def replace(iri:IRI,value:Long):  PropertyModel  = this.replace(iri,LongLiteral(value))
+  def replace(iri:IRI,value:Int):  PropertyModel  = this.replace(iri,IntLiteral(value))
 
   def update(iri:IRI,value:RDFValue)(implicit update:ModelUpdater): PropertyModel = update(iri,value,this)
   def update(iri:IRI,value:String)(implicit update:ModelUpdater): PropertyModel  = this.update(iri,StringLiteral(value))
   def update(iri:IRI,value:String,lang:String)(implicit update:ModelUpdater): PropertyModel = this.update(iri,StringLangLiteral(value,lang))
   def update(iri:IRI,value:Double)(implicit update:ModelUpdater): PropertyModel = this.update(iri,DoubleLiteral(value))
-  def update(iri:IRI,value:Long)(implicit update:ModelUpdater): PropertyModel = this.update(iri,LongLiteral(value))
+  def update(iri:IRI,value:Int)(implicit update:ModelUpdater): PropertyModel = this.update(iri,IntLiteral(value))
 
   override def id: Res = resource
 }

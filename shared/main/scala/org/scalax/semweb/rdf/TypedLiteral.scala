@@ -63,10 +63,12 @@ abstract class DatatypeLiteral(val label : String, val dataType : IRI) extends L
 
 }
 
+case class TypedLiteral( content : String,  tp : IRI) extends DatatypeLiteral(content,tp)
+
 // It should be better to inherit from DatatypeLiteral,
 // but case-to-case inheritance is prohibited in Scala
-case class IntegerLiteral(value: Integer) extends  DatatypeLiteral(value.toString,XSD.IntegerDatatypeIRI)
-case class LongLiteral(value: Long) extends  DatatypeLiteral(value.toString,XSD.LongDatatypeIRI)
+case class IntLiteral(value: Int) extends  DatatypeLiteral(value.toString,XSD.IntDatatypeIRI)
+//case class LongLiteral(value: Long) extends  DatatypeLiteral(value.toString,XSD.LongDatatypeIRI)
 
 case class DecimalLiteral(value: BigDecimal) extends DatatypeLiteral(value.toString(),XSD.DecimalDatatypeIRI)
 
@@ -102,6 +104,7 @@ case class StringLangLiteral(text: String, lang : String) extends DatatypeLitera
 
 
 }
+
 
 case class BooleanLiteral(value:Boolean) extends DatatypeLiteral(value.toString,XSD.BooleanDatatypeIRI)
 

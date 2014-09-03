@@ -6,14 +6,14 @@ import scala.collection.immutable._
 
 /**
  * For nice shape building
- * @param iri
+ * @param propertyIRI
  */
-class WithShapeProperty(id:Option[Res],iri:IRI) {
+class WithShapeProperty(id:Res = Rule.genRuleRes(),propertyIRI:IRI) {
   protected var occ: Cardinality = ExactlyOne
   protected var vc: ValueClass = ValueType(RDF.VALUE)
   protected var priority: Option[Int] = None
   protected var title: Option[String] = None
-  lazy val result: Option[ArcRule] = Some(ArcRule(id.map(Label.apply), iri, vc, occ, Seq.empty, this.priority, this.title))
+  lazy val result: Option[ArcRule] = Some(ArcRule(Label.apply(id), propertyIRI, vc, occ, Seq.empty, this.priority, this.title))
 
 
 
@@ -57,9 +57,9 @@ class WithShapeProperty(id:Option[Res],iri:IRI) {
  */
 class ShapeBuilder(res:Res) extends RDFBuilder[WithShapeProperty]{
 
-  def has(iri:IRI) = this -- new WithShapeProperty(None,iri)
+  def has(iri:IRI) = this -- new WithShapeProperty(propertyIRI = iri)
 
-  def hasProperty(res:Res,iri:IRI) = this -- new WithShapeProperty(Some(res),iri)
+  def hasProperty(res:Res,iri:IRI) = this -- new WithShapeProperty(res,iri)
 
   def hasRule(rule:Rule):this.type  = {
     this.rules = this.rules + rule
@@ -78,7 +78,7 @@ class ShapeBuilder(res:Res) extends RDFBuilder[WithShapeProperty]{
    */
   def result:Shape = {
     val allRules: Set[Rule] = this.values.filter(_.result.isDefined).map(_.result.get) ++ this.rules
-    val and = new AndRule(allRules)
+    val and: AndRule = new AndRule(allRules,Label.apply(res))
     Shape(res,and)
   }
 

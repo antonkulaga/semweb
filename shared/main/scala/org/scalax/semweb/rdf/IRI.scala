@@ -27,7 +27,7 @@ case class IRI(uri:String) extends CanBePredicate with Res
   def /(child:IRI): IRI = this / child.stringValue
 
 
-  require(uri.contains(":"), "uri string must by URL")
+  require(uri.contains(":"), "uri string must be URL and contain ':' ")
 
 
   /**
