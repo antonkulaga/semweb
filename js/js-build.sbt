@@ -18,10 +18,9 @@ autoCompilerPlugins := true
 
 libraryDependencies += "org.scalajs" %%% "scalajs-pickling" % "0.3.1"
 
-resolvers += Opts.resolver.repo("alexander-myltsev", "maven")
+resolvers += "bintray-alexander_myltsev" at "http://dl.bintray.com/alexander-myltsev/maven/"
 
-libraryDependencies += "name.myltsev" %%% "parboiled" % "2.0.0"
-
+libraryDependencies += "org.parboiled" %%% "parboiled" % "2.0.1"
 
 bintraySettings
 

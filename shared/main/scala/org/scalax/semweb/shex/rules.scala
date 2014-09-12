@@ -21,7 +21,7 @@ object Rule {
   def genRuleLabel():Label = BNodeLabel( genRuleRes())
 }
 
-sealed trait Rule extends ToQuads with ToTriplets with Labeled
+trait Rule extends ToQuads with ToTriplets with Labeled
 
 
 object ArcRule {
@@ -31,18 +31,18 @@ object ArcRule {
   val priority: IRI = WI.pl("priority")
 
 
+  def apply(propertyName:IRI): ArcRule = apply(propertyName,RDF.VALUE,Star,None)
 
-}
+  def apply(propertyName:IRI,tp:IRI): ArcRule =   apply(propertyName,tp,Star,None)
 
-object AndRule
-{
+  def apply(propertyName:IRI,tp:IRI,card:Cardinality): ArcRule = apply(propertyName,tp,card,None)
 
-  def apply(propertyName:IRI,tp:IRI = RDF.VALUE,card:Cardinality = Star, priority:Option[Int] = None): ArcRule =
+  def apply(propertyName:IRI,tp:IRI,card:Cardinality, priority:Option[Int]): ArcRule =
   {
     ArcRule(Rule.genRuleLabel(), NameTerm(propertyName),ValueType(tp),card, priority = priority)
   }
-}
 
+}
 
 
 
@@ -96,6 +96,14 @@ trait RuleContainer extends Rule {
  // def updated(rule:Rule):Option[this.type ]
 
 }
+
+object AndRule
+{
+
+  def empty = new AndRule(Set.empty,WI.PLATFORM.EMPTY)
+
+}
+
 
 /**
  * TODO: decide about the type

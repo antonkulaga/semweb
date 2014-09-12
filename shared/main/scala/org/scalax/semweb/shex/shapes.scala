@@ -1,7 +1,7 @@
 package org.scalax.semweb.shex
 
 import org.scalax.semweb.rdf._
-import org.scalax.semweb.rdf.vocabulary.RDF
+import org.scalax.semweb.rdf.vocabulary.{WI, RDF}
 
 
 case class ShEx(rules:Seq[Shape], start: Option[Label] = None) extends {
@@ -12,8 +12,8 @@ object Shape {
 
   val rdfType = rs / "ResourceShape"
 
+  lazy val empty = Shape(WI.PLATFORM.EMPTY, AndRule.empty)
 }
-
 
 /**
  * Shape expression

@@ -2,7 +2,7 @@ import bintray.Plugin.bintraySettings
 import sbt.Keys._
 import sbt._
 
-lazy val root = project.in(file("."))//.settings(crossScalaVersions := Seq("2.10.4", "2.11.0"))
+lazy val root = project.in(file("."))
 
 lazy val js = project.in(file("js"))
 
@@ -20,14 +20,16 @@ unmanagedSourceDirectories in Test <+= baseDirectory(_ / "shared" / "test" / "sc
 
 
 libraryDependencies ++= Seq(
-  "com.lihaoyi" %% "utest" % "0.2.2" % "test"
+  "com.lihaoyi" %% "utest" % "0.2.3" % "test"
 )
 
 testFrameworks += new TestFramework("utest.runner.JvmFramework")
 
 libraryDependencies += "org.scalajs" %% "scalajs-pickling-play-json" % "0.3.1"
 
-libraryDependencies += "org.parboiled" %% "parboiled" % "2.0.0"
+resolvers += "bintray-alexander_myltsev" at "http://dl.bintray.com/alexander-myltsev/maven/"
+
+libraryDependencies += "org.parboiled" %%% "parboiled" % "2.0.1"
 
 autoCompilerPlugins := true
 

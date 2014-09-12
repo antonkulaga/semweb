@@ -11,11 +11,11 @@ object Build extends sbt.Build{
 
  def repo = if(isRelease) "scalax-releases" else "scalax-snapshots"
 
- val semWebVer = "0.6.8"
+ val semWebVer = "0.6.11"
 
  publishMavenStyle := false
 
- val currentVersion = semWebVer//if(this.isRelease) semWebVer else semWebVer+"-SNAPSHOT"
+ val currentVersion = semWebVer
 
  val scalajsOutputDir = Def.settingKey[File]("directory for javascript files output by scalajs")
 
