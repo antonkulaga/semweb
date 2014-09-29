@@ -41,9 +41,13 @@ trait Scala2SesameModelImplicits{
 
 
 
-  implicit def lit2Literal(lit:Lit):Literal = lit match {
+  implicit def lit2Literal(literal:Lit):Literal = literal match {
     case null=>null
     case StringLangLiteral(text,lang)=>new LiteralImpl(text,lang)
+    case lit:IntLiteral=>intLit2Literal(lit)
+    case lit:DoubleLiteral=>doubleLit2Literal(lit)
+    case lit:BooleanLiteral=>booleanLit2Literal(lit)
+    case lit:DateLiteral=>dateLit2Literal(lit)
     case lit:DatatypeLiteral=> new LiteralImpl(lit.label, lit.dataType)
     case other=>new LiteralImpl(other.label)
 
@@ -51,12 +55,13 @@ trait Scala2SesameModelImplicits{
 
 
   implicit def langLi2Literal(lit:StringLangLiteral):Literal = new LiteralImpl(lit.text,lit.lang)
+  implicit def intLit2Literal(lit:IntLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.INTEGER)
 
   implicit def doubleLit2Literal(lit:DoubleLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.DOUBLE)
   implicit def booleanLit2Literal(lit:BooleanLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.BOOLEAN)
   implicit def decimalLit2Literal(lit:DecimalLiteral):Literal = new LiteralImpl(lit.value.toString(),vocabulary.XMLSchema.DECIMAL)
   //implicit def longLit2Literal(lit:LongLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.LONG)
-  implicit def dateLit2Literal(lit:DateLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.DATE)
+  implicit def dateLit2Literal(lit:DateLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.DATETIME)
 
 
 
@@ -116,13 +121,12 @@ trait Sesame2ScalaModelImplicits{
   implicit def literal2Lit(l:Literal):Lit = l.getDatatype match {
     case null=>if(l==null) null else AnyLit(l.getLabel)
     case xe.BOOLEAN => BooleanLiteral(l.booleanValue())
-    case xe.DECIMAL => DecimalLiteral(l.decimalValue())
-    case xe.DOUBLE => DoubleLiteral(l.doubleValue())
+    //case xe.DECIMAL => DecimalLiteral(l.decimalValue())
+    case xe.DOUBLE | xe.DECIMAL => DoubleLiteral(l.doubleValue())
   //  case xe.LONG => LongLiteral(l.longValue())
-    case xe.INT => IntLiteral(l.intValue())
-
+    case xe.INT | xe.INTEGER | xe.POSITIVE_INTEGER | xe.NON_NEGATIVE_INTEGER => IntLiteral(l.intValue())
     case d if this.isCalendar(d) =>  DateLiteral(l.calendarValue().toGregorianCalendar.getTime)
-    case xe.STRING | xe.NORMALIZEDSTRING=> if(l.getLanguage!="") StringLangLiteral(l.getLabel,l.getLanguage) else StringLiteral(l.getLabel)
+    case xe.STRING | xe.NORMALIZEDSTRING=> if(l.getLanguage!="" && l.getLanguage!=null) StringLangLiteral(l.getLabel,l.getLanguage) else StringLiteral(l.getLabel)
     case other => AnyLit(l.getLabel)
   }
 

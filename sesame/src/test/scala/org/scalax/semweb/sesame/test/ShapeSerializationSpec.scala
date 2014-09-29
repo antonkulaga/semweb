@@ -54,7 +54,8 @@ class ShapeSerializationSpec extends  WordSpec with Matchers {
       con.hasStatement(page,ArcRule.property,null,true,c) shouldEqual true
 
       con.hasStatement(null, NameTerm.property,   WI.pl("title"), true, c) shouldEqual true
-      con.hasStatement(null, ArcRule.priority ,   IntLiteral(1) , true, c) shouldEqual true
+      //this.fail(con.getStatements(null, ArcRule.priority ,   null , true, c).toList.toString)
+      con.hasStatement(null, ArcRule.priority ,  /*new impl.IntegerLiteralImpl(java.math.BigInteger.valueOf(1))*/ IntLiteral(1) , true, c) shouldEqual true
 
 
       con.hasStatement(null, rs / "valueType" ,   XSD.StringDatatypeIRI, true, c) shouldEqual true

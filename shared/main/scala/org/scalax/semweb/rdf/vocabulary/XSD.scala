@@ -12,7 +12,7 @@ object XSD {
   val StringDatatypeIRI 		=  xsd / "string"
   val LangStringDatatypeIRI  = xsd / "language"
   val BooleanDatatypeIRI 	= xsd / "boolean"
-  //val IntegerDatatypeIRI 	= xsd / "integer"
+  val IntegerDatatypeIRI 	= xsd / "integer"
   val IntDatatypeIRI 	= xsd / "int"
 
   //val LongDatatypeIRI 	= xsd / "long"

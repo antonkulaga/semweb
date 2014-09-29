@@ -2,9 +2,9 @@ package org.scalax.semweb.picklers
 
 import org.scalajs.spickling.PicklerRegistry
 import org.scalajs.spickling.PicklerRegistry._
-import org.scalax.semweb.rdf.{BlankNode, IRI, StringLiteral, Trip, _}
+import org.scalax.semweb.rdf._
 import org.scalax.semweb.shex.validation.{Failed, JustFailure, Valid}
-import org.scalax.semweb.shex.{ArcRule, PropertyModel, Shape, _}
+import org.scalax.semweb.shex._
 import org.scalax.semweb.sparql.Pat
 
 trait RDFPicklers extends CommonPicklers{

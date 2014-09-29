@@ -25,11 +25,13 @@ resolvers += "apache-repo-releases" at "http://repository.apache.org/content/rep
 
 resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
 
+libraryDependencies += "org.openrdf.sesame" % "sesame-rio-turtle" %  bigDataSesameVersion// "2.7.13" //latest TURTLE parser
+
 libraryDependencies += "org.openrdf.sesame" % "sesame-sail-memory" % bigDataSesameVersion
 
-libraryDependencies += "com.bigdata" % "bigdata" % "1.3.1" % "test" //Bigdata for tests
+libraryDependencies += "com.bigdata" % "bigdata" % "1.3.2" % "test" //Bigdata for tests
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.1"
+libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.1" % "test"
 
 parallelExecution in Test := false
 

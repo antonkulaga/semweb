@@ -100,7 +100,7 @@ trait RuleContainer extends Rule {
 object AndRule
 {
 
-  def empty = new AndRule(Set.empty,WI.PLATFORM.EMPTY)
+  lazy val empty = new AndRule(Set.empty,WI.PLATFORM.EMPTY)
 
 }
 

@@ -1,15 +1,18 @@
 package org.scalax.semweb.sesame.files
 
+import org.openrdf.rio.RDFParser.DatatypeHandling
+import org.openrdf.rio.turtle.TurtleParser
+
 import scala.util.Try
 import java.net.URL
 import java.io.{InputStream, FileInputStream, File}
-import org.openrdf.rio.Rio
+import org.openrdf.rio.{ParserConfig, Rio}
 import org.scalax.semweb.sesame.SesameDataWriter
 import org.scalax.semweb.rdf.IRI
 import org.scalax.semweb.commons.LogLike
 
 
-abstract class SesameFileParser extends SesameDataWriter{
+abstract class SesameFileParser(val config:ParserConfig =  new ParserConfig(false,false,true, DatatypeHandling.NORMALIZE)) extends SesameDataWriter{
 
 
   def makeListener(filename:String,con:WriteConnection,context:IRI,lg:LogLike):SesameFileListener
@@ -45,6 +48,7 @@ abstract class SesameFileParser extends SesameDataWriter{
 
     val format = Rio.getParserFormatForFileName(fileName)
     val parser = Rio.createParser(format)
+    parser.setParserConfig(config)
     this.write{con=>
       val context = if(contextStr=="") null else IRI(contextStr)
       val r = this.makeListener(fileName,con,context,lg)

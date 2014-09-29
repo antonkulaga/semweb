@@ -49,18 +49,14 @@ trait CommonPicklers {
       assert(len > 0)
       ((0 until len).toList map { index =>
         registry.unpickle(reader.readArrayElem(pickle, index))
-      }).asInstanceOf[::[Any]]
+      }).asInstanceOf[::[_]]
     }
   }
   def registerCommon() = {
-    //
-    // Utils
-    register(Nil)
-    register[::[Any]]
-    register(None)
-    register[Date]
-
-    //register[(_,_)]
+    PicklerRegistry.register(Nil)
+    PicklerRegistry.register(None)
+    PicklerRegistry.register[Date]
+    PicklerRegistry.register[::[_]]
 
   }
 

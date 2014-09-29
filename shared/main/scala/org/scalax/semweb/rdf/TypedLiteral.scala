@@ -60,19 +60,36 @@ abstract class DatatypeLiteral(val label : String, val dataType : IRI) extends L
   override def stringValue : String = if(dataType!=null) "\"" + label + "\"^^" + "<"+dataType.stringValue+">" else
     "\"" + label + "\""
 
-
 }
 
 case class TypedLiteral( content : String,  tp : IRI) extends DatatypeLiteral(content,tp)
 
 // It should be better to inherit from DatatypeLiteral,
 // but case-to-case inheritance is prohibited in Scala
-case class IntLiteral(value: Int) extends  DatatypeLiteral(value.toString,XSD.IntDatatypeIRI)
+case class IntLiteral(value: Int) extends  DatatypeLiteral(value.toString,XSD.IntegerDatatypeIRI)
+{
+  override def stringValue = value.toString
+
+
+  override def equals(that: Any): Boolean = that match  {
+
+    case l:DatatypeLiteral=>l.label==label && (l.dataType ==this.dataType || l.dataType == XSD.IntegerDatatypeIRI)
+    case _=>false
+
+  }
+}
+
 //case class LongLiteral(value: Long) extends  DatatypeLiteral(value.toString,XSD.LongDatatypeIRI)
 
 case class DecimalLiteral(value: BigDecimal) extends DatatypeLiteral(value.toString(),XSD.DecimalDatatypeIRI)
+{
+  override def stringValue = value.toString
+}
 
 case class DoubleLiteral(value:Double) extends DatatypeLiteral(value.toString,XSD.DoubleDatatypeIRI)
+{
+  override def stringValue = value.toString
+}
 
 case class StringLiteral(text: String) extends DatatypeLiteral(text,XSD.StringDatatypeIRI){
 
@@ -107,6 +124,9 @@ case class StringLangLiteral(text: String, lang : String) extends DatatypeLitera
 
 
 case class BooleanLiteral(value:Boolean) extends DatatypeLiteral(value.toString,XSD.BooleanDatatypeIRI)
+{
+  override def stringValue = value.toString
+}
 
 case class DateLiteral(value:Date) extends DatatypeLiteral(value.toString,XSD.Date) {
 
