@@ -20,7 +20,7 @@ unmanagedSourceDirectories in Test <+= baseDirectory(_ / "shared" / "test" / "sc
 
 
 libraryDependencies ++= Seq(
-  "com.lihaoyi" %% "utest" % "0.2.3" % "test"
+  "com.lihaoyi" %% "utest" % "0.2.4" % "test"
 )
 
 testFrameworks += new TestFramework("utest.runner.JvmFramework")

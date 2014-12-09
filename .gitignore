@@ -11,6 +11,7 @@ dist/*
 src_managed/
 project/boot/
 project/plugins/project/
+projectFilesBackup
 
 # Scala-IDE specific
 .scala_dependencies

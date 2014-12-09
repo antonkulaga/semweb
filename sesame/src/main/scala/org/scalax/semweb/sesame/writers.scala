@@ -31,7 +31,7 @@ trait SesameDataWriter extends CanWriteSesame{
   def write[T](action:WriteConnection=>T):Try[T] =
   {
     val con = this.writeConnection
-    con.setAutoCommit(false)
+    con.begin()
     val res = Try {
       val r = action(con)
       con.commit()

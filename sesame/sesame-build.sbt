@@ -7,13 +7,11 @@ organization := "org.scalax"
 
 name := "semweb-sesame"
 
-scalaVersion :="2.11.2"
+scalaVersion :="2.11.4"
 
 version := Build.semWebVer
 
-val currentSesameVersion = "2.7.13"
-
-val bigDataSesameVersion = "2.6.10" //BigData devs are lazy to update, but I have to use their sesame in order no to brake my apps that depend on sesame
+val bigDataSesameVersion = "2.7.13" //BigData devs are lazy to update, but I have to use their sesame in order no to brake my apps that depend on sesame
 
 resolvers += "Bigdata releases" at "http://systap.com/maven/releases/"
 
@@ -29,7 +27,7 @@ libraryDependencies += "org.openrdf.sesame" % "sesame-rio-turtle" %  bigDataSesa
 
 libraryDependencies += "org.openrdf.sesame" % "sesame-sail-memory" % bigDataSesameVersion
 
-libraryDependencies += "com.bigdata" % "bigdata" % "1.3.2" % "test" //Bigdata for tests
+libraryDependencies += "com.bigdata" % "bigdata" % "1.4.0" % "test" //Bigdata for tests
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.1" % "test"
 
