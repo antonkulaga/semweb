@@ -28,8 +28,6 @@ trait ResultsImplicits extends Sesame2ScalaModelImplicits {
       results.toList.map{case b=>   b.iterator().map(v=>(v.getName,v.getValue:RDFValue)).toMap }
     )
 
-
-
     override def next(): BindingSet = results.next()
 
     override def hasNext: Boolean = results.hasNext
