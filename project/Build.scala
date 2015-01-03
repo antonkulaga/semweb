@@ -67,12 +67,10 @@ object Build extends sbt.Build
 
     libraryDependencies +=  "com.lihaoyi" %% "utest" % "0.2.4" % "test",
     libraryDependencies += "org.scalajs" %%% "scalajs-pickling" % "0.3.1"
-
   )
 
   val jvmSettings : Seq[Setting[_]] = Seq(
     libraryDependencies += "org.scalajs" %% "scalajs-pickling-play-json" % "0.3.1"
-
   )
 
 
@@ -99,6 +97,8 @@ object Build extends sbt.Build
 
     name := "semweb-sesame",
 
+    parallelExecution in Test := false,
+
     resolvers += "Bigdata releases" at "http://systap.com/maven/releases/",
 
     resolvers += "nxparser-repo" at "http://nxparser.googlecode.com/svn/repository/",
@@ -112,6 +112,8 @@ object Build extends sbt.Build
     libraryDependencies += "com.bigdata" % "bigdata" % "1.4.0" % "test",
 
     libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.1" % "test"
+
+    //libraryDependencies += "org.w3" %% "sesame" % "0.7.1"
 
   )).dependsOn(semwebJvm)
 

@@ -46,6 +46,22 @@ object ShapeBuilderSuite extends TestSuite{
 
     }
 
+    "testing set of values" - {
+      object shape extends ShapeBuilder(IRI("http://myshape.com"))
+      val dnaBase =  IRI("http://denigma.org/resource/DNA_base")
+      val de = IRI("http://denigma.org/resource/")
+      val valueClass = ValueSet(Set(de / "A", de / "T", de / "G", de /"C"))
+
+      shape has dnaBase from(de / "A", de / "T", de / "G", de /"C")
+
+      val res = shape.result
+
+      assert(res.arcSorted().head.value.isInstanceOf[ValueSet])
+      assert(res.arcSorted().head.value==valueClass)
+
+
+    }
+
 
 
   }

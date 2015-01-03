@@ -2,7 +2,11 @@ package org.scalax.semweb.rdf
 
 import java.util.Date
 
+import org.scalax.semweb.parsers.DateParser
 import org.scalax.semweb.rdf.vocabulary.XSD
+
+import scala.util.Try
+
 //
 //object Lit {
 //
@@ -44,7 +48,7 @@ case class AnyLit(value:Any) extends Lit{
 
   override val label = value.toString
 
-  override def stringValue : String = "\"" + label + "\""
+  override def stringValue : String = label //"\"" + label + "\""
 }
 
 abstract class DatatypeLiteral(val label : String, val dataType : IRI) extends Lit {
@@ -58,7 +62,7 @@ abstract class DatatypeLiteral(val label : String, val dataType : IRI) extends L
 
 
   override def stringValue : String = if(dataType!=null) "\"" + label + "\"^^" + "<"+dataType.stringValue+">" else
-    "\"" + label + "\""
+   label// "\"" + label + "\""
 
 }
 
@@ -128,37 +132,54 @@ case class BooleanLiteral(value:Boolean) extends DatatypeLiteral(value.toString,
   override def stringValue = value.toString
 }
 
-case class DateLiteral(value:Date) extends DatatypeLiteral(value.toString,XSD.Date) {
+object DateTimeFormats{
+
+  /**
+   * To port day and month
+   * @param int
+   * @return
+   */
+  protected def format2(int:Int) = int match
+  {
+    case i if i < -9 | i > 9 => i.toString
+    case i if i <0 =>"-0"+Math.abs(i)
+    case i =>"0"+ i.toString
+  }
+
+  def dateFormat(value:Date):String = {
+    val (year,month,date) = (value.getYear,value.getMonth,value.getDate)
+    s"${year}-${format2(month)}-${format2(date)}"
+  }
+
+  def timeFormat(value:Date):String = {
+    val offset = value.getTimezoneOffset
+    val ho: Int = offset / 60
+    val min = offset % 60
+    val strOffset: String = if(offset==0) "" else (if(offset>0) "+" else "")+format2(ho)+":"+format2(min)
+    s"${format2(value.getHours)}:${format2(value.getMinutes)}:${format2(value.getSeconds)}$strOffset"
+  }
+
+  def dateTimeFormat(value:Date) = {
+    dateFormat(value)+"T"+timeFormat(value)
+  }
+
+  def parseDate(value:String) =  new DateParser(value).NormalDate.run()
+}
+
+case class DateLiteral(value:Date) extends DatatypeLiteral(DateTimeFormats.dateFormat(value),XSD.Date) {
 
   override def equals(that: Any): Boolean = that match  {
     case DateLiteral(d)=>value==d
     case l:DatatypeLiteral=>l.label==label && l.dataType ==this.dataType
     case _=>false
-
   }
 }
 
+case class DateTimeLiteral(value:Date) extends DatatypeLiteral(DateTimeFormats.dateTimeFormat(value),XSD.DateTime) {
 
-//case class Lang(lang : String) {
-//
-//  // This should be the right regular expression for lang.
-//  // We don't use this expression because the specification does not also.
-//  val langtag_ex : String = "(\\A[xX]([\\x2d]\\p{Alnum}{1,8})*\\z)" +
-//    "|(((\\A\\p{Alpha}{2,8}(?=\\x2d|\\z)){1}" +
-//    "(([\\x2d]\\p{Alpha}{3})(?=\\x2d|\\z)){0,3}" +
-//    "([\\x2d]\\p{Alpha}{4}(?=\\x2d|\\z))?" +
-//    "([\\x2d](\\p{Alpha}{2}|\\d{3})(?=\\x2d|\\z))?" +
-//    "([\\x2d](\\d\\p{Alnum}{3}|\\p{Alnum}{5,8})(?=\\x2d|\\z))*)" +
-//    "(([\\x2d]([a-wyzA-WYZ](?=\\x2d))([\\x2d](\\p{Alnum}{2,8})+)*))*" +
-//    "([\\x2d][xX]([\\x2d]\\p{Alnum}{1,8})*)?)\\z"
-//
-//  // TODO. Specification defines other ways to match languages
-//  def matchLanguage(other : Lang) =
-//    this.lang.toLowerCase == other.lang.toLowerCase
-//
-//  override def toString = lang match {
-//    case "" => ""
-//    case ls => "@" + ls
-//  }
-//
-//}
+  override def equals(that: Any): Boolean = that match  {
+    case DateTimeLiteral(d)=>value==d
+    case l:DatatypeLiteral=>l.label==label && l.dataType ==this.dataType
+    case _=>false
+  }
+}

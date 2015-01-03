@@ -7,20 +7,26 @@ import java.util.Date
 
 class DateParser(val input:ParserInput) extends BasicParser {
 
-  def InputLine = rule {
+  def InputLine:Rule1[Date] = rule {
     NormalDate ~ EOI
   }
 
-  def NormalDate =  rule { (Day ~ Sep ~ ( Month | MonthName) ~ Sep ~ Year) ~>((d,m,y)=> new Date(y,m,d))}//new Date(y,m,d)) }
 
 
-  def Sep = rule { this.anyOf(";./ ") }
+  def NormalDate =  rule { DateFromYear | DateFromDay }
 
-  def Day = rule {
-    capture( (1 to 2).times(CharPredicate.Digit) | CharPredicate.Digit) ~>(_.toInt)
+  def DateFromYear:Rule1[Date] = rule { (Year ~ Sep ~ ( Month | MonthName) ~ Sep ~ Day) ~>( (y:Int,m:Int,d:Int) => new Date(y,m,d) ) }
+
+  def DateFromDay:Rule1[Date] = rule { (Day ~ Sep ~ ( Month | MonthName) ~ Sep ~ Year)  ~>( (d:Int,m:Int,y:Int) => new Date(y,m,d) ) }
+
+
+  def Sep = rule { this.anyOf("-;./ ") }
+
+  def Day:Rule1[Int] = rule {
+    capture( (1 to 2).times(CharPredicate.Digit) | CharPredicate.Digit) ~>((s:String)=>s.toInt)
   }
 
-  def Month = rule {  capture(2.times(CharPredicate.Digit)) ~>(_.toInt) }
+  def Month:Rule1[Int] = rule {  capture(2.times(CharPredicate.Digit)) ~>((s:String)=>s.toInt) }
 
   val months = Map(
     "january"->1,
@@ -37,14 +43,14 @@ class DateParser(val input:ParserInput) extends BasicParser {
     "december"->12
   )
 
-  def MonthName = rule {
-   capture(oneOrMore(CharPredicate.Alpha ))~>{v=>test(months.contains(v.toLowerCase)) ~ push(months(v.toLowerCase))}
+  def MonthName:Rule1[Int] = rule {
+   capture(oneOrMore(CharPredicate.Alpha ))~>{(v:String)=>test(months.contains(v.toLowerCase)) ~ push(months(v.toLowerCase))}
     //capture(2.times(CharPredicate.Digit)) ~>(_.toInt)
   }
 
-  def Year = rule {
-    capture( (3 to 4).times(CharPredicate.Digit) ) ~>(_.toInt) |
-      capture( (1 to 2).times(CharPredicate.Digit) ) ~>(i=>2000+i.toInt)
+  def Year:Rule1[Int] = rule {
+    capture( (3 to 4).times(CharPredicate.Digit) ) ~>((s:String)=>s.toInt)
+    //|  capture( (1 to 2).times(CharPredicate.Digit) ) ~>( (i:String) =>2000+i.toInt)
 
   }
 

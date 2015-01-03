@@ -53,7 +53,8 @@ case class ArcRule(
                     occurs: Cardinality,
                     actions: Seq[Action] = List.empty,
                     priority:Option[Int] = None, //the smaller the more important
-                    title:Option[String] = None
+                    title:Option[String] = None,
+                    default:Option[RDFValue] = None
                     ) extends Rule
 {
 

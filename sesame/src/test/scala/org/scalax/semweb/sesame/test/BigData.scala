@@ -7,7 +7,9 @@ import com.bigdata.rdf.sail._
 import org.apache.commons.io.FileUtils
 import org.openrdf.query.QueryLanguage
 import org.scalax.semweb.commons.LogLike
+import org.scalax.semweb.rdf.IRI
 import org.scalax.semweb.sesame._
+import org.scalax.semweb.sesame.files.{SesameFileListener, SesameFileParser}
 import org.scalax.semweb.sesame.shapes.ShapeReader
 
 import scala.util.Try
@@ -49,8 +51,10 @@ deletes local db file (used mostly in tests)
 /**
  * Simpliest as possible BigDataSetup
  */
-class BigData(url:String="./sesame/db/test",dbFileName:String="bigdata.jnl") extends SesameDataWriter
+class BigData(url:String="./sesame/db/test",dbFileName:String="bigdata.jnl") extends SesameDataWriter with SesameFileParser
 with SesameReader with SelectReader with AskReader with ConstructReader with ShapeReader {
+  self=>
+
   type WriteConnection = BigdataSailRepositoryConnection
   type ReadConnection = BigdataSailRepositoryConnection
 
@@ -152,4 +156,10 @@ with SesameReader with SelectReader with AskReader with ConstructReader with Sha
    */
   def shutDown() = this.repo.shutDown()
 
+  override def makeListener(filename: String, con: WriteConnection, context: IRI, lg: LogLike): SesameFileListener = new TestListener(filename,con,lg)
+}
+
+class TestListener(fileName:String,val writeConnection:BigdataSailRepositoryConnection, val lg:LogLike) extends SesameFileListener(fileName)(lg)
+{
+  type WriteConnection = BigdataSailRepositoryConnection
 }

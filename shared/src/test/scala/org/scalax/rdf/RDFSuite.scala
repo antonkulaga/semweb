@@ -1,5 +1,7 @@
 package org.scalax.rdf
 
+import java.util.Date
+
 import org.scalax.semweb.rdf._
 
 import utest._
@@ -29,7 +31,26 @@ object RDFSuite extends TestSuite{
         assert(alice.namespace=="http://foo.com/resource#")
         assert(alice.localName=="Alice")
 
+      }
 
+
+      "pretty print data literal" - {
+        val dt = new DateLiteral(new Date(2014,10,14))
+        assert(dt.label=="2014-10-14")
+      }
+
+      "support Time Literals" - {
+        val date = new Date(2014,10,14)
+        date.setHours(0)
+        date.setMinutes(10)
+        date.setSeconds(30)
+        val dt = DateTimeLiteral(date)
+        val sp = dt.label.split('T')
+        assert(sp.size==2)
+        val dst = sp.head
+        assert(dst=="2014-10-14")
+        val ts = sp.tail.head
+        assert(ts.contains("00:10:30"))
       }
 
 

@@ -4,6 +4,7 @@ import java.util.Date
 
 import org.scalax.semweb.parsers.DateParser
 import org.scalax.semweb.parsers.sample.Calculator
+import org.scalax.semweb.rdf.DateTimeFormats
 import utest._
 import org.scalax.semweb._
 
@@ -34,8 +35,24 @@ object ParsersSuit extends TestSuite{
         assert(d1.getYear==2010)
         assert(d1.getMonth==2)
         assert(d1.getDate==1)
+      }
 
 
+      "support DateParsing" - {
+        val do1 = DateTimeFormats.parseDate("2014.10.14")
+        assert(do1.isSuccess)
+        val d1 = do1.get
+        assert(d1.getYear==2014)
+        assert(d1.getMonth==10)
+        assert(d1.getDate==14)
+        DateTimeFormats.parseDate("20014.12.14").isFailure
+        DateTimeFormats.parseDate("Tue, 2014.12.14").isFailure
+        val do2 = DateTimeFormats.parseDate("14-10-2014")
+        assert(do2.isSuccess)
+        val d2 = do2.get
+        assert(d1.getYear==2014)
+        assert(d1.getMonth==10)
+        assert(d1.getDate==14)
       }
 
 

@@ -20,7 +20,7 @@ Setting up:
 
     resolvers += Resolver.url("bintray-sbt-plugin-releases",url("http://dl.bintray.com/content/sbt/sbt-plugin-releases"))(Resolver.ivyStylePatterns)
 
-    addSbtPlugin("me.lessis" % "bintray-sbt" % "0.1.1")
+    addSbtPlugin("me.lessis" % "bintray-sbt" % "0.1.2")
 ```
 
 2 Add scalax resolvers:
@@ -33,9 +33,9 @@ If you use release version it looks like:
 
 ```scala
 
-    libraryDependencies += "org.scalax" %% "semweb" % "0.6.1"// for scala projects
+    libraryDependencies += "org.scalax" %% "semweb" % "0.6.16"// for scala projects
 
-    libraryDependencies += "org.scalax" %%% "semweb" % "0.6.1"// for scalajs projects, note %%% is used
+    libraryDependencies += "org.scalax" %%% "semweb" % "0.6.16"// for scalajs projects, note %%% is used
 ```
 
 4). Use it in your project!

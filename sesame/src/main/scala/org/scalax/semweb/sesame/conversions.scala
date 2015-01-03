@@ -22,8 +22,8 @@ import org.openrdf.model.vocabulary
  */
 trait Scala2SesameModelImplicits{
 
-  implicit def IRI2URI(iri:IRI) = if(iri==null) null else new URIImpl(iri.stringValue)
-  implicit def blankNode2BNode(b:BlankNode) = if(b==null) null else new BNodeImpl(b.stringValue)
+  implicit def IRI2URI(iri:IRI):URI = if(iri==null) null else new URIImpl(iri.stringValue)
+  implicit def blankNode2BNode(b:BlankNode):BNode = if(b==null) null else new BNodeImpl(b.stringValue)
   implicit def res2Resource(res:Res): Resource = res match {
     case null=>null
     case res:Resource=>res
@@ -59,9 +59,10 @@ trait Scala2SesameModelImplicits{
 
   implicit def doubleLit2Literal(lit:DoubleLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.DOUBLE)
   implicit def booleanLit2Literal(lit:BooleanLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.BOOLEAN)
-  implicit def decimalLit2Literal(lit:DecimalLiteral):Literal = new LiteralImpl(lit.value.toString(),vocabulary.XMLSchema.DECIMAL)
+  implicit def decimalLit2Literal(lit:DecimalLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.DECIMAL)
   //implicit def longLit2Literal(lit:LongLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.LONG)
-  implicit def dateLit2Literal(lit:DateLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.DATETIME)
+  implicit def dateLit2Literal(lit:DateLiteral):Literal = new LiteralImpl(lit.label,vocabulary.XMLSchema.DATE)
+  implicit def dateTimeLit2Literal(lit:DateTimeLiteral):Literal = new LiteralImpl(lit.label,vocabulary.XMLSchema.DATETIME)
 
 
 
@@ -81,8 +82,8 @@ trait Scala2SesameModelImplicits{
  * Implicit conversions from Sesame to Scala-Semantic
  */
 trait Sesame2ScalaModelImplicits{
-  implicit def URI2IRI(uri:URI) = if(uri==null) null else IRI(uri.stringValue)
-  implicit def Resource2Res(r:Resource)  = r match {
+  implicit def URI2IRI(uri:URI):IRI = if(uri==null) null else IRI(uri.stringValue)
+  implicit def Resource2Res(r:Resource): Res  = r match {
     case null=>null
     case b:BNode=>BlankNode(b.getID)
     case u:URI=>this.URI2IRI(u)

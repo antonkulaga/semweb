@@ -21,7 +21,8 @@ trait ShapeReader extends SesameReader with ArcExtractor{
 
 
 
-  def loadShapes(shapes:IRI*)(implicit contexts:Seq[Resource] = List.empty[Resource]) = this.read{
+  def loadShapes(shapes:Resource*)(implicit contexts:Seq[Resource] = List.empty[Resource]) = this.read
+  {
     con=>shapes.map(sh=>getShape(sh,con)(contexts)).toList
   }
 
@@ -29,12 +30,14 @@ trait ShapeReader extends SesameReader with ArcExtractor{
     con=>con.getStatements(null,RDF.TYPE,Shape.rdfType,true,contexts:_*).map{st=>   st.getSubject:Res   }.toList
   }
 
-  def loadAllShapes(implicit contexts:Seq[Resource] = List.empty[Resource]) = this.read{
-    con=>con.getStatements(null,RDF.TYPE, Shape.rdfType,true,contexts:_*).map{st=>   getShape(st.getSubject,con)(contexts)   }
+  def loadAllShapes(implicit contexts:Seq[Resource] = List.empty[Resource]): Try[List[Shape]] = this.read{
+    con=>
+      val sts = con.getStatements(null,RDF.TYPE, Shape.rdfType,true,contexts:_*).toList
+      sts.map{st=>   getShape(st.getSubject,con)(contexts)   }
   }
 
-  def loadShape(iri:Res)(implicit contexts:Seq[Resource] = List.empty[Resource]): Try[Shape] =this.read{con=>
-    this.getShape(iri,con)(contexts)
+  def loadShape(resource:Res)(implicit contexts:Seq[Resource] = List.empty[Resource]): Try[Shape] =this.read{con=>
+    this.getShape(resource,con)(contexts)
   }
 
   /**
@@ -62,6 +65,21 @@ trait ShapeReader extends SesameReader with ArcExtractor{
  }
 
 
+  def loadPropertyModelsByShape(sh:Shape,res:Set[Resource])(implicit contexts:Seq[Resource] = List.empty[Resource]):Try[Set[PropertyModel]] =
+    this.read{ con=>  for(r<-res) yield modelByShape(sh,r,con)(contexts)
+  }
+
+  def modelByShape(sh:Shape,res:Resource,con:ReadConnection)(implicit contexts:Seq[Resource] = List.empty[Resource]): PropertyModel  =
+    sh.rule match {
+      case and:AndRule=>
+        val arcs = and.conjoints.collect{   case arc:ArcRule=>  arc }
+        val result: PropertyModel = arcs.foldLeft[PropertyModel](PropertyModel.clean(res)){ case (model: PropertyModel,arc)=> this.modelByArc(model,arc)(con,contexts)}
+        result
+      case r =>
+        lg.warn(s"or rule is not yet supported, passed rule is ${r.toString}")
+        ???
+    }
+
   /**
    * Functions to load properties by shape
    * WARNING: BUGGY!
@@ -70,22 +88,8 @@ trait ShapeReader extends SesameReader with ArcExtractor{
    * @param contexts
    * @return
    */
-  def loadPropertiesByShape(sh:Shape,res:Resource)(implicit contexts:Seq[Resource] = List.empty[Resource]): Try[PropertyModel] = this.read{con=>
-
-    sh.rule match {
-      case and:AndRule=>
-        val arcs = and.conjoints.collect{   case arc:ArcRule=>  arc }
-
-        val result: PropertyModel = arcs.foldLeft[PropertyModel](PropertyModel.clean(res)){ case (model: PropertyModel,arc)=> this.modelByArc(model,arc)(con,contexts)}
-        result
-
-      case r =>
-        lg.warn(s"or rule is not yet supported, passed rule is ${r.toString}")
-        ???
-    }
-
-
-  }
+  def loadModelByShape(sh:Shape,res:Resource)(implicit contexts:Seq[Resource] = List.empty[Resource]): Try[PropertyModel] =
+    this.read{con=>   modelByShape(sh,res,con)(contexts) }
 
   protected def modelByArc(model:PropertyModel,arc:ArcRule)(implicit con:ReadConnection, contexts:Seq[Resource] = List.empty[Resource]) = {
     arc.name match {
@@ -97,6 +101,10 @@ trait ShapeReader extends SesameReader with ArcExtractor{
       case NameStem(stem)=>
         lg.error("Name stems property extraction not implemented")
         ??? //TODO complete
+      case _ =>
+        lg.error("other nameterms are also not implemented")
+        ??? //TODO complete
+
     }
   }
 
@@ -161,13 +169,12 @@ trait ShapeReader extends SesameReader with ArcExtractor{
 
   def getShape(shapeRes:Res,con:ReadConnection)(implicit contexts:Seq[Resource] = List.empty[Resource]): Shape = {
     object shape extends ShapeBuilder(shapeRes)
-    val props = con.resources(shapeRes:Resource,ArcRule.property:URI,contexts)
-    props.foreach{
-      case res: Resource =>
-        val arco = getArc(res,con)(contexts)
-        for(arc<-arco) shape.hasRule(arc)
-    }
-    shape.result
+    val props: Seq[Resource] = con.resources(shapeRes:Resource,ArcRule.property:URI,contexts)
+
+    props.foreach{   case res: Resource =>   getArc(res,con)(contexts).foreach(arc=>shape.hasRule(arc))  }
+    val sh = shape.result
+    lg.debug("RESULT for +"+shapeRes.stringValue +" = "+ sh.toString)
+    sh
   }
 
 

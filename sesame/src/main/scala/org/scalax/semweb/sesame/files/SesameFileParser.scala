@@ -12,8 +12,9 @@ import org.scalax.semweb.rdf.IRI
 import org.scalax.semweb.commons.LogLike
 
 
-abstract class SesameFileParser(val config:ParserConfig =  new ParserConfig(false,false,true, DatatypeHandling.NORMALIZE)) extends SesameDataWriter{
+trait SesameFileParser extends SesameDataWriter{
 
+  val config:ParserConfig =  new ParserConfig(false,false,true, DatatypeHandling.NORMALIZE)
 
   def makeListener(filename:String,con:WriteConnection,context:IRI,lg:LogLike):SesameFileListener
   /*

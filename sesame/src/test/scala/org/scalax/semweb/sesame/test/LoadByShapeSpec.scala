@@ -168,18 +168,19 @@ class LoadByShapeSpec extends  WordSpec with Matchers {
       con2.close()
 
 
-      val ops: Try[PropertyModel] = db.loadPropertiesByShape(sl,paper)
-      ops.isSuccess shouldBe(true)
-      val op = ops.get
+
+      val ops: Try[Set[PropertyModel]] = db.loadPropertyModelsByShape(sl,Set(paper))
+      ops.isSuccess shouldBe true
+      val opl = ops.get
+      opl.size shouldBe 1
+      val op = opl.head
       op.isValid shouldEqual true
       op.properties(author).head shouldEqual pAuthor
       pTitle shouldEqual op.properties(title).head
       pText shouldEqual op.properties(text).head
 
-
-
-      val ods: Try[PropertyModel] = db.loadPropertiesByShape(sl,draft)
-      ods.isSuccess shouldBe(true)
+      val ods: Try[PropertyModel] = db.loadModelByShape(sl,draft)
+      ods.isSuccess shouldBe true
       val od = ods.get
 
       od.isValid shouldEqual false
@@ -190,7 +191,7 @@ class LoadByShapeSpec extends  WordSpec with Matchers {
 
       val vio = od.violations
       vio.size shouldEqual 1
-      vio.head.value shouldEqual(text)
+      vio.head.value shouldEqual text
 
       db.shutDown()
 

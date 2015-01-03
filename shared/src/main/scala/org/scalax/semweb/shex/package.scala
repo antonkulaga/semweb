@@ -29,8 +29,8 @@ package object shex {
     Cardinality(min = m, max = n)
   }
 
-  implicit def iri2Label(iri:IRI) = IRILabel(iri)
-  implicit def bNode2Label(b:BlankNode) = BNodeLabel(b)
+  implicit def iri2Label(iri:IRI): IRILabel = IRILabel(iri)
+  implicit def bNode2Label(b:BlankNode): BNodeLabel = BNodeLabel(b)
 
   implicit def iri2Name(iri:IRI) = NameTerm(iri)
 
@@ -39,9 +39,9 @@ package object shex {
    * @param res
    * @return
    */
-  implicit def res2ValueType(res:Res)= ValueType(res)
+  implicit def res2ValueType(res:Res): ValueType = ValueType(res)
 
-  implicit def res2Label(res:Res) = res match
+  implicit def res2Label(res:Res): Label with Product with Serializable = res match
   {
     case iri:IRI=>this.iri2Label(iri)
     case bnode:BlankNode=>this.bNode2Label(bnode)
