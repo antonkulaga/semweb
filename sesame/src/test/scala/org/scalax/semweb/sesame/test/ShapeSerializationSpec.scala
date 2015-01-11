@@ -118,7 +118,7 @@ class ShapeSerializationSpec extends  WordSpec with Matchers {
      val terms = props.flatMap{case p=>con objects(p,NameTerm.property:URI,List(c:Resource))}
      terms.size shouldEqual(3)
 
-      val arcs = props.flatMap(p=>db.getArc(p,con)(List(c:Resource)))
+      val arcs = props.flatMap(p=>db.extractor.getArc(p,con)(List(c:Resource)))
       arcs.size shouldEqual 3
       arcs.foreach{a=>print(a.toString)}
 
@@ -142,7 +142,7 @@ class ShapeSerializationSpec extends  WordSpec with Matchers {
       } shouldEqual 1
 
 
-      val shape = db.getShape(page,con)(List(c:Resource))
+      val shape = db.extractor.getShape(page,con)(List(c:Resource))
 
       shape.rule.isInstanceOf[AndRule] shouldEqual true
       val and = shape.rule.asInstanceOf[AndRule]
@@ -150,6 +150,8 @@ class ShapeSerializationSpec extends  WordSpec with Matchers {
       rules.size shouldEqual 3
 
       con.close()
+
+      import org.openrdf.model.vocabulary.XMLSchema
 
 //      val arc = db.getArc(author.get.me,test,con)
 //      arc.isDefined shouldEqual(true)

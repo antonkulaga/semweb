@@ -1,5 +1,7 @@
 package org.scalax.semweb.sesame.test
 
+import java.io.InputStream
+
 import org.scalatest.{Matchers, WordSpec}
 import org.scalax.semweb.rdf.vocabulary._
 import org.scalax.semweb.shex._
@@ -146,22 +148,22 @@ class LoadByShapeSpec extends  WordSpec with Matchers {
 
       val con2 = db.readConnection
 
-      val pau: (IRI, Seq[Value]) = db.propertyByArc(paper,author,aur)(con2)
+      val pau: (IRI, Seq[Value]) = db.extractor.propertyByArc(paper,author,aur)(con2)
       pau._2.size shouldEqual 1
       pau._2.head.stringValue() shouldEqual pAuthor.stringValue
 
 
-      val pat: (IRI, Seq[Value]) = db.propertyByArc(paper,title,pt)(con2)
+      val pat: (IRI, Seq[Value]) = db.extractor.propertyByArc(paper,title,pt)(con2)
       pat._2.size shouldEqual 1
       pTitle.stringValue.contains(pat._2.head.stringValue()) shouldEqual true
 
 
 
-      val dau: (IRI, Seq[Value]) = db.propertyByArc(draft,author,aur)(con2)
+      val dau: (IRI, Seq[Value]) = db.extractor.propertyByArc(draft,author,aur)(con2)
       dau._2.size shouldEqual 1
       dau._2.head.stringValue() shouldEqual dAuthor.stringValue
 
-      val dat: (IRI, Seq[Value]) = db.propertyByArc(draft,title,pt)(con2)
+      val dat: (IRI, Seq[Value]) = db.extractor.propertyByArc(draft,title,pt)(con2)
       dat._2.size shouldEqual 1
       //dat._2.head.stringValue() shouldEqual dTitle
 
@@ -197,6 +199,7 @@ class LoadByShapeSpec extends  WordSpec with Matchers {
 
 
     }
+
   }
 
 

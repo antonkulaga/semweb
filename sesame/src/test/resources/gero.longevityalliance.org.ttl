@@ -1,0 +1,65 @@
+##############Gero.longevity.org.ua configuration################
+
+
+########Prefixes ###################
+
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# prefixes from social ontologies
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix sioc: <http://rdfs.org/sioc/ns#> .
+
+# specific webintelligence prefixes
+@prefix wi: <http://webintelligence.eu/resource/> .
+@prefix pl: <http://webintelligence.eu/platform/> .
+@prefix wiq: <http://webintelligence.eu/queries/> .
+
+
+# all website pages
+@prefix pg: <http://webintelligence.eu/page/> .
+
+# users
+@prefix us: <http://webintelligence.eu/users/> .
+
+# all other resources
+@prefix : <http://webintelligence.eu/resource/> .
+
+#gero prefixes
+@prefix gero: <http://gero.longevityalliance.org/> .
+@prefix pgg: <http://gero.longevityalliance.org/pages/> .
+@prefix gf: <http://gero.longevityalliance.org/files/gero.longevityalliance.org/> .
+
+###############Website########################
+
+<http://gero.longevityalliance.org> a pl:Site;
+    pl:index pgg:GEROontology;
+    pl:has_menu pgg:menu .
+
+pgg:menu a pl:Menu;
+    pl:has_item pgg:GSEA, pgg:Ontology, pgg:Evidences, pgg:Interventions, pgg:About .
+
+pgg:GSEA pl:has_title "GSEA" .
+pgg:Ontology pl:has_title "GEROntology" .
+pgg:Evidences pl:has_title "Evidences" .
+pgg:Interventions pl:has_title "Interventions" .
+pgg:About pl:has_title "About project" .
+
+pl:SelectQuery rdfs:subClassOf pl:Query .
+
+wiq:All a pl:SelectQuery;
+    pl:hasText "SELECT ?all WHERE { ?all <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://open-services.net/ns/core#Shape> . }" .
+
+<http://gero.longevityalliance.org/query/genes> a pl:SelectQuery;
+    pl:hasText "SELECT ?gene WHERE { ?gene <http://gero.longevityalliance.org/has_ENTREZID> ?entrez   }" .
+
+pgg:Evidences pl:has_shape "Evidence_Shape" ;
+    pl:has_query wiq:All ;
+    pl:hasShape gero:Evidences ;
+    pl:has_template pl:DataGrid .
+pgg:Interventions pl:has_shape "Interventions_Shape" ;
+    pl:has_template pl:DataGrid .
+pgg:Ontology pl:has_template pl:Ontology .
+

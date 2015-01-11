@@ -82,7 +82,8 @@ trait Scala2SesameModelImplicits{
  * Implicit conversions from Sesame to Scala-Semantic
  */
 trait Sesame2ScalaModelImplicits{
-  implicit def URI2IRI(uri:URI):IRI = if(uri==null) null else IRI(uri.stringValue)
+  implicit def URI2IRI(uri:URI) = if(uri==null) null else IRI(uri.stringValue)
+  implicit def BNode2BlankNode(bnode:BNode): BlankNode = BlankNode(bnode.getID)
   implicit def Resource2Res(r:Resource): Res  = r match {
     case null=>null
     case b:BNode=>BlankNode(b.getID)
@@ -128,6 +129,10 @@ trait Sesame2ScalaModelImplicits{
     case xe.INT | xe.INTEGER | xe.POSITIVE_INTEGER | xe.NON_NEGATIVE_INTEGER => IntLiteral(l.intValue())
     case d if this.isCalendar(d) =>  DateLiteral(l.calendarValue().toGregorianCalendar.getTime)
     case xe.STRING | xe.NORMALIZEDSTRING=> if(l.getLanguage!="" && l.getLanguage!=null) StringLangLiteral(l.getLabel,l.getLanguage) else StringLiteral(l.getLabel)
+    case xe.DATE => DateLiteral(l.calendarValue().toGregorianCalendar.getTime)
+    case xe.DATETIME => DateTimeLiteral(l.calendarValue().toGregorianCalendar.getTime)
+    case cal if this.isCalendar(l)=>
+      DateTimeLiteral(l.calendarValue().toGregorianCalendar.getTime) //TODO: add property GMONTH support
     case other => AnyLit(l.getLabel)
   }
 

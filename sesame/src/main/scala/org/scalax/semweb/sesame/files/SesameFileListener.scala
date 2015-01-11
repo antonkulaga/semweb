@@ -36,7 +36,6 @@ abstract class SesameFileListener(fileName:String, context: se.model.Resource = 
 
   override def handleNamespace(prefix: String, uri: String): Unit = if(prefix!=null && this.writeConnection.getNamespace(prefix)==null) {
     this.writeConnection.setNamespace(prefix,uri)
-      //lg.debug(s"set prefix $prefix for namespace $uri")
   }
 
   override def endRDF(): Unit = {

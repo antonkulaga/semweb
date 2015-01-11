@@ -33,9 +33,8 @@ class LoadShapeSpec  extends  WordSpec with Matchers {
       shop.isSuccess shouldEqual true
       val shape = shop.get
       shape.id.asResource shouldEqual res
+      shape.arcSorted().size shouldEqual 13
 
-      db.lg.debug("SHAPE = \n"+shape.toString)
-      shape.arcSorted().size shouldEqual 12
 /*
       val shops = db.loadAllShapes
       shops.isSuccess shouldEqual true

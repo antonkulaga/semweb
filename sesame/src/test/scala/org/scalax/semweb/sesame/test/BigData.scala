@@ -1,18 +1,23 @@
 package org.scalax.semweb.sesame.test
 
-import java.io.File
+import java.io.{InputStream, File}
 import java.util.Properties
 
 import com.bigdata.rdf.sail._
 import org.apache.commons.io.FileUtils
 import org.openrdf.query.QueryLanguage
+import org.openrdf.rio.RDFParser.DatatypeHandling
+import org.openrdf.rio.helpers.BasicParserSettings
+import org.openrdf.rio.turtle.TurtleParser
 import org.scalax.semweb.commons.LogLike
 import org.scalax.semweb.rdf.IRI
+import org.scalax.semweb.rdf.vocabulary.WI
 import org.scalax.semweb.sesame._
 import org.scalax.semweb.sesame.files.{SesameFileListener, SesameFileParser}
 import org.scalax.semweb.sesame.shapes.ShapeReader
 
 import scala.util.Try
+import com.bigdata.rdf.rio.turtle.BigdataTurtleParser
 
 
 /**
@@ -67,11 +72,11 @@ with SesameReader with SelectReader with AskReader with ConstructReader with Sha
   type ConstructQuery = BigdataSailGraphQuery
 
 
-  override def makeSelectQuery(con: ReadConnection, query: String)(implicit base: String): SelectQuery = con.prepareTupleQuery(QueryLanguage.SPARQL,query,base)
+  override def makeSelectQuery(con: ReadConnection, query: String)(implicit base: String = WI.RESOURCE): SelectQuery = con.prepareTupleQuery(QueryLanguage.SPARQL,query,base)
 
-  override def makeAskQuery(con: ReadConnection, query: String)(implicit base: String): AskQuery = con.prepareBooleanQuery(QueryLanguage.SPARQL,query,base)
+  override def makeAskQuery(con: ReadConnection, query: String)(implicit base: String = WI.RESOURCE): AskQuery = con.prepareBooleanQuery(QueryLanguage.SPARQL,query,base)
 
-  override def makeConstructQuery(con: ReadConnection, query: String)(implicit base: String): ConstructQuery = con.prepareGraphQuery(QueryLanguage.SPARQL,query,base)
+  override def makeConstructQuery(con: ReadConnection, query: String)(implicit base: String = WI.RESOURCE): ConstructQuery = con.prepareGraphQuery(QueryLanguage.SPARQL,query,base)
 
 
   /**
@@ -124,19 +129,6 @@ with SesameReader with SelectReader with AskReader with ConstructReader with Sha
    */
   def writeConnection = repo.getUnisolatedConnection
 
-
-//  /**
-//   * Just does select
-//   * @param query query
-//   * @param base basic value
-//   * @return Try with results of query execution
-//   */
-//  def select(query:String)(implicit base:String = "http://testme.bigdata.com"): Try[TupleQueryResult] = this.read{
-//    con=>
-//      val q = con.prepareTupleQuery(QueryLanguage.SPARQL,query,base)
-//      q.evaluate()
-//  }
-
   /**
    * Note: for tests only
    * @param updateStr insert or delete query
@@ -147,6 +139,23 @@ with SesameReader with SelectReader with AskReader with ConstructReader with Sha
     con=>
       val u = con.prepareNativeSPARQLUpdate(QueryLanguage.SPARQL,updateStr,base)
       u.execute()
+  }
+
+  override def parseStream(fileName:String,inputStream:InputStream,contextStr:String=""): Try[Unit] = {
+
+    //val format = Rio.getParserFormatForFileName(fileName)
+    val parser = new BigdataTurtleParser()
+    parser.setPreserveBNodeIDs(true)
+    parser.setDatatypeHandling(DatatypeHandling.VERIFY)
+    parser.setParserConfig(config)
+    this.write{con=>
+      val context = if(contextStr=="") null else IRI(contextStr)
+      val r = this.makeListener(fileName,con,context,lg)
+      parser.setRDFHandler(r)
+      parser.setParseErrorListener(r)
+      parser.parse(inputStream, fileName)
+    }
+
   }
 
 

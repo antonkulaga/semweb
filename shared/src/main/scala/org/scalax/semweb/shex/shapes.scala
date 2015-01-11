@@ -4,15 +4,31 @@ import org.scalax.semweb.rdf._
 import org.scalax.semweb.rdf.vocabulary.{WI, RDF}
 
 
-case class ShEx(rules:Seq[Shape], start: Option[Label] = None) extends {
+object ShEx {
 
+  val rdtType = se / "Shape_Expression"
+
+  val hasShape = se / "has_shape"
+
+  val start = se / "start"
+
+  val startTitle = se / "start_title" //in this way we define how the start resource will be called
 }
+
+/**
+ * Shape expressions that contains different shapes
+ * @param rules shapes inside
+ * @param start start shape [optional]
+ * @param title title of subject
+ */
+case class ShEx(id:Label,rules:Seq[Shape], start: Option[Label] = None, title:Option[String] = None)   extends Labeled
 
 object Shape {
 
   val rdfType = rs / "ResourceShape"
 
   lazy val empty = Shape(WI.PLATFORM.EMPTY, AndRule.empty)
+
 }
 
 /**
@@ -50,7 +66,6 @@ case class Shape(id: Label, rule: Rule)  extends Labeled
       //TODO: delete or figure out what I need it for
 
     case and:AndRule=> and.conjoints.map{
-
 
       case arc:ArcRule=>
 

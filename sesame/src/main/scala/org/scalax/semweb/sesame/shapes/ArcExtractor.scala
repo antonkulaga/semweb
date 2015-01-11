@@ -1,19 +1,21 @@
 package org.scalax.semweb.sesame.shapes
 
-import org.openrdf.model.{Literal, Resource, URI}
+import org.openrdf.model.{Value, Literal, Resource, URI}
+import org.openrdf.repository.RepositoryConnection
+import org.scalax.semweb.commons.Logged
 import org.scalax.semweb.rdf._
 import org.scalax.semweb.rdf.vocabulary.RDF
 import org.scalax.semweb.sesame._
 import org.scalax.semweb.shex._
+import org.scalax.semweb.shex.validation.{Valid, Failed, ValidationResult}
 
 import scala.util.Try
 
 /**
  * Extracts arcs from shape
  */
-trait ArcExtractor {
+trait ArcExtractor[ReadConnection<: RepositoryConnection] extends Logged {
 
-  self:SesameReader=>
 
   /**
    * Extracts Arc rule
@@ -89,6 +91,24 @@ trait ArcExtractor {
 
     }
 
+  }
+
+
+  /**
+   * Checks if there is violation with occurence
+   * @param c cardinality values against the check should be done
+   * @param prop property IRI
+   * @param values values that were found
+   * @return
+   */
+  def checkOccurrence(c:Cardinality,prop:IRI, values:Seq[Value]):ValidationResult= c match {
+
+    case ExactlyOne=>if(values.size!=1) Failed(s"exactly-one rule",prop) else Valid
+    case Plus=>if(values.size<1) Failed(s"one or more rule",prop) else Valid
+    case Opt=>if(values.size>1) Failed(s"optional rule",prop) else Valid
+    case Star=>Valid
+    case Range(min,max)=>if(values.size<min || values.size>max) Failed(s"range rule",prop) else Valid
+    case _=> Failed(s"uknown cardinality type",prop)
   }
 
 }

@@ -1,0 +1,72 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix pl: <http://webintelligence.eu/platform/> .
+@prefix shex: <http://open-services.net/ns/core#> .
+@prefix def: <http://www.w3.org/2013/ShEx/Definition#> .
+@prefix gero: <http://gero.longevityalliance.org/> .
+
+gero:Age_Related_Gene a gero:Gene ;
+	rdfs:subClassOf gero:Aging_Associated_Gene .
+
+gero:Aging_Associated_Gene a gero:Gene ;
+	rdfs:subClassOf gero:Gene .
+
+gero:Aging_Biomarker rdfs:subClassOf gero:Age_Related_Gene .
+
+gero:Anti-oxidant_Enzyme rdfs:subClassOf gero:Longevity_Effector .
+
+gero:Apoptosis_Gene rdfs:subClassOf gero:Longevity_Effector .
+
+gero:Autophagy_Gene rdfs:subClassOf gero:Longevity_Effector .
+
+gero:Cellular_Senescence_Gene rdfs:subClassOf gero:Longevity_Effector .
+
+gero:Circadian_Gene a gero:Gene ;
+	rdfs:subClassOf gero:Longevity_Regulator .
+
+gero:Cytokine rdfs:subClassOf gero:Longevity_Regulator .
+
+gero:DNA_Repair_Gene rdfs:subClassOf gero:Longevity_Effector .
+
+gero:Deacetualases rdfs:subClassOf gero:Longevity_Mediator .
+
+gero:Detoxification rdfs:subClassOf gero:Longevity_Effector .
+
+gero:Detoxification_phase_I rdfs:subClassOf gero:Longevity_Effector .
+
+gero:Detoxification_phase_II rdfs:subClassOf gero:Longevity_Effector .
+
+gero:Grows_Factor rdfs:subClassOf gero:Longevity_Regulator .
+
+gero:Heat_Shocke_Protein rdfs:subClassOf gero:Longevity_Effector .
+
+gero:House_Keeping_Gene rdfs:subClassOf gero:Longevity_Effector .
+
+gero:Innate_Immunity_Gene rdfs:subClassOf gero:Longevity_Effector .
+
+gero:Longevity_Effector rdfs:subClassOf gero:Longevity_Gene .
+
+gero:Longevity_Gene a gero:Gene ;
+	rdfs:subClassOf gero:Aging_Associated_Gene , _:node19aosed52x11 .
+
+gero:Longevity_Mediator rdfs:subClassOf gero:Longevity_Gene .
+
+gero:Longevity_Regulator rdfs:subClassOf gero:Longevity_Gene .
+
+gero:Protease rdfs:subClassOf gero:Longevity_Effector .
+
+gero:Transcription_Factor rdfs:subClassOf gero:Longevity_Mediator .
+
+gero:Unfolded_Protein_Response_Gene rdfs:subClassOf gero:Longevity_Effector .
+
+gero:has_influence a rdf:Property ;
+	rdfs:domain gero:Longevity_Gene .
+
+gero:microRNA rdfs:subClassOf gero:Longevity_Mediator .
+
+_:node19aosed52x11 a owl:Restriction ;
+	owl:onProperty gero:has_influence ;
+	owl:someValuesFrom gero:Pro-Longevity , gero:Anti-Longevity .

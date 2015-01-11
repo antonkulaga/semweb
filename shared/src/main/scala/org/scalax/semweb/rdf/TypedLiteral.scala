@@ -147,7 +147,7 @@ object DateTimeFormats{
   }
 
   def dateFormat(value:Date):String = {
-    val (year,month,date) = (value.getYear,value.getMonth,value.getDate)
+    val (year,month,date) = (value.getYear+1900,value.getMonth+1,value.getDate)
     s"${year}-${format2(month)}-${format2(date)}"
   }
 
