@@ -43,7 +43,7 @@ abstract class SesameFileListener(fileName:String, context: se.model.Resource = 
   }
 
   override def startRDF(): Unit = {
-    lg.info(s"$fileName parsing has started")
+    lg.info(s"$fileName parsing has started\n")
 
   }
 

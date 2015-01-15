@@ -5,21 +5,24 @@ import org.scalax.semweb.rdf.{IRI, RDFElement}
 
 object SELECT
 {
-  def apply(params:SelectElement*) = new SelectQuery(params = params.toList)
+  //def apply(params:SelectElement*): SelectQuery = new SelectQuery(params = params.toList)
+
+  def apply(params:SelectElement*): SelectQuery = SelectQuery(params)
 }
 
 
-case class SelectQuery(params:List[SelectElement]) extends WithWhere with Sliced
+case class SelectQuery(params:Seq[SelectElement],from:String = "") extends WithWhere with Sliced
 {
   lazy val vars: Map[String, Variable] = params.collect{case v:Variable=>v.name->v}.toMap
 
-  object DISTINCT {
-    //TODO: complete
-  }
+  protected lazy val selection = params.foldLeft("")( (acc,el)=>acc+" "+el.stringValue)
+
+  def FROM(iri:IRI):SelectQuery =  this.copy(from= from + s"FROM ${iri.toString} ") //DIRTY but working
+
+  def FROM_NAMED(iri:IRI):SelectQuery  =  this.copy(from= from + s"FROM NAMED ${iri.toString} ")
 
 
-
-  def stringValue = s"SELECT ${params.foldLeft("")( (acc,el)=>acc+" "+el.stringValue)} \n${WHERE.stringValue}\n ${LIMIT.stringValue} ${OFFSET.stringValue}"
+  def stringValue = s"SELECT $selection $from\n${WHERE.stringValue}\n ${LIMIT.stringValue} ${OFFSET.stringValue}"
 
 }
 

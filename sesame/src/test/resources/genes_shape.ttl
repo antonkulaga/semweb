@@ -6,86 +6,88 @@
 @prefix pl: <http://webintelligence.eu/platform/> .
 @prefix shex: <http://open-services.net/ns/core#> .
 @prefix def: <http://www.w3.org/2013/ShEx/Definition#> .
+@prefix pmid: <http://ncbi.nlm.nih.gov/pubmed/> .
 @prefix gero: <http://gero.longevityalliance.org/> .
+@prefix entrez: <http://ncbi.nlm.nih.gov/gene/> .
 
-_:0.009045327696699412 shex:occurs shex:Exactly-one ;
-	shex:propDefinition gero:is_DB_object ;
-	shex:valueType rdfs:Resource ;
-	dc:title "DB Object ID"^^xsd:string ;
-	pl:priority "4"^^xsd:integer .
-
-_:0.07545139967372749 shex:occurs shex:Exactly-one ;
-	shex:propDefinition gero:has_ENTREZID ;
-	dc:title "ENTREZID"^^xsd:string ;
-	pl:priority "1"^^xsd:integer ;
-	def:stem <http://www.ncbi.nlm.nih.gov/gene/?term=> .
-
-_:0.11387336890187616 shex:occurs shex:Exactly-one ;
-	shex:propDefinition rdfs:subClassOf ;
-	dc:title "Class"^^xsd:string ;
-	pl:priority "2"^^xsd:integer ;
-	def:stem <http://gero.longevityalliance.org/> .
-
-_:0.18782564147445957 shex:allowedValue gero:microRNA , gero:tRNA , gero:snRNA , gero:transcript , gero:protein , gero:protein_complex , gero:snoRNA , gero:rRNA , gero:ncRNA , gero:gene_product ;
-	shex:occurs shex:Exactly-one ;
-	shex:propDefinition gero:of_type ;
-	dc:title "Gene product type"^^xsd:string ;
-	pl:priority "11"^^xsd:integer .
-
-_:0.20578122164225843 shex:occurs shex:Exactly-one ;
-	shex:propDefinition gero:from_db ;
-	shex:valueType rdfs:Resource ;
-	dc:title "DB"^^xsd:string ;
-	pl:priority "3"^^xsd:integer .
-
-_:0.3417278909876792 shex:occurs shex:One-or-many ;
+_:0.06983549548166279 shex:occurs shex:One-or-many ;
 	shex:propDefinition gero:has_ref ;
 	shex:valueType rdfs:Resource ;
 	dc:title "Publication"^^xsd:string ;
 	pl:priority "6"^^xsd:integer .
 
-_:0.3538478877622808 shex:maxoccurs "2"^^xsd:integer ;
+_:0.08181387037359245 shex:maxoccurs "2"^^xsd:integer ;
 	shex:minoccurs "1"^^xsd:integer ;
 	shex:propDefinition gero:from_model_organism ;
 	dc:title "Organism"^^xsd:string ;
 	pl:priority "12"^^xsd:integer ;
 	def:stem <http://gero.longevityalliance.org/> .
 
-_:0.3786818837141236 shex:occurs shex:Exactly-one ;
-	shex:propDefinition gero:added_on ;
-	shex:valueType xsd:date ;
-	dc:title "Date"^^xsd:string ;
-	pl:priority "13"^^xsd:integer .
-
-_:0.4447846966379665 shex:occurs shex:Zero-or-one ;
-	shex:propDefinition gero:has_name ;
-	dc:title "DB object Name"^^xsd:string ;
-	pl:priority "8"^^xsd:integer ;
-	def:stem <http://gero.longevityalliance.org/> .
-
-_:0.6700140845067339 shex:allowedValue gero:TAS , gero:IEP , gero:IC , gero:NAS , gero:ND , gero:IMP , gero:IDA , gero:IGI , gero:IPI ;
-	shex:occurs shex:Exactly-one ;
-	shex:propDefinition gero:has_code ;
-	dc:title "Evidence Code"^^xsd:string ;
-	pl:priority "7"^^xsd:integer .
-
-_:0.7358798077356258 shex:occurs shex:Exactly-one ;
-	shex:propDefinition gero:has_symbol ;
-	shex:valueType rdfs:Resource ;
-	dc:title "DB Object Symbol"^^xsd:string ;
-	pl:priority "5"^^xsd:integer .
-
-_:0.781149606036152 shex:occurs shex:One-or-many ;
-	shex:propDefinition gero:from_tissue ;
-	shex:valueType rdfs:Resource ;
-	dc:title "Tissue"^^xsd:string ;
-	pl:priority "17"^^xsd:integer .
-
-_:0.9145491354630345 shex:allowedValue gero:Pro-Longevity , gero:Anti-Longevity ;
+_:0.12277200221755658 shex:allowedValue gero:Anti-Longevity , gero:Pro-Longevity ;
 	shex:occurs shex:Exactly-one ;
 	shex:propDefinition gero:has_influence ;
 	dc:title "Influence"^^xsd:string ;
 	pl:priority "18"^^xsd:integer .
 
-gero:Evidence_Shape shex:property _:0.009045327696699412 , _:0.3786818837141236 , _:0.3538478877622808 , _:0.7358798077356258 , _:0.9145491354630345 , _:0.4447846966379665 , _:0.781149606036152 , _:0.11387336890187616 , _:0.18782564147445957 , _:0.07545139967372749 , _:0.6700140845067339 , _:0.3417278909876792 , _:0.20578122164225843 ;
+_:0.19040589414661124 shex:occurs shex:Exactly-one ;
+	shex:propDefinition gero:from_db ;
+	shex:valueType rdfs:Resource ;
+	dc:title "DB"^^xsd:string ;
+	pl:priority "3"^^xsd:integer .
+
+_:0.3481228727618151 shex:occurs shex:Exactly-one ;
+	shex:propDefinition rdfs:subClassOf ;
+	dc:title "Class"^^xsd:string ;
+	pl:priority "2"^^xsd:integer ;
+	def:stem <http://gero.longevityalliance.org/> .
+
+_:0.4572922448754929 shex:occurs shex:One-or-many ;
+	shex:propDefinition gero:from_tissue ;
+	shex:valueType rdfs:Resource ;
+	dc:title "Tissue"^^xsd:string ;
+	pl:priority "17"^^xsd:integer .
+
+_:0.5991651959786445 shex:occurs shex:Zero-or-one ;
+	shex:propDefinition gero:has_name ;
+	dc:title "DB object Name"^^xsd:string ;
+	pl:priority "8"^^xsd:integer ;
+	def:stem <http://gero.longevityalliance.org/> .
+
+_:0.6295704268506844 shex:occurs shex:Exactly-one ;
+	shex:propDefinition gero:has_ENTREZID ;
+	dc:title "ENTREZID"^^xsd:string ;
+	pl:priority "1"^^xsd:integer ;
+	def:stem <http://ncbi.nlm.nih.gov/gene/> .
+
+_:0.762911506754341 shex:allowedValue gero:ND , gero:IC , gero:IMP , gero:IDA , gero:NAS , gero:IPI , gero:IEP , gero:IGI , gero:TAS ;
+	shex:occurs shex:Exactly-one ;
+	shex:propDefinition gero:has_code ;
+	dc:title "Evidence Code"^^xsd:string ;
+	pl:priority "7"^^xsd:integer .
+
+_:0.8486975306013855 shex:allowedValue gero:gene_product , gero:protein , gero:transcript , gero:rRNA , gero:protein_complex , gero:microRNA , gero:snoRNA , gero:snRNA , gero:tRNA , gero:ncRNA ;
+	shex:occurs shex:Exactly-one ;
+	shex:propDefinition gero:of_type ;
+	dc:title "Gene product type"^^xsd:string ;
+	pl:priority "11"^^xsd:integer .
+
+_:0.8987915229673961 shex:occurs shex:Exactly-one ;
+	shex:propDefinition gero:has_symbol ;
+	shex:valueType rdfs:Resource ;
+	dc:title "DB Object Symbol"^^xsd:string ;
+	pl:priority "5"^^xsd:integer .
+
+_:0.923746210365575 shex:occurs shex:Exactly-one ;
+	shex:propDefinition gero:is_DB_object ;
+	shex:valueType rdfs:Resource ;
+	dc:title "DB Object ID"^^xsd:string ;
+	pl:priority "4"^^xsd:integer .
+
+_:0.9492724118794664 shex:occurs shex:Exactly-one ;
+	shex:propDefinition gero:added_on ;
+	shex:valueType xsd:date ;
+	dc:title "Date"^^xsd:string ;
+	pl:priority "13"^^xsd:integer .
+
+gero:Evidence_Shape shex:property _:0.3481228727618151 , _:0.4572922448754929 , _:0.08181387037359245 , _:0.923746210365575 , _:0.12277200221755658 , _:0.9492724118794664 , _:0.8486975306013855 , _:0.06983549548166279 , _:0.5991651959786445 , _:0.8987915229673961 , _:0.6295704268506844 , _:0.19040589414661124 , _:0.762911506754341 ;
 	a shex:ResourceShape .

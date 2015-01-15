@@ -1,14 +1,13 @@
-package org.scalax.semweb.sesame.test
+package org.scalax.semweb.sesame.test.classes
 
-import java.io.{InputStream, File}
+import java.io.{File, InputStream}
 import java.util.Properties
 
+import com.bigdata.rdf.rio.turtle.BigdataTurtleParser
 import com.bigdata.rdf.sail._
 import org.apache.commons.io.FileUtils
 import org.openrdf.query.QueryLanguage
 import org.openrdf.rio.RDFParser.DatatypeHandling
-import org.openrdf.rio.helpers.BasicParserSettings
-import org.openrdf.rio.turtle.TurtleParser
 import org.scalax.semweb.commons.LogLike
 import org.scalax.semweb.rdf.IRI
 import org.scalax.semweb.rdf.vocabulary.WI
@@ -17,7 +16,6 @@ import org.scalax.semweb.sesame.files.{SesameFileListener, SesameFileParser}
 import org.scalax.semweb.sesame.shapes.ShapeReader
 
 import scala.util.Try
-import com.bigdata.rdf.rio.turtle.BigdataTurtleParser
 
 
 /**

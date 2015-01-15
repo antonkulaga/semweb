@@ -23,9 +23,12 @@ trait ShapeReader extends SesameReader {
 
   val extractor = new ShapeExtractor[ReadConnection](this.lg)
 
+/*
   def loadShex(shex:Resource) = this.read{
     con=>
+      con.getStatements(shex,)
   }
+*/
 
 
   def loadShapes(shapes:Resource*)(implicit contexts:Seq[Resource] = List.empty[Resource]) = this.read
@@ -48,31 +51,16 @@ trait ShapeReader extends SesameReader {
   }
 
 
-      //    case Plus=> if(prop._2.size<1) throw new Exception(s"one-or-many rule is broken for ${prop._1.toString}") else prop
-//    case Opt=> if(prop._2.size>1) throw new Exception(s"zero-or-one rule is broken for ${prop._1.toString}") else prop
-//    case Star=> prop
-//    case Range(min,max)=> if(prop._2.size<min || prop._2.size>max) throw new Exception(s"cardinality rule is broken for ${prop._1.toString}") else prop
-//    case _=>throw new Exception("uknown cardinality type")
-//
-
-
-
   def loadPropertyModelsByShape(sh:Shape,res:Set[Resource])(implicit contexts:Seq[Resource] = List.empty[Resource]):Try[Set[PropertyModel]] =
-    this.read{ con=>  for(r<-res) yield modelByShape(sh,r,con)(contexts)
+    this.read{ con=> for(r<-res) yield modelByShape(sh,r,con)(contexts)
   }
 
   def modelByShape(sh:Shape,res:Resource,con:ReadConnection)(implicit contexts:Seq[Resource] = List.empty[Resource]): PropertyModel  =
-    sh.rule match {
-      case and:AndRule=>
-        val arcs = and.conjoints.collect{   case arc:ArcRule=>  arc }
-        val result: PropertyModel = arcs.foldLeft[PropertyModel](PropertyModel.clean(res)){ case (model: PropertyModel,arc)=>
-          extractor.modelByArc(model,arc)(con,contexts)}
-        result
-      case r =>
-        lg.warn(s"or rule is not yet supported, passed rule is ${r.toString}")
-        ???
+  sh.arcSorted()
+    .foldLeft[PropertyModel](PropertyModel.clean(res))
+    {
+      case (model: PropertyModel,arc)=>  extractor.modelWithArc(model,arc)(con,contexts)
     }
-
   /**
    * Functions to load properties by shape
    * WARNING: BUGGY!

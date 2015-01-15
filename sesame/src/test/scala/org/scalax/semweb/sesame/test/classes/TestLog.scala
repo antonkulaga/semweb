@@ -1,4 +1,4 @@
-package org.scalax.semweb.sesame.test
+package org.scalax.semweb.sesame.test.classes
 
 import org.scalax.semweb.commons.LogLike
 

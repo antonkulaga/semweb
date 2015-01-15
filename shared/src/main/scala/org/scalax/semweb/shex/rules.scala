@@ -30,6 +30,8 @@ object ArcRule {
 
   val priority: IRI = WI.pl("priority")
 
+  val default: IRI = WI.pl("default")
+
 
   def apply(propertyName:IRI): ArcRule = apply(propertyName,RDF.VALUE,Star,None)
 

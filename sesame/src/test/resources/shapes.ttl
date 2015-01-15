@@ -128,7 +128,7 @@ _:0.38899813697340824 <http://open-services.net/ns/core#occurs> <http://open-ser
 
 _:0.9431131979064611 <http://open-services.net/ns/core#valueType> <http://www.w3.org/2001/XMLSchema#date> .
 
-_:0.7633274125860936 <http://www.w3.org/2013/ShEx/Definition#stem> <http://www.ncbi.nlm.nih.gov/gene/?term=> .
+_:0.7633274125860936 <http://www.w3.org/2013/ShEx/Definition#stem> <http://ncbi.nlm.nih.gov/gene/?term=> .
 
 _:0.3046213113183608 <http://purl.org/dc/elements/1.1/title> "Publication"^^<http://www.w3.org/2001/XMLSchema#string> .
 

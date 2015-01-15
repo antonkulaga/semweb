@@ -36,6 +36,7 @@ case class NameAny(excl: Set[NameStem]) extends NameClass{
   override def matches(iri: IRI): Boolean = !excl.exists(e=>e.matches(iri))
   //TODO: look at AST and IRIstem, what is the difference?
 }
+
 object NameStem {
 
   val property: IRI = se / "stem"
@@ -47,5 +48,5 @@ case class NameStem(s: IRI) extends NameClass{
 
   override def toTriplets(subject: Res): Set[Trip] = Set(Trip(subject,NameStem.property, s))
 
-  override def matches(iri: IRI): Boolean = iri.stringValue.contains(s.stringValue)
+  override def matches(iri: IRI): Boolean = iri.stringValue.startsWith(s.stringValue)
 }

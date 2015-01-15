@@ -105,7 +105,7 @@ trait TermParser extends ExpressionParser {
 
 
   def PNAME_LN = rule  {
-    PNAME_NS ~ PN_LOCAL ~>((pref,local)=>pref / local )
+    PNAME_NS ~ PN_LOCAL ~>((pref,local)=> pref / local )
   }
 
 

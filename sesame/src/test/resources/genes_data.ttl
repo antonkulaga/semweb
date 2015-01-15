@@ -6,129 +6,131 @@
 @prefix pl: <http://webintelligence.eu/platform/> .
 @prefix shex: <http://open-services.net/ns/core#> .
 @prefix def: <http://www.w3.org/2013/ShEx/Definition#> .
+@prefix pmid: <http://ncbi.nlm.nih.gov/pubmed/> .
 @prefix gero: <http://gero.longevityalliance.org/> .
+@prefix entrez: <http://ncbi.nlm.nih.gov/gene/> .
 
-gero:248194 gero:added_on "2014-11-27"^^xsd:date ;
+entrez:248194 gero:added_on "2014-11-27"^^xsd:date ;
 	gero:from_db gero:GenAge ;
 	gero:from_model_organism gero:Drosophila_melanogaster ;
 	gero:from_tissue gero:body ;
-	gero:has_ENTREZID <http://www.ncbi.nlm.nih.gov/gene/?term=248194> ;
+	gero:has_ENTREZID entrez:248194 ;
 	gero:has_code gero:IMP ;
 	gero:has_influence gero:Pro-Longevity ;
 	gero:has_name gero:Glutamate-cysteine_ligase_modifier_subunit ;
-	gero:has_ref <PMID:16148000> ;
+	gero:has_ref pmid:16148000 ;
 	gero:has_symbol gero:Gclm ;
 	gero:is_DB_object gero:294 ;
 	gero:of_type gero:protein ;
 	rdfs:subClassOf gero:anti-oxidant_enzymes .
 
-gero:31220 gero:added_on "2014-11-27"^^xsd:date ;
+entrez:31220 gero:added_on "2014-11-27"^^xsd:date ;
 	gero:from_db gero:GenAge ;
 	gero:from_model_organism gero:Drosophila_melanogaster ;
 	gero:from_tissue gero:abdominal_fat_body ;
-	gero:has_ENTREZID <http://www.ncbi.nlm.nih.gov/gene/?term=31220> ;
+	gero:has_ENTREZID entrez:31220 ;
 	gero:has_code gero:IMP ;
 	gero:has_influence gero:Pro-Longevity ;
 	gero:has_name gero:Insulin-like_peptide_6 ;
-	gero:has_ref <PMID:22935001> ;
+	gero:has_ref pmid:22935001 ;
 	gero:has_symbol gero:Ilp6 ;
 	gero:is_DB_object gero:1756 ;
 	gero:of_type gero:protein ;
 	rdfs:subClassOf gero:growth_factors .
 
-gero:31251 gero:added_on "2014-11-27"^^xsd:date ;
+entrez:31251 gero:added_on "2014-11-27"^^xsd:date ;
 	gero:from_db gero:FlyBase ;
 	gero:from_model_organism gero:Drosophila_melanogaster ;
 	gero:from_tissue gero:body ;
-	gero:has_ENTREZID <http://www.ncbi.nlm.nih.gov/gene/?term=31251> ;
+	gero:has_ENTREZID entrez:31251 ;
 	gero:has_code gero:IMP ;
 	gero:has_influence gero:Anti-Longevity ;
 	gero:has_name gero:Period ;
-	gero:has_ref <PMID:9850008> ;
+	gero:has_ref pmid:9850008 ;
 	gero:has_symbol gero:per ;
 	gero:is_DB_object gero:FBgn0003068 ;
 	gero:of_type gero:protein ;
 	rdfs:subClassOf gero:circadian_genes .
 
-gero:31845 gero:added_on "2014-11-27"^^xsd:date ;
+entrez:31845 gero:added_on "2014-11-27"^^xsd:date ;
 	gero:from_db gero:GenAge ;
 	gero:from_model_organism gero:Drosophila_melanogaster ;
 	gero:from_tissue gero:body ;
-	gero:has_ENTREZID <http://www.ncbi.nlm.nih.gov/gene/?term=31845> ;
+	gero:has_ENTREZID entrez:31845 ;
 	gero:has_code gero:IMP ;
 	gero:has_influence gero:Pro-Longevity ;
 	gero:has_name gero:frataxin_homolog ;
-	gero:has_ref <PMID:18258192> ;
+	gero:has_ref pmid:18258192 ;
 	gero:has_symbol gero:fn ;
 	gero:is_DB_object gero:848 ;
 	gero:of_type gero:protein ;
 	rdfs:subClassOf gero:anti-oxidant_enzymes .
 
-gero:32001 gero:added_on "2014-11-27"^^xsd:date ;
+entrez:32001 gero:added_on "2014-11-27"^^xsd:date ;
 	gero:from_db gero:GenAge ;
 	gero:from_model_organism gero:Drosophila_melanogaster ;
 	gero:from_tissue gero:nervous_system ;
-	gero:has_ENTREZID <http://www.ncbi.nlm.nih.gov/gene/?term=32001> ;
+	gero:has_ENTREZID entrez:32001 ;
 	gero:has_code gero:IMP ;
 	gero:has_influence gero:Pro-Longevity ;
 	gero:has_name gero:Autophagy-related_8a ;
-	gero:has_ref <PMID:18059160> ;
+	gero:has_ref pmid:18059160 ;
 	gero:has_symbol gero:Atg8a ;
 	gero:is_DB_object gero:22 ;
 	gero:of_type gero:protein ;
 	rdfs:subClassOf gero:autophagy_genes .
 
-gero:40336 gero:added_on "2014-11-27"^^xsd:date ;
+entrez:40336 gero:added_on "2014-11-27"^^xsd:date ;
 	gero:from_db gero:GenAge ;
 	gero:from_model_organism gero:Drosophila_melanogaster ;
-	gero:from_tissue gero:nervous_system , gero:body ;
-	gero:has_ENTREZID <http://www.ncbi.nlm.nih.gov/gene/?term=40336> ;
+	gero:from_tissue gero:body , gero:nervous_system ;
+	gero:has_ENTREZID entrez:40336 ;
 	gero:has_code gero:IMP ;
 	gero:has_influence gero:Pro-Longevity ;
 	gero:has_name gero:parkin ;
-	gero:has_ref <PMID:23650379> ;
+	gero:has_ref pmid:23650379 ;
 	gero:has_symbol gero:park ;
 	gero:is_DB_object gero:1843 ;
 	gero:of_type gero:protein ;
 	rdfs:subClassOf gero:ubiquitin_ligases .
 
-gero:41709 gero:added_on "2014-11-27"^^xsd:date ;
+entrez:41709 gero:added_on "2014-11-27"^^xsd:date ;
 	gero:from_db gero:GenAge ;
 	gero:from_model_organism gero:Drosophila_melanogaster ;
 	gero:from_tissue gero:fat_body ;
-	gero:has_ENTREZID <http://www.ncbi.nlm.nih.gov/gene/?term=41709> ;
+	gero:has_ENTREZID entrez:41709 ;
 	gero:has_code gero:IMP ;
 	gero:has_influence gero:Pro-Longevity ;
 	gero:has_name <http://gero.longevityalliance.org/Forkhead_box,_sub-group_O> ;
-	gero:has_ref <PMID:15192154> ;
+	gero:has_ref pmid:15192154 ;
 	gero:has_symbol gero:foxo ;
 	gero:is_DB_object gero:286 ;
 	gero:of_type gero:protein ;
 	rdfs:subClassOf gero:transcription_factors .
 
-gero:43904 gero:added_on "2014-11-27"^^xsd:date ;
+entrez:43904 gero:added_on "2014-11-27"^^xsd:date ;
 	gero:from_db gero:FlyBase ;
 	gero:from_model_organism gero:Drosophila_melanogaster ;
 	gero:from_tissue gero:nervous_system ;
-	gero:has_ENTREZID <http://www.ncbi.nlm.nih.gov/gene/?term=43904> ;
+	gero:has_ENTREZID entrez:43904 ;
 	gero:has_code gero:IMP ;
 	gero:has_influence gero:Pro-Longevity ;
 	gero:has_name gero:AMP-activated_protein_kinase_alpha_subunit ;
-	gero:has_ref <PMID:25199830> ;
+	gero:has_ref pmid:25199830 ;
 	gero:has_symbol gero:AMPK ;
 	gero:is_DB_object gero:FBgn0023169 ;
 	gero:of_type gero:protein ;
 	rdfs:subClassOf gero:kinases .
 
-gero:53581 gero:added_on "2014-11-27"^^xsd:date ;
+entrez:53581 gero:added_on "2014-11-27"^^xsd:date ;
 	gero:from_db gero:GenAge ;
 	gero:from_model_organism gero:Drosophila_melanogaster ;
-	gero:from_tissue gero:body , gero:nervous_system ;
-	gero:has_ENTREZID <http://www.ncbi.nlm.nih.gov/gene/?term=53581> ;
+	gero:from_tissue gero:nervous_system , gero:body ;
+	gero:has_ENTREZID entrez:53581 ;
 	gero:has_code gero:IMP ;
 	gero:has_influence gero:Pro-Longevity ;
 	gero:has_name gero:Glutamate-cysteine_ligase_catalytic_subunit ;
-	gero:has_ref <PMID:16148000> ;
+	gero:has_ref pmid:16148000 ;
 	gero:has_symbol gero:Gclc ;
 	gero:is_DB_object gero:294 ;
 	gero:of_type gero:protein ;

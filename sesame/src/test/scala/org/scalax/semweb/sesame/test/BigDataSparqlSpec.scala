@@ -1,22 +1,15 @@
 package org.scalax.semweb.sesame.test
 
-import scala.util.Try
-import org.openrdf.query.BindingSet
-
-
-import org.scalatest._
-
-
-import scala.collection.immutable.List
-import org.openrdf.model.{Statement, Value}
+import org.openrdf.model.Statement
+import org.openrdf.query.QueryLanguage
 import org.openrdf.repository.RepositoryResult
-import org.scalatest.WordSpecLike
-import org.scalatest.Matchers
-import org.scalax.semweb.sparql._
-import org.scalax.semweb.rdf.{Trip, IRI}
-import org.scalax.semweb.rdf.IRI
-import org.scalax.semweb.rdf.Trip
-import org.scalax.semweb.sparql.Pat
+import org.scalatest.{Matchers, _}
+import org.scalax.semweb.rdf.{IRI, Trip}
+import org.scalax.semweb.sesame.test.classes.{BigData, SimpleTestData}
+import org.scalax.semweb.sparql.{Pat, _}
+
+import org.scalax.semweb.sesame._
+import scala.util.Try
 
 /**
  * Tests SPARQL DSL on bigdata
@@ -25,6 +18,7 @@ class BigDataSparqlSpec  extends  WordSpec with Matchers with SimpleTestData {
   self=> //alias to this, to avoid confusion
 
   "Bigdata spec" should {
+/*
 
     "Provide errors for wrong queries" in {
 
@@ -48,6 +42,7 @@ class BigDataSparqlSpec  extends  WordSpec with Matchers with SimpleTestData {
      db.shutDown() // shutting down
 
     }
+*/
 
 
     "read SELECT quries successfully" in {
@@ -70,6 +65,26 @@ class BigDataSparqlSpec  extends  WordSpec with Matchers with SimpleTestData {
       val queryLove= db.justSelect(query.stringValue)
       queryLove.isSuccess shouldBe  true
       queryLove.get.toList.size shouldEqual 6
+
+      val query2 =  SELECT(?("s"), ?("o") ) WHERE (
+        Pat(?("s"), IRI("http://denigma.org/relations/resources/loves"), ?("o")),
+        FILTER(STR_STARTS(STR(?("o")),s"http://denigma.org/actors/resources/Immort"))
+        )
+
+      val queryLove2= db.justSelect(query2.stringValue)
+      queryLove2.isSuccess shouldBe  true
+      queryLove2.get.toList.size shouldEqual 5
+
+
+      val query3 =  SELECT(?("s"), ?("o") ) WHERE (
+        Pat(?("s"), IRI("http://denigma.org/relations/resources/loves"), ?("o")),
+        FILTER(STR_STARTS(STR(?("o")),s"http://denigma.org/actors/resources/Immort"))
+        )
+
+      val queryLove3= db.justSelect(query2.stringValue)
+      queryLove3.isSuccess shouldBe  true
+      queryLove3.get.toList.size shouldEqual 5
+
 
       db.shutDown() // shutting down
     }
@@ -139,9 +154,100 @@ class BigDataSparqlSpec  extends  WordSpec with Matchers with SimpleTestData {
 
     }
 
+    val cont1 = IRI("http://context/1/")
+    val cont2 = IRI("http://context/2/")
+    val cont3 = IRI("http://context/3/")
 
+    "support named graphs" in {
+      val db = BigData(true) //cleaning the files and initializing the database
+
+      def selProp(prop:IRI,cont:IRI) = SELECT(?("o"),?("any")) FROM cont WHERE Pat( ?("o"),prop,?("any"))
+
+
+      val i1 = INSERT (
+        DATA.INTO (cont1)(
+        Trip(Daniel,loves,RDF),
+        Trip(Liz,loves,Immortality),
+        Trip(Edouard, loves, Immortality)
+        )
+      )
+      //print(i1.stringValue)
+      db.update(i1.stringValue)
+
+
+      db.read{ con=>con.getStatements(null,loves,null,false,cont1).toList }.get.size shouldEqual 3
+      db.read{ con=>con.getStatements(null,hates,null,false,cont1).toList }.get.size shouldEqual 0
+      db.read{ con=>con.getStatements(null,loves,null,false,cont2).toList }.get.size shouldEqual 0
+      db.read{ con=>con.getStatements(null,hates,null,false,cont2).toList }.get.size shouldEqual 0
+      db.read{ con=>con.getStatements(null,loves,null,false,cont3).toList }.get.size shouldEqual 0
+      db.read{ con=>con.getStatements(null,hates,null,false,cont3).toList }.get.size shouldEqual 0
+      print(selProp(loves,cont2).stringValue)
+      db.justSelect(selProp(loves,cont1).stringValue).get.size shouldEqual 3
+      db.justSelect(selProp(hates,cont1).stringValue).get.size shouldEqual 0
+
+
+      val i2 = INSERT (
+        DATA.INTO (cont2)(
+        Trip(Anton, hates, RDF),
+        Trip(Anton,loves,Immortality)
+      )
+      )
+      db.update(i2.stringValue)
+
+
+
+      db.read{ con=>con.getStatements(null,loves,null,false,cont1).toList }.get.size shouldEqual 3
+      db.read{ con=>con.getStatements(null,hates,null,false,cont1).toList }.get.size shouldEqual 0
+      db.read{ con=>con.getStatements(null,loves,null,false,cont2).toList }.get.size shouldEqual 1
+      db.read{ con=>con.getStatements(null,hates,null,false,cont2).toList }.get.size shouldEqual 1
+      db.read{ con=>con.getStatements(null,loves,null,false,cont3).toList }.get.size shouldEqual 0
+      db.read{ con=>con.getStatements(null,hates,null,false,cont3).toList }.get.size shouldEqual 0
+
+
+
+      db.justSelect(selProp(loves,cont2).stringValue).get.size shouldEqual 1
+      db.justSelect(selProp(hates,cont2).stringValue).get.size shouldEqual 1
+
+
+      val i3 = INSERT (
+        DATA.INTO (cont3)(
+        Trip(Daniel,loves,Immortality),
+        Trip(Ilia, loves, Immortality)
+      ))
+      db.update(i3.stringValue)
+
+      db.read{ con=>con.getStatements(null,loves,null,false,cont1).toList }.get.size shouldEqual 3
+      db.read{ con=>con.getStatements(null,hates,null,false,cont1).toList }.get.size shouldEqual 0
+      db.read{ con=>con.getStatements(null,loves,null,false,cont2).toList }.get.size shouldEqual 1
+      db.read{ con=>con.getStatements(null,hates,null,false,cont2).toList }.get.size shouldEqual 1
+      db.read{ con=>con.getStatements(null,loves,null,false,cont3).toList }.get.size shouldEqual 2
+      db.read{ con=>con.getStatements(null,hates,null,false,cont3).toList }.get.size shouldEqual 0
+
+      db.justSelect(selProp(loves,cont3).stringValue).get.size shouldEqual 2
+      db.justSelect(selProp(hates,cont3).stringValue).get.size shouldEqual 0
+
+
+      db.read{ con=>con.getStatements(null,loves,null,false,cont1,cont2,cont3).toList }.get.size shouldEqual 6
+      db.read{ con=>con.getStatements(null,hates,null,false,cont1,cont2,cont3).toList }.get.size shouldEqual 1
+/*val books =
+  """
+    |PREFIX dc: <http://purl.org/dc/elements/1.1/>
+    |INSERT DATA INTO <http://example/bookStore>
+    |{ <http://example/book3>  dc:title  "Fundamentals of Compiler Design" }
+  """.stripMargin
+      import org.scalax.semweb.sesame._
+      db.write{
+        con=>
+          val u = con.prepareUpdate(QueryLanguage.SPARQL,books)
+          u.execute()
+      }
+      db.read{ con=>con.getStatements(null,IRI("http://purl.org/dc/elements/1.1/title"),null,false,IRI("http://example/bookStore")).toList }.get.size shouldEqual 1
+    */
+
+      db.shutDown()
+    }
   }
-  
+
   
   
 }

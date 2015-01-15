@@ -29,7 +29,12 @@ trait ArcExtractor[ReadConnection<: RepositoryConnection] extends Logged {
     nco.map{ nameClass =>
       val occurs = this.getOccurs(id,con)(contexts)
       val valueClass = extractValueClass(id,con)(contexts)
-      ArcRule(Label.apply(id:Res),nameClass,valueClass,occurs)
+      val priority: Option[Int] = con.objects(id,ArcRule.priority).collectFirst{
+        case lit:Literal if Try(lit.intValue()).isSuccess=>
+          lit.intValue()
+      }
+      val title: Option[String] = con.objects(id,vocabulary.DCElements.title).headOption.map(v=>v.label)
+      ArcRule(Label.apply(id:Res),nameClass,valueClass,occurs,Seq.empty[Action],priority,title)
     }
   }
 

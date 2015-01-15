@@ -36,9 +36,6 @@ trait QuadPattern extends TripletPattern{
 
   def canBind(q:Quad) = super.canBindTriplet(q) && (!this.hasContext || this.canBindContextRes(q.cont))
 
-
-
-
 }
 
 trait TripletPattern extends RDFElement

@@ -1,12 +1,10 @@
 package org.scalax.semweb.sparql
 
-import org.scalax.semweb.rdf.RDFElement
+import org.scalax.semweb.rdf.{IRI, RDFElement}
 
 trait WithWhere extends RDFElement
 {
   self=>
-
-
 
   object WHERE extends WhereClause(List.empty)
   {
@@ -25,10 +23,24 @@ trait WithWhere extends RDFElement
 
 }
 
-class WhereClause(var children:List[RDFElement]) extends GP
-{
-  where=>
-
-  override def stringValue: String = if(!this.hasChildren) "" else s"WHERE \n{ ${this.foldChildren} }\n"
+/*
+case class FROM(iri:IRI) extends DataSource{
+  def stringValue = s"FROM ${iri.toString}"
 }
+case class FROM_NAMED(iri:IRI) extends DataSource{
+
+  def stringValue = s"FROM NAMED ${iri.toString}"
+
+}*/
+
+trait  DataSource extends RDFElement
+
+class WhereClause(elements:List[RDFElement]) extends Clause[RDFElement]("WHERE",elements)
+
+
+class Clause[T](name:String,var children:List[RDFElement]) extends GP
+{
+  override def stringValue: String = if(!this.hasChildren) "" else s"$name \n{ ${this.foldChildren} }\n"
+}
+
 

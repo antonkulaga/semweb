@@ -17,6 +17,8 @@ trait ResultsImplicits extends Sesame2ScalaModelImplicits {
   implicit class TupleResult(results: TupleQueryResult)  extends Iterator[BindingSet]
   {
 
+    def get(prop:String*) = this.flatMap{   case v=> v.collect{case p if prop.contains(p.getName)=>p.getValue}  }.toSeq
+
     lazy val vars: List[String] = results.getBindingNames.toList
 
     def binding2Map(b:BindingSet): Map[String, Value] = b.iterator().map(v=>v.getName->v.getValue).toMap

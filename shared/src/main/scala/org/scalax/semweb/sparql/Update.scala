@@ -1,6 +1,6 @@
 package org.scalax.semweb.sparql
 
-import org.scalax.semweb.rdf.{Trip, RDFElement, CanBePredicate}
+import org.scalax.semweb.rdf._
 
 
 case class InsertQuery(insert:Insert)
@@ -19,18 +19,23 @@ case class InsertDeleteUnless(insert:Insert,delete:Delete,question:AskQuery)
 case class DeleteInsertUnless(delete:Delete,insert:Insert,question:AskQuery)
 
 
-class Insert(var children: List[RDFElement]) extends GP with WithWhere
+class Insert(var children: List[RDFElement],context:Option[IRI] = None) extends GP with WithWhere
 {
 
   lazy val hasDATA = children.exists(_.isInstanceOf[Data])
 
-  override def stringValue: String = if(hasDATA) s"INSERT ${this.foldChildren} "
-    else s"INSERT \n{ ${this.foldChildren} } "+ WHERE.stringValue
+  lazy val into = context.map(c=>s"INTO ${c.toString}").getOrElse("")
+
+  override def stringValue: String = if(hasDATA) s"INSERT $into ${this.foldChildren} "
+    else s"INSERT $into  \n{ ${this.foldChildren} } "+ WHERE.stringValue
 
 }
 
 object INSERT
 {
+
+  //def INTO(iri:IRI)(elements: RDFElement*) =   new Insert(elements.toList ,Some(iri))
+
   def apply(data:Data): Insert = new Insert(data::Nil)
 
   def apply(graph:PatternGraph): Insert = new Insert(graph::Nil)
@@ -63,6 +68,8 @@ object DELETE {
 
 object DATA {
 
+  def INTO(iri:IRI)(triplets:Trip*) =   new Data(new TripletGraph(iri)(triplets.toList)::Nil)//new Data(triplets.toList,Some(iri))
+
   def apply(triplets:Trip*) = {
     new Data(triplets.toList)
 
@@ -81,10 +88,12 @@ object GRAPH {
 
 
 
-class Data(val children:List[RDFElement]) extends GP {
+class Data(val children:List[RDFElement],context:Option[IRI] = None) extends GP {
 
 
-  override def stringValue: String = s"DATA \n{ ${this.foldChildren} }\n"
+  lazy val into = context.map(c=>s"INTO ${c.toString}").getOrElse("")
+
+  override def stringValue: String = s"DATA $into \n{ ${this.foldChildren} }\n"
 
 
 }

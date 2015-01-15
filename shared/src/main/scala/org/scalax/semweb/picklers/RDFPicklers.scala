@@ -74,8 +74,8 @@ trait RDFPicklers extends CommonPicklers{
     register[BNodeLabel]
     //register[IRIStem]
     register[Action]
-
     register[Shape]
+    register[ShEx]
 
   }
 
@@ -85,11 +85,6 @@ trait RDFPicklers extends CommonPicklers{
     this.registerRdfValues()
     this.registerStatements()
     this.registerShapes()
-
-
-
-
-
 
   }
 

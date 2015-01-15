@@ -5,6 +5,7 @@ import org.scalatest.{Matchers, WordSpec}
 import org.scalax.semweb.rdf._
 import org.scalax.semweb.rdf.vocabulary._
 import org.scalax.semweb.sesame._
+import org.scalax.semweb.sesame.test.classes.BigData
 import org.scalax.semweb.shex._
 import org.scalax.semweb.sparql._
 /**

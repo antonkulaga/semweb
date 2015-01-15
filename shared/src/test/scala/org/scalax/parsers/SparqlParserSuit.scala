@@ -4,17 +4,14 @@ import org.parboiled2._
 import org.scalax.semweb.parsers.TermParser
 import org.scalax.semweb.rdf
 import org.scalax.semweb.rdf.{IRI, BlankNode, BooleanLiteral}
+import org.scalax.utils.{DateTester, DateFixer}
 import utest._
 import utest.framework.TestSuite
 
-import scala.util.{Failure, Success}
+import scala.util.{Try, Failure, Success}
 
-object SparqlParserSuit extends TestSuite {
-  class TestTermParser(val input:ParserInput) extends TermParser{
-
-
-
-  }
+object SparqlParserSuit extends TestSuite with DateFixer with DateTester{
+  class TestTermParser(val input:ParserInput) extends TermParser
 
 
 
@@ -37,7 +34,7 @@ object SparqlParserSuit extends TestSuite {
       }
 
       "should parse integers" - {
-        assert(new TestTermParser("true").TRUE.run().isFailure==false)
+        assert(!new TestTermParser("true").TRUE.run().isFailure)
         //
         //
         assertMatch(new TestTermParser("1").IntegerLiteral.run()){case Success(rdf.IntLiteral(1))=>}
@@ -47,7 +44,7 @@ object SparqlParserSuit extends TestSuite {
       }
 
       "should parse double" - {
-        assert(new TestTermParser("true").TRUE.run().isFailure==false)
+        assert(!new TestTermParser("true").TRUE.run().isFailure)
         //
         //
         assertMatch(new TestTermParser("1.2").DoubleLiteral.run()){case Success(rdf.DoubleLiteral(1.2))=>}
@@ -98,7 +95,7 @@ object SparqlParserSuit extends TestSuite {
         val ps = new TestTermParser("de:hello")
         ps.prefixes = ps.prefixes + ("de"->IRI("http://denigma.de/resource/"))
 
-        val lno = ps.PNAME_LN.run()
+        val lno: Try[IRI] = ps.PNAME_LN.run()
         assert(lno.isSuccess)
         val ln = lno.get
         assert(ln== IRI("http://denigma.de/resource/hello"))

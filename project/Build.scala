@@ -12,7 +12,7 @@ import bintray.Keys._
 object Build extends sbt.Build
 {
 
- val semWebVer = "0.6.17"
+ val semWebVer = "0.6.18"
 
  publishMavenStyle := false
 
@@ -45,7 +45,7 @@ object Build extends sbt.Build
 
   val sameSettings:Seq[Setting[_]] = Seq(
     organization := "org.scalax",
-    scalaVersion :="2.11.4",
+    scalaVersion :="2.11.5",
     version := semWebVer,
     resolvers += "bintray-alexander_myltsev" at "http://dl.bintray.com/alexander-myltsev/maven/",
     resolvers += "Sonatype OSS Releases" at "https://oss.sonatype.org/content/repositories/releases",

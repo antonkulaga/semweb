@@ -1,20 +1,15 @@
-package org.scalax.semweb.sesame.test
+package org.scalax.semweb.sesame.test.classes
 
 /**
  * Console file for testing
  */
 object Console {
 
-  import org.scalatest.{Matchers, WordSpec}
-  import scala.util.Try
-  import org.openrdf.repository.RepositoryResult
-  import org.openrdf.model.Statement
-  import org.scalax.semweb._
   import org.scalax.semweb.rdf._
-  import org.scalax.semweb.shex._
-  import org.scalax.semweb.sparql._
   import org.scalax.semweb.rdf.vocabulary._
   import org.scalax.semweb.sesame._
+  import org.scalax.semweb.shex._
+  import org.scalax.semweb.sparql._
 
   val page = WI.re("Page")
 

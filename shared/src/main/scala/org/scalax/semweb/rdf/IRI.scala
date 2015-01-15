@@ -23,7 +23,15 @@ implementation of openrdf URI class
 case class IRI(uri:String) extends CanBePredicate with Res
 {
 
-  def /(child:String): IRI = if(stringValue.endsWith("/") || stringValue.endsWith("#")) IRI(stringValue+child) else IRI(stringValue+ "/" +child) //  IRI( stringValue / child )
+  def /(child:String): IRI = if
+  (stringValue.endsWith("/")
+      || stringValue.endsWith("#")
+      || stringValue.endsWith("?")
+      || stringValue.endsWith("="))
+    IRI(stringValue+child)
+  else
+    IRI(stringValue+ "/" +child) //  IRI( stringValue / child )
+
   def /(child:IRI): IRI = this / child.stringValue
 
 

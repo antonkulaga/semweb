@@ -20,13 +20,6 @@ case class Variable(name:String) extends CanBePredicate with SelectElement  {
   override def isVar = true
 
 }
-case class EqualsFilter(left:Variable,right:Any) extends Filter {
-  override def toString = left.toString+" = "+right.toString
-}
-class Filter extends RDFElement
-{
-  def stringValue = "FILTER"
-}
 
 
 trait TreeElement[T] {

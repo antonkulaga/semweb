@@ -1,7 +1,8 @@
-package org.scalax.semweb.sesame.test
+package org.scalax.semweb.sesame.test.classes
 
-import org.openrdf.model.impl.{URIImpl, StatementImpl}
-import org.openrdf.model.{Resource, Value, URI}
+import org.openrdf.model.impl.{StatementImpl, URIImpl}
+import org.openrdf.model.{Resource, URI, Value}
+
 import scala.collection.immutable.List
 
 

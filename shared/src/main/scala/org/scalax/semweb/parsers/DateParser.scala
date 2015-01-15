@@ -3,7 +3,7 @@ import org.parboiled2.RuleFrame.ZeroOrMore
 import org.parboiled2._
 import org.scalax.semweb.sparql
 import org.scalax.semweb.sparql._
-import java.util.Date
+import java.util.{Calendar, Date}
 
 class DateParser(val input:ParserInput) extends BasicParser {
 
@@ -12,12 +12,26 @@ class DateParser(val input:ParserInput) extends BasicParser {
   }
 
 
+  /**
+   * creates date by using calendar
+   * @param year
+   * @param month
+   * @param day
+   * @return
+   */
+  protected def date(year:Int,month:Int,day:Int) = {
+    val c = Calendar.getInstance()
+    c.set(year,month-1,day)
+    new Date(c.getTimeInMillis)
+  }
+
+
 
   def NormalDate =  rule { DateFromYear | DateFromDay }
 
-  def DateFromYear:Rule1[Date] = rule { (Year ~ Sep ~ ( Month | MonthName) ~ Sep ~ Day) ~>( (y:Int,m:Int,d:Int) => new Date(y,m,d) ) }
+  def DateFromYear:Rule1[Date] = rule { (Year ~ Sep ~ ( Month | MonthName) ~ Sep ~ Day) ~>( (y:Int,m:Int,d:Int) => date(y,m,d) ) }
 
-  def DateFromDay:Rule1[Date] = rule { (Day ~ Sep ~ ( Month | MonthName) ~ Sep ~ Year)  ~>( (d:Int,m:Int,y:Int) => new Date(y,m,d) ) }
+  def DateFromDay:Rule1[Date] = rule { (Day ~ Sep ~ ( Month | MonthName) ~ Sep ~ Year)  ~>( (d:Int,m:Int,y:Int) => date(y,m,d) ) }
 
 
   def Sep = rule { this.anyOf("-;./ ") }
