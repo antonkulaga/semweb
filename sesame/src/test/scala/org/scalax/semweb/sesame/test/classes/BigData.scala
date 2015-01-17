@@ -87,7 +87,7 @@ with SesameReader with SelectReader with AskReader with ConstructReader with Sha
     props.setProperty("com.bigdata.rdf.store.AbstractTripleStore.storeBlankNodes","true")
 
     props.setProperty("com.bigdata.rdf.sail.truthMaintenance","false")
-    props.setProperty("com.bigdata.rdf.sail.statementIdentifiers","false")
+    props.setProperty("com.bigdata.rdf.sail.statementIdentifiers","true")
     props.setProperty("com.bigdata.journal.AbstractJournal.file",url+"/"+dbFileName)
     props
   }

@@ -32,7 +32,6 @@ object ArcRule {
 
   val default: IRI = WI.pl("default")
 
-
   def apply(propertyName:IRI): ArcRule = apply(propertyName,RDF.VALUE,Star,None)
 
   def apply(propertyName:IRI,tp:IRI): ArcRule =   apply(propertyName,tp,Star,None)
@@ -62,41 +61,23 @@ case class ArcRule(
 
   lazy val me = id.asResource
 
-//  override def toQuads(subj: Res)(implicit context: Res): Set[Quad] = {
-//   Set(Quad(subj, ArcRule.property, me, context))++ name.toQuads(me)(context) ++ value.toQuads(me)(context) ++  occurs.toQuads(me)(context)
-//  }
-
-    override def toQuads(subj: Res)(implicit context: Res): Set[Quad] = {
-      val tlt: Set[Quad] =  this.title.fold(Set.empty[Quad])(t=>Set(Quad(me, vocabulary.DCElements.title,t,context)))
-      val prior: Set[Quad] = this.priority.fold(Set.empty[Quad])(p=>Set(Quad(me, ArcRule.priority,IntLiteral(p),context)))
-
-      Set(Quad(subj, ArcRule.property, me, context)) ++ tlt ++ prior ++   name.toQuads(me)(context) ++ value.toQuads(me)(context) ++  occurs.toQuads(me)(context)
-
-    }
-
+  override def toQuads(subj: Res)(implicit context: Res): Set[Quad] = {
+    val tlt: Set[Quad] =  this.title.fold(Set.empty[Quad])(t=>Set(Quad(me, vocabulary.DCElements.title,t,context)))
+    val prior: Set[Quad] = this.priority.fold(Set.empty[Quad])(p=>Set(Quad(me, ArcRule.priority,IntLiteral(p),context)))
+    Set(Quad(subj, ArcRule.property, me, context)) ++ tlt ++ prior ++   name.toQuads(me)(context) ++ value.toQuads(me)(context) ++  occurs.toQuads(me)(context)
+  }
 
   override def toTriplets(subj:Res):Set[Trip] = {
-
     val tlt: Set[Trip] =  this.title.fold(Set.empty[Trip])(t=>Set(Trip(me, vocabulary.DCElements.title,t)))
     val prior: Set[Trip] = this.priority.fold(Set.empty[Trip])(p=>Set(Trip(me, ArcRule.priority,IntLiteral(p))))
     Set(Trip(subj, ArcRule.property, me))++ tlt ++ prior   ++  name.toTriplets(me) ++ value.toTriplets(me) ++  occurs.toTriplets(me)
   }
 
-//  def occurs(occ:Cardinality) = this.copy(occurs = occ)
-
-  def makeId = Math.random().toString //todo: reimplement with something more reliable
-
-  def propertiesByNameClass(properties:Map[IRI,RDFValue]) = properties.filter(kv=>name.matches(kv._1))
-
-
 }
+
 
 trait RuleContainer extends Rule {
   def items:Set[Rule]
-
-
-
- // def updated(rule:Rule):Option[this.type ]
 
 }
 

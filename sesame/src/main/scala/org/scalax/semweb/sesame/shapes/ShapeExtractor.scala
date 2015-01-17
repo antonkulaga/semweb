@@ -130,7 +130,7 @@ class ShapeExtractor[ReadConnection<: RepositoryConnection](val lg:LogLike) exte
         import org.scalax.semweb.sesame._
         val p = ?("prop")
         val query = SELECT(p) WHERE FILTER(STR_STARTS(STR(p),stem.stringValue))
-        val props = con.prepareTupleQuery(QueryLanguage.SPARQL,query.stringValue).evaluate().get(p.name)
+        val props = con.prepareTupleQuery(QueryLanguage.SPARQL,query.stringValue).evaluate().extractVars(p)
         lg.error("Name stems property extraction not implemented")
         ??? //TODO complete
       case _ =>

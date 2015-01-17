@@ -1,49 +1,22 @@
-package org.scalax.semweb.sesame.test
+package org.scalax.semweb.sesame.test.sparql
 
 import org.openrdf.model.Statement
-import org.openrdf.query.QueryLanguage
 import org.openrdf.repository.RepositoryResult
 import org.scalatest.{Matchers, _}
 import org.scalax.semweb.rdf.{IRI, Trip}
+import org.scalax.semweb.sesame._
 import org.scalax.semweb.sesame.test.classes.{BigData, SimpleTestData}
 import org.scalax.semweb.sparql.{Pat, _}
 
-import org.scalax.semweb.sesame._
 import scala.util.Try
 
 /**
  * Tests SPARQL DSL on bigdata
  */
-class BigDataSparqlSpec  extends  WordSpec with Matchers with SimpleTestData {
+class SparqlSpec  extends  WordSpec with Matchers with SimpleTestData {
   self=> //alias to this, to avoid confusion
 
   "Bigdata spec" should {
-/*
-
-    "Provide errors for wrong queries" in {
-
-      val db = BigData(true) //cleaning the files and initializing the database
-      self.addTestData(db) //add test data ( see SimpleTestData )
-
-      val wrongQuery =
-      """
-        | SELECT ?subject ?property ?object WHERE
-        | {
-        | ?subject ?property ?object .
-        | FILTER( STR(?property) "lov*") .
-        | }
-        | LIMIT 50
-        | """
-        .stripMargin('|')
-
-      //UNCOMMENT FOLLOWING LINES TO SEE TIMEOUTS
-     val queryFreeze= db.justSelect(wrongQuery)
-     queryFreeze.isFailure shouldBe true
-     db.shutDown() // shutting down
-
-    }
-*/
-
 
     "read SELECT quries successfully" in {
 
@@ -171,7 +144,7 @@ class BigDataSparqlSpec  extends  WordSpec with Matchers with SimpleTestData {
         Trip(Edouard, loves, Immortality)
         )
       )
-      //print(i1.stringValue)
+
       db.update(i1.stringValue)
 
 
@@ -181,7 +154,7 @@ class BigDataSparqlSpec  extends  WordSpec with Matchers with SimpleTestData {
       db.read{ con=>con.getStatements(null,hates,null,false,cont2).toList }.get.size shouldEqual 0
       db.read{ con=>con.getStatements(null,loves,null,false,cont3).toList }.get.size shouldEqual 0
       db.read{ con=>con.getStatements(null,hates,null,false,cont3).toList }.get.size shouldEqual 0
-      print(selProp(loves,cont2).stringValue)
+
       db.justSelect(selProp(loves,cont1).stringValue).get.size shouldEqual 3
       db.justSelect(selProp(hates,cont1).stringValue).get.size shouldEqual 0
 

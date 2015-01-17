@@ -5,6 +5,7 @@ import org.openrdf.query.{BindingSet, GraphQueryResult, TupleQueryResult}
 import org.openrdf.repository.RepositoryResult
 import org.scalax.semweb.messages.Results
 import org.scalax.semweb.rdf.RDFValue
+import org.scalax.semweb.sparql.Variable
 
 import scala.collection.JavaConversions._
 import scala.collection.immutable._
@@ -17,7 +18,20 @@ trait ResultsImplicits extends Sesame2ScalaModelImplicits {
   implicit class TupleResult(results: TupleQueryResult)  extends Iterator[BindingSet]
   {
 
-    def get(prop:String*) = this.flatMap{   case v=> v.collect{case p if prop.contains(p.getName)=>p.getValue}  }.toSeq
+    def extract(prop:String*): scala.Seq[(String, Value)] = this.flatMap{   case v=> v.collect{case p if prop.contains(p.getName)=>p.getName->p.getValue}  }.toSeq
+
+    def extractVars(vars:Variable*): scala.Seq[(String,Value)]  = this.extract(vars.map(v=>v.name):_*)
+
+
+    /**
+     * Extracts values of vars
+     * TODO: decide if I should get rid of it
+     * @param prop
+     * @return
+     */
+    def extractValues(prop:String*): scala.Seq[Value] = this.flatMap{   case v=> v.collect{case p if prop.contains(p.getName)=>p.getValue}  }.toSeq
+
+    def extractVarValues(vars:Variable*): scala.Seq[Value]  = this.extractValues(vars.map(v=>v.name):_*)
 
     lazy val vars: List[String] = results.getBindingNames.toList
 

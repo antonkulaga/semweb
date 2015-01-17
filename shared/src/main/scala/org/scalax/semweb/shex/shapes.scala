@@ -77,6 +77,22 @@ case class Shape(id: Label, rule: Rule)  extends Labeled
 
   def arcSorted()= this.arcRules(this.rule).sortBy(f=>f.priority)
 
+  def expand[T](fun:PartialFunction[Rule,List[T]]):PartialFunction[Rule,List[T]] = {
+    case  and:AndRule=> and.conjoints.flatMap(v=>fold[T](v)(fun)).toList
+    case  orRule:OrRule=> orRule.disjoints.flatMap(v=>fold[T](v)(fun)).toList //TODO: figure out what to do with ors
+    case _=>List.empty[T]
+  }
+
+  /**
+   * Folds all rules
+   * @param rl start Rule
+   * @param fun partial function that will be expanded
+   * @tparam T type parameter to collect
+   * @return List of type parameters
+   */
+  def fold[T](rl:Rule = this.rule)(fun:PartialFunction[Rule,List[T]]):List[T] = fun.orElse(expand[T](fun))(rl)
+
+
   def arcRules(rl:Rule = this.rule):List[ArcRule] = {
     rl match {
       case arc:ArcRule=> List(arc)

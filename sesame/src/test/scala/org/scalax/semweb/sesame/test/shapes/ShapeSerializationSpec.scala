@@ -1,4 +1,4 @@
-package org.scalax.semweb.sesame.test
+package org.scalax.semweb.sesame.test.shapes
 
 import org.openrdf.model._
 import org.scalatest.{Matchers, WordSpec}
@@ -105,7 +105,6 @@ class ShapeSerializationSpec extends  WordSpec with Matchers {
 
 
       val subs = con.subjects(NameTerm.property ,null,List(c))
-      println("subjects = "+subs.toString())
 
       val tlt: Resource = con.subjects(NameTerm.property , title,List(c)).head
 
@@ -121,7 +120,6 @@ class ShapeSerializationSpec extends  WordSpec with Matchers {
 
       val arcs = props.flatMap(p=>db.extractor.getArc(p,con)(List(c:Resource)))
       arcs.size shouldEqual 3
-      arcs.foreach{a=>print(a.toString)}
 
 
       arcs.count{a=>a.name match {
@@ -151,8 +149,6 @@ class ShapeSerializationSpec extends  WordSpec with Matchers {
       rules.size shouldEqual 3
 
       con.close()
-
-      import org.openrdf.model.vocabulary.XMLSchema
 
 //      val arc = db.getArc(author.get.me,test,con)
 //      arc.isDefined shouldEqual(true)

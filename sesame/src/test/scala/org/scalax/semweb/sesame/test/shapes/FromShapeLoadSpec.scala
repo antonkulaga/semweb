@@ -1,24 +1,18 @@
-package org.scalax.semweb.sesame.test
+package org.scalax.semweb.sesame.test.shapes
 
-import java.io.InputStream
-
+import org.openrdf.model.Value
 import org.scalatest.{Matchers, WordSpec}
+import org.scalax.semweb.rdf.{IRI, Quad, StringLiteral, Trip, _}
 import org.scalax.semweb.rdf.vocabulary._
+import org.scalax.semweb.sesame._
 import org.scalax.semweb.sesame.test.classes.BigData
 import org.scalax.semweb.shex._
-import org.scalax.semweb.rdf._
-import org.scalax.semweb.sparql.{GRAPH, DATA, INSERT}
-import org.openrdf.model.{Value, URI, Resource}
-import org.scalax.semweb.shex._
-import org.scalax.semweb.rdf.IRI
-import org.scalax.semweb.rdf.StringLiteral
-import org.scalax.semweb.rdf.Quad
-import org.scalax.semweb.rdf.Trip
-import org.scalax.semweb.sesame._
+import org.scalax.semweb.sparql.{DATA, GRAPH, INSERT}
+
 import scala.util.Try
 
 
-class LoadByShapeSpec extends  WordSpec with Matchers {
+class FromShapeLoadSpec extends  WordSpec with Matchers {
   self=> //alias to this, to avoid confusion
 
   "Shapes" should {

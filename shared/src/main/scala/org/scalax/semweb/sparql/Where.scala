@@ -1,6 +1,6 @@
 package org.scalax.semweb.sparql
 
-import org.scalax.semweb.rdf.{IRI, RDFElement}
+import org.scalax.semweb.rdf.{CanBeObject, IRI, RDFElement}
 
 trait WithWhere extends RDFElement
 {
@@ -22,6 +22,12 @@ trait WithWhere extends RDFElement
 
 
 }
+
+case class BIND(element:CanBeObject,variable:Variable) extends RDFElement{
+  override def stringValue = s"BIND( ${element.toString} AS ${variable.toString} )"
+  //BIND( <<?bob foaf:age ?age>> AS ?t ) .
+}
+
 
 /*
 case class FROM(iri:IRI) extends DataSource{

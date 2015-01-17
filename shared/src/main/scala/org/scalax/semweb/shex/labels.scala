@@ -31,11 +31,6 @@ case class BNodeLabel(bnode:BlankNode) extends Label
 
 }
 
-//case class IRIStem(iri: IRI, isStem: Boolean) {
-//  def matches(other: Res): Boolean = other match {
-//    case prop:IRI=>prop.stringValue.startsWith(iri.stringValue)
-//    case _=>false
-//  }
-//}
-
 case class Action(label: Label, code: String)
+
+

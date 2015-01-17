@@ -34,7 +34,7 @@ object ShapesModificationSuite extends TestSuite{
         assert(f2.get.occurs==Plus)
 
       }
-      "should be updateble" - {
+      "should be updatable" - {
 
 
         assert(acs.length ==2)
@@ -56,6 +56,14 @@ object ShapesModificationSuite extends TestSuite{
         assert(acs2.length==2)
         assert(acs2.count(f => f.name.matches(FOAF.NAME)) == 0)
         assert(acs2.count(f => f.name.matches(FOAF.currentProject)) == 1)
+
+        val folded = sh2.fold(){
+          case arc:ArcRule=> List(arc)
+        }
+        assert(folded.length==2)
+        assert(folded.count(f => f.name.matches(FOAF.NAME)) == 0)
+        assert(folded.count(f => f.name.matches(FOAF.currentProject)) == 1)
+
       }
 
     }
