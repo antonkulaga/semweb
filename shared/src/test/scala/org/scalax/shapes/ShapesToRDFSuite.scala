@@ -92,33 +92,33 @@ object ShapesToRDFSuite extends TestSuite{
 
           assert { quads.exists(v=>v.sub==page&& v.pred==RDF.TYPE && v.obj== rs / "ResourceShape") }
           val tq = title.get.toQuads(page)(c)
-          assert { tq.size == 4}
+          assert { tq.size == 5} //used to be 4
 
           assert { title.get.toQuads(page).exists(v=>v.sub==page && v.obj==title.get.me) }
 
 
           assert { quads.exists(v=>v.sub==page&& v.pred==rs / "property" && v.obj==title.get.me) }
-          assert { quads.count(v=>v.sub==title.get.me) == 3 }
+          assert { quads.count(v=>v.sub==title.get.me) == 4 } //used to be 3
           assert { quads.exists(v=>v.sub==title.get.me && v.pred == rs / "valueType" && v.obj ==  XSD.StringDatatypeIRI )}
           assert { quads.exists(v=>v.sub==title.get.me && v.pred == rs / "propDefinition" && v.obj ==  WI.pl("title") )}
           assert { quads.exists(v=>v.sub==title.get.me && v.pred == rs / "occurs" && v.obj == rs / "Exactly-one" )}
 
 
           assert { quads.exists(v=>v.sub==page&& v.pred==rs / "property" && v.obj==text.get.me) }
-          assert { quads.count(v=>v.sub==text.get.me) == 3 }
+          assert { quads.count(v=>v.sub==text.get.me) == 4 } //used to be 3
           assert { quads.exists(v=>v.sub==text.get.me && v.pred == rs / "valueType" && v.obj ==  XSD.StringDatatypeIRI )}
           assert { quads.exists(v=>v.sub==text.get.me && v.pred == rs / "propDefinition" && v.obj ==  WI.pl("text") )}
           assert { quads.exists(v=>v.sub==text.get.me && v.pred == rs / "occurs" && v.obj ==  rs / "Exactly-one" )}
 
           assert { quads.exists(v=>v.sub==page&& v.pred==rs / "property" && v.obj==author.get.me) }
-          assert { quads.count(v=>v.sub==author.get.me) == 3 }
+          assert { quads.count(v=>v.sub==author.get.me) == 4 } //used to be 4
           assert { quads.exists(v=>v.sub==author.get.me && v.pred == rs / "valueType" && v.obj ==  FOAF.PERSON )}
           assert { quads.exists(v=>v.sub==author.get.me && v.pred == rs / "propDefinition" && v.obj ==  WI.pl("author") )}
           assert { quads.exists(v=>v.sub==author.get.me && v.pred == rs / "occurs" && v.obj ==  rs / "One-or-many" )}
 
         }
 
-        "write shape with context and subject rules" in {
+        "write shape with context and subject rules" - {
           val page = WI.re("Page")
 
           object shape extends ShapeBuilder(page)
@@ -135,26 +135,26 @@ object ShapesToRDFSuite extends TestSuite{
 
           assert { quads.exists(v=>v.sub==page&& v.pred==RDF.TYPE && v.obj== rs / "ResourceShape") }
           val tq = title.get.toQuads(page)(c)
-          assert { tq.size == 4}
+          assert { tq.size == 5} //used to be 4
 
           assert { title.get.toQuads(page).exists(v=>v.sub==page && v.obj==title.get.me) }
 
 
           assert { quads.exists(v=>v.sub==page&& v.pred==rs / "property" && v.obj==title.get.me) }
-          assert { quads.count(v=>v.sub==title.get.me) == 3 }
+          assert { quads.count(v=>v.sub==title.get.me) == 4 } //used to be 3
           assert { quads.exists(v=>v.sub==title.get.me && v.pred == rs / "valueType" && v.obj ==  XSD.StringDatatypeIRI )}
           assert { quads.exists(v=>v.sub==title.get.me && v.pred == rs / "propDefinition" && v.obj ==  WI.pl("title") )}
           assert { quads.exists(v=>v.sub==title.get.me && v.pred == rs / "occurs" && v.obj == rs / "Exactly-one" )}
 
 
           assert { quads.exists(v=>v.sub==page&& v.pred==rs / "property" && v.obj==text.get.me) }
-          assert { quads.count(v=>v.sub==text.get.me) == 3 }
+          assert { quads.count(v=>v.sub==text.get.me) == 4 } //used to be 3
           assert { quads.exists(v=>v.sub==text.get.me && v.pred == rs / "valueType" && v.obj ==  XSD.StringDatatypeIRI )}
           assert { quads.exists(v=>v.sub==text.get.me && v.pred == rs / "propDefinition" && v.obj ==  WI.pl("text") )}
           assert { quads.exists(v=>v.sub==text.get.me && v.pred == rs / "occurs" && v.obj ==  rs / "Exactly-one" )}
 
           assert { quads.exists(v=>v.sub==page&& v.pred==rs / "property" && v.obj==author.get.me) }
-          assert { quads.count(v=>v.sub==author.get.me) == 3 }
+          assert { quads.count(v=>v.sub==author.get.me) == 4 } //used to be 3
           assert { quads.exists(v=>v.sub==author.get.me && v.pred == rs / "valueType" && v.obj ==  FOAF.PERSON )}
           assert { quads.exists(v=>v.sub==author.get.me && v.pred == rs / "propDefinition" && v.obj ==  WI.pl("author") )}
           assert { quads.exists(v=>v.sub==author.get.me && v.pred == rs / "occurs" && v.obj ==  rs / "One-or-many" )}

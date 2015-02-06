@@ -66,11 +66,13 @@ object Build extends sbt.Build
   val jsSettings: Seq[Setting[_]] = Seq(
 
     libraryDependencies +=  "com.lihaoyi" %% "utest" % "0.2.4" % "test",
-    libraryDependencies += "org.scalajs" %%% "scalajs-pickling" % "0.3.1"
+    libraryDependencies += "org.scalajs" %%% "scalajs-pickling" % "0.3.1",
+    libraryDependencies += "com.github.benhutchison" %%% "prickle" % "1.1.2"
   )
 
   val jvmSettings : Seq[Setting[_]] = Seq(
-    libraryDependencies += "org.scalajs" %% "scalajs-pickling-play-json" % "0.3.1"
+    libraryDependencies += "org.scalajs" %% "scalajs-pickling-play-json" % "0.3.1",
+    libraryDependencies += "com.github.benhutchison" %% "prickle" % "1.1.2"
   )
 
 

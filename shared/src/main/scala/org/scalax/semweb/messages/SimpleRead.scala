@@ -33,14 +33,16 @@ object SimpleRead {
  * Contains messages with Query
  */
 object StringQueryMessages{
+  
+  trait StringMessage
 
-  case class Select(query:String, id:String,  channel:String = Channeled.default,time:Date = new Date()) extends StorageMessage
+  case class Select(query:String, id:String,  channel:String = Channeled.default,time:Date = new Date()) extends StorageMessage with StringMessage
 
-  case class Ask(query:String,  id:String,  channel:String = Channeled.default,time:Date = new Date()) extends StorageMessage
+  case class Ask(query:String,  id:String,  channel:String = Channeled.default,time:Date = new Date()) extends StorageMessage with StringMessage
 
-  case class Construct(query:String,  id:String,  channel:String = Channeled.default,time:Date = new Date()) extends StorageMessage
+  case class Construct(query:String,  id:String,  channel:String = Channeled.default,time:Date = new Date()) extends StorageMessage with StringMessage
 
-  case class Update(query:String,  id:String,  channel:String = Channeled.default,time:Date = new Date()) extends StorageMessage
+  case class Update(query:String,  id:String,  channel:String = Channeled.default,time:Date = new Date()) extends StorageMessage with StringMessage
 
 
 }
