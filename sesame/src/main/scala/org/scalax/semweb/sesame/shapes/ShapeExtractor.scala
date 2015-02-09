@@ -28,6 +28,7 @@ class ShapeExtractor[ReadConnection<: RepositoryConnection](val lg:LogLike) exte
 {
   
   lazy val queryExtractor = new ShapeQueryExtractor()
+  
 
   def getShape(shapeRes:Res,con:ReadConnection)(implicit contexts:Seq[Resource] = List.empty[Resource]): Shape = 
   {

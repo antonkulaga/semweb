@@ -1,5 +1,6 @@
 package org.scalax.semweb.sesame.test.shapes
 
+
 import java.io.InputStream
 
 import org.openrdf.model.{Statement, Resource}
@@ -7,7 +8,7 @@ import org.openrdf.query.GraphQueryResult
 import org.scalatest.{Matchers, WordSpec}
 import org.scalax.semweb.rdf.{IRI, _}
 import org.scalax.semweb.rdf.vocabulary._
-import org.scalax.semweb.sesame.test.classes.{BigData, GeneLoader}
+import org.scalax.semweb.sesame.test.classes.{GeneSchemaData, BigData, GeneLoader}
 import org.scalax.semweb.shex.{Shape, _}
 import org.scalax.semweb.sesame._
 import org.scalax.semweb.sparql.SelectQuery
@@ -15,33 +16,20 @@ import org.scalax.semweb.sesame._
 
 import scala.util.Try
 
-class ModelShapeLoaderSpec  extends  WordSpec with Matchers with GeneLoader
+class ModelShapeLoaderSpec  extends  WordSpec with Matchers with GeneLoader with GeneSchemaData
 {
-  lazy val gero = IRI("http://gero.longevityalliance.org/")
 
-  lazy val (entrezId:IRI,adb:IRI,objId:IRI,symbol:IRI, qualifier:IRI, go:IRI,
-  ref:IRI, code:IRI , from:IRI, aspect:IRI,  dbObjectName:IRI, synonym:IRI, tp:IRI,
-  taxon:IRI, date:IRI, assigned:IRI, extension:IRI, product:IRI,
-  clazz:IRI, tissue:IRI, influence:IRI
-    ) =
-    (gero / "has_ENTREZID",gero / "from_db" ,  gero / "is_DB_object" ,  gero / "has_symbol", gero / "has_qualifier", gero / "has_GO",
-      gero / "has_ref", gero / "has_code" , gero / "is_from",
-      gero / "has_aspect", gero / "has_name", gero / "has_synonym", gero / "of_type",
-      gero / "from_model_organism", gero / "added_on", gero / "is_assigned_by",
-      gero / "has_extension", gero / "is_product",
-      RDFS.SUBCLASSOF, gero / "from_tissue", gero / "has_influence"
-      )
 
   def loadQueryWithShape(db:BigData,query:String, shape:Shape): Try[Set[PropertyModel]] =
   {
     import org.scalax.semweb.sesame._
-      db.selectQuery(query){ (q,con,qr)=>
-        val res = qr.evaluate().toSelectResults
-        val rows: List[Map[String, RDFValue]] = res.rows
-        val resources = rows.map(r=>r.collectFirst{case (k,r:Res)=>r}.get:Resource).toSet
-        val models = db.loadPropertyModelsByShape(shape,resources)//this.loadPropertyModelsByShape(shape,resources)
-        models
-      }.flatten
+    db.selectQuery(query){ (q,con,qr)=>
+      val res = qr.evaluate().toSelectResults
+      val rows: List[Map[String, RDFValue]] = res.rows
+      val resources = rows.map(r=>r.collectFirst{case (k,r:Res)=>r}.get:Resource).toSet
+      val models = db.loadPropertyModelsByShape(shape,resources)//this.loadPropertyModelsByShape(shape,resources)
+      models
+    }.flatten
   }
 
   "Shapes" should {
@@ -79,7 +67,7 @@ class ModelShapeLoaderSpec  extends  WordSpec with Matchers with GeneLoader
       db.shutDown()
 
     }
-    
+
     "load valid property models" in {
 
       val db = BigData(true)
@@ -88,7 +76,7 @@ class ModelShapeLoaderSpec  extends  WordSpec with Matchers with GeneLoader
 
       val broken: InputStream = getClass.getResourceAsStream("/broken_genes.ttl")
       db.parseStream("broken_genes.ttl",broken)
-      
+
       val res = gero / "Evidence_Shape"
 
       val shop: Try[Shape] = db.loadShape(res)
@@ -97,24 +85,24 @@ class ModelShapeLoaderSpec  extends  WordSpec with Matchers with GeneLoader
       val arcs = shape.arcSorted()
       val classo = arcs.collectFirst{
         case arc @ ArcRule(  id: Label, name, ValueStem(st),occurs: Cardinality,  actions,  priority,  Some("Class"),   default) =>
-        arc         
+          arc
       }
       classo.isDefined shouldBe true
       val cl = classo.get
       val qClass = db.extractor.queryExtractor.arcQuery(cl)
-      
+
       //println("\n"+qClass.stringValue)
-      
+
       //LOAD FROM ARC WITH CLASSES
-      
+
       val r = db.justSelect(qClass.stringValue)
       r.isSuccess shouldEqual true
       r.get.size should be > 15
 
       //println("ARCS = \n"+arcs.toString)
-      
+
       //LOAF FROM ARC WITH ALLOWED VALUES
-      
+
       val codo: Option[ArcRule] = arcs.collectFirst{
         case arc @ ArcRule(  id: Label, name, valueClass,occurs: Cardinality,  actions,  priority,  Some("Evidence Code"),   default)  => arc
       }
@@ -125,11 +113,11 @@ class ModelShapeLoaderSpec  extends  WordSpec with Matchers with GeneLoader
       val rCodes = db.justSelect(codes.stringValue)
       val cds = rCodes.get
       cds.size shouldEqual 10
-      
+
       val dato = arcs.collectFirst{
         case arc @ ArcRule(  id: Label, name, valueClass,occurs: Cardinality,  actions,  priority,  Some("Date"),   default)  => arc
       }
-      
+
       dato.isDefined shouldBe true
       val data = dato.get
       val dates = db.extractor.queryExtractor.arcQuery(data)
@@ -217,18 +205,49 @@ class ModelShapeLoaderSpec  extends  WordSpec with Matchers with GeneLoader
       val e = sts.count{st=>st.getPredicate.stringValue().contains("has_ENTREZID")}
       e shouldEqual 3 //loads everything
       //printGraph(props)
-      
+
       db.shutDown()
     }
 
-    
-    
+/*
+    "construct graphs" in {
+      val db = BigData(true)
+      loadData(db)
+
+      val broken: InputStream = getClass.getResourceAsStream("/broken_genes.ttl")
+      db.parseStream("broken_genes.ttl",broken)
+
+      val con =
+        """
+          |PREFIX ex: <http://example.org>
+          |CONSTRUCT {
+          |?s ?p ?o
+          |?st ex:was_told_by ex:Bob
+          |} WHERE
+          |{
+          |?s ?p ?o
+          |{
+          | SELECT ?st WHERE {
+          | ?s ?p ?o
+          | BIND (<<?s ?p ?o>> AS ?st) }
+          |}
+          |}
+        """.stripMargin
+      println("CONSTRUCT QEUALS = \n"+con)
+      val g = db.justConstruct(con)
+      g.isSuccess shouldEqual true
+      printGraph(g.get)
+      db.shutDown()
+
+    }
+*/
+
+
+
     def printGraph(g:GraphQueryResult) = {
-      var t = List.empty[Statement]
-      while(g.hasNext) t = g.next()::t
-      println("CONSTRUCT RESULTS + \n"+t.mkString("\n"))
+      val t = g.toList
+      println("CONSTRUCT RESULTS = \n"+t.mkString("\n"))
     }
 
   }
 }
-//evidenceForm has clazz isCalled "Class" startsWith gero occurs ExactlyOne hasPriority 2

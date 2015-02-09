@@ -38,6 +38,24 @@ object Shape {
  */
 case class Shape(id: Label, rule: Rule)  extends Labeled
 {
+  
+  def + (r:Rule) = rule match {
+    case and:AndRule => this.copy(rule = and + r)
+    case or:OrRule => this.copy(rule = or + r)
+    case other => this.copy(rule = AndRule(Set(rule,other),id))
+  }
+  
+  def - (r:Rule) = rule match {
+    case and:AndRule => this.copy(rule = and - r)
+    case or:OrRule => this.copy(rule = or - r)
+    case other => if(other.id==r.id) this.copy(rule = AndRule.empty)
+  }
+  
+  def updated(r:Rule):Shape = this.rule match {
+    case and:AndRule => copy(rule = and.updated(r))
+    case or:OrRule => copy(rule = or.updated(r))
+    case other => if(other.id==r.id) copy(rule = r) else this
+  }
 
 
   /**
@@ -104,15 +122,9 @@ case class Shape(id: Label, rule: Rule)  extends Labeled
   }
 
   def updated[TR<:Rule](change:PartialFunction[Rule,TR]) =  if(change.isDefinedAt(rule))
-    Some(this.copy(rule = change(rule)))
-  else  rule match
-  {
-    case and:AndRule=>
-    case orRule:OrRule=>
-    case _=> None
-  }
+    this.copy(rule = change(rule)) else this
 
-
+/*
   def updated(newRule:Rule):Option[Shape] = this.rule match {
     case r if this.id.asResource==newRule.id.asResource=> Some(Shape(newRule.id,newRule))
     case r if r.id==newRule.id && r!=newRule=> Some(this.copy(rule = newRule))
@@ -121,7 +133,7 @@ case class Shape(id: Label, rule: Rule)  extends Labeled
     case or:OrRule=> or.updated(newRule).map(r=>this.copy(rule = r))
     case _ => None
 
-  }
+  }*/
 
 
 
