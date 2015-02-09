@@ -26,7 +26,11 @@ import scala.util.Try
  */
 class ShapeExtractor[ReadConnection<: RepositoryConnection](val lg:LogLike) extends ArcExtractor[ReadConnection]
 {
-  def getShape(shapeRes:Res,con:ReadConnection)(implicit contexts:Seq[Resource] = List.empty[Resource]): Shape = {
+  
+  lazy val queryExtractor = new ShapeQueryExtractor()
+
+  def getShape(shapeRes:Res,con:ReadConnection)(implicit contexts:Seq[Resource] = List.empty[Resource]): Shape = 
+  {
     object shape extends ShapeBuilder(shapeRes)
     for{
       res<- con.resources(shapeRes:Resource,ArcRule.property:URI,contexts).toSeq

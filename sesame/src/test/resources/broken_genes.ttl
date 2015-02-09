@@ -1,0 +1,57 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix pl: <http://webintelligence.eu/platform/> .
+@prefix shex: <http://open-services.net/ns/core#> .
+@prefix def: <http://www.w3.org/2013/ShEx/Definition#> .
+@prefix pmid: <http://ncbi.nlm.nih.gov/pubmed/> .
+@prefix gero: <http://gero.longevityalliance.org/> .
+@prefix entrez: <http://ncbi.nlm.nih.gov/gene/> .
+
+entrez:1111 gero:added_on "some time" ;  #broken
+	pl:has_status pl:Draft ;
+	gero:from_db gero:GenAge ;
+	gero:from_model_organism gero:Drosophila_melanogaster ;
+	gero:from_tissue gero:nervous_system , gero:body ;
+	gero:has_ENTREZID entrez:53581 ;
+	gero:has_code gero:IMP ;
+	gero:has_influence gero:Pro-Longevity ;
+	gero:has_name gero:Glutamate-cysteine_ligase_catalytic_subunit ;
+	gero:has_ref pmid:16148000 ;
+	gero:has_symbol gero:Gclc ;
+	gero:is_DB_object gero:294 ;
+	gero:of_type entrez:protein ;  #broken
+	rdfs:subClassOf entrez:anti-oxidant_enzymes .  #broken
+
+entrez:2222 gero:added_on 2045 ;  #broken
+	pl:has_status pl:Draft ;	
+	gero:from_db gero:GenAge ;
+	gero:from_model_organism gero:Drosophila_melanogaster ;
+	gero:from_tissue gero:nervous_system , gero:body ;
+	gero:has_ENTREZID entrez:53581 ;
+	gero:has_code gero:BREAK_ME ;  #broken
+	gero:has_influence gero:Pro-Longevity ;
+	gero:has_name gero:Glutamate-cysteine_ligase_catalytic_subunit ;
+	gero:has_ref pmid:16148000 ;
+	gero:has_symbol gero:Gclc ;
+	gero:is_DB_object gero:294 ;
+	gero:of_type gero:protein ;
+	rdfs:subClassOf gero:anti-oxidant_enzymes .
+
+
+entrez:3333 gero:added_on "2014-11-27"^^xsd:date ;
+	pl:has_status pl:Draft ;
+	gero:from_db gero:GenAge ;
+	gero:from_model_organism gero:Drosophila_melanogaster ;
+	gero:from_tissue gero:nervous_system , gero:body ;
+	gero:has_ENTREZID entrez:53581 ;
+	gero:has_code gero:BREAK_ME ;
+	gero:has_influence gero:Pro-Longevity ;
+	gero:has_name gero:Glutamate-cysteine_ligase_catalytic_subunit ;
+	gero:has_ref pmid:16148000 ;
+	gero:has_symbol gero:Gclc ;
+	gero:is_DB_object gero:294 ;
+	gero:of_type gero:protein ;
+	rdfs:subClassOf entrez:anti-oxidant_enzymes .

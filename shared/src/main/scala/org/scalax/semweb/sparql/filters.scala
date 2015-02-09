@@ -1,6 +1,6 @@
 package org.scalax.semweb.sparql
 
-import org.scalax.semweb.rdf.{CanBeObject, RDFElement}
+import org.scalax.semweb.rdf.{Res, IRI, CanBeObject, RDFElement}
 
 
 
@@ -16,8 +16,34 @@ case class FILTER(elements:FilterElement*) extends GP
 {
   lazy val children = elements.toList
 
-  override def stringValue: String = if(hasChildren)  "FILTER "+foldChildren else ""
+  override def stringValue: String = if(hasChildren)  s"\nFILTER $foldChildren" else ""
 
+}
+
+case class NOT_EQUALS(one:RDFElement,two:RDFElement) extends FilterElement {
+
+  override def stringValue: String = s"(${one.stringValue} != ${two.stringValue})"
+
+}
+
+case class EQUALS(one:RDFElement,two:RDFElement) extends FilterElement {
+
+  override def stringValue: String = s"(${one.stringValue} = ${two.stringValue})"
+
+}
+
+
+case class IN(element:SelectElement,set:Set[RDFElement]) extends FilterElement
+{
+  override def stringValue = "("+element.toString+" IN ("+set.foldLeft("")( (acc,el)=>acc+","+el.toString).tail+") "+")"
+}
+
+case class NOT(element:FilterElement) extends FilterElement{
+
+  def stringValue = element.stringValue match {
+    case str if str.contains("=")=> str.replace("=","!=")
+    case str => s"(!($str))"
+  }
 }
 
 case class EXISTS(gr:GP) extends FilterElement
@@ -25,6 +51,27 @@ case class EXISTS(gr:GP) extends FilterElement
   def stringValue = s"EXISTS {${gr.toString}}"
 }
 
+case class IsIRI(v:Variable) extends FilterElement {
+  def stringValue = s"isIRI(${v.toString})"
+}
+
+
+case class IsBlank(v:Variable) extends FilterElement {
+  def stringValue = s"isBlank(${v.toString})"
+}
+
+case class IsLiteral(v:Variable) extends FilterElement {
+  def stringValue = s"isLiteral(${v.toString})"
+}
+
+case class IsNumeric(v:Variable) extends FilterElement {
+  def stringValue = s"isNumeric(${v.toString})"
+}
+
+case class DATATYPE(v:Variable,tp:Res) extends FilterElement {
+  override def stringValue =s"( datatype(${v.toString}) = ${tp.toString} )"
+  
+}
 
 case class STR_STARTS(str:STR, start:String) extends FilterElement {
   override def stringValue: String = s"""STRSTARTS(str(${str.stringValue}), "$start")"""

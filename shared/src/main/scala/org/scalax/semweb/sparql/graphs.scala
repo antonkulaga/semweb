@@ -36,4 +36,5 @@ trait SPARQLGraph extends GP{
 
   override def children: List[RDFElement] = triplets.toList
 
+
 }

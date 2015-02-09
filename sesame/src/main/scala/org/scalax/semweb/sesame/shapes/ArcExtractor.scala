@@ -4,12 +4,15 @@ import org.openrdf.model.{Value, Literal, Resource, URI}
 import org.openrdf.repository.RepositoryConnection
 import org.scalax.semweb.commons.Logged
 import org.scalax.semweb.rdf._
-import org.scalax.semweb.rdf.vocabulary.RDF
+import org.scalax.semweb.rdf.vocabulary.{RDFS, RDF}
 import org.scalax.semweb.sesame._
 import org.scalax.semweb.shex._
 import org.scalax.semweb.shex.validation.{Valid, Failed, ValidationResult}
-
+import org.scalax.semweb.sparql
+import org.scalax.semweb.sparql._
 import scala.util.Try
+
+
 
 /**
  * Extracts arcs from shape
@@ -17,6 +20,10 @@ import scala.util.Try
 trait ArcExtractor[ReadConnection<: RepositoryConnection] extends Logged {
 
 
+  def arc2Shape(arc:ArcRule) = Shape(arc.id,AndRule(Set(arc),arc.id))
+
+
+  
   /**
    * Extracts Arc rule
    * @param id id of the arc rule
@@ -26,7 +33,7 @@ trait ArcExtractor[ReadConnection<: RepositoryConnection] extends Logged {
    */
   def getArc(id:Resource,con:ReadConnection)(implicit contexts:Seq[Resource] = List.empty[Resource]):Option[ArcRule] = {
     val nco =    extractNameClass(id,con)(contexts)
-    nco.map{ nameClass =>
+    nco.map{case  nameClass =>
       val occurs = this.getOccurs(id,con)(contexts)
       val valueClass = extractValueClass(id,con)(contexts)
       val priority: Option[Int] = con.objects(id,ArcRule.priority).collectFirst{

@@ -15,6 +15,11 @@ trait WithWhere extends RDFElement
       self
     }
 
+    def apply(elements:Set[RDFElement]):self.type = {
+      this.children = elements.toList
+      self
+    }
+
   }
 
 

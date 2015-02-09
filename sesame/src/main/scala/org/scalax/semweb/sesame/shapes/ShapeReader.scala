@@ -23,12 +23,6 @@ trait ShapeReader extends SesameReader {
 
   val extractor = new ShapeExtractor[ReadConnection](this.lg)
 
-/*
-  def loadShex(shex:Resource) = this.read{
-    con=>
-      con.getStatements(shex,)
-  }
-*/
 
 
   def loadShapes(shapes:Resource*)(implicit contexts:Seq[Resource] = List.empty[Resource]) = this.read

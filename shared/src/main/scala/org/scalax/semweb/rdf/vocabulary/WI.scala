@@ -17,6 +17,10 @@ object WI extends PrefixConfig("http://webintelligence.eu/"){
     val SHAPE_FOR = IRI(this / "shapeFor")
     val HAS_SHAPE = IRI(this / "hasShape")
     val EMPTY = IRI(this / "Empty")
+    val HAS_STATUS = IRI(this / "has_status")
+    val DRAFT = IRI(this / "Draft")
+
+
   }
 
 

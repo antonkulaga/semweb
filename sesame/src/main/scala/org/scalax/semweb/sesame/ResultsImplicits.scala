@@ -66,9 +66,6 @@ implicit class for Repository results that adds some nice features there and tur
 
     def uris = results.collect{case st if st.getObject.isInstanceOf[URI]=>st.getObject.asInstanceOf[URI]}.toList
 
-
-
-
   }
 
   implicit class GraphResult(results:GraphQueryResult) extends Iterator[Statement]

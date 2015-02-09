@@ -1,5 +1,7 @@
 package org.scalax.prickling
 
+import java.util.Date
+
 import org.scalajs.spickling.PicklerRegistry._
 import org.scalax.semweb.composites.SemanticComposites
 import org.scalax.semweb.messages.StringQueryMessages
@@ -70,6 +72,13 @@ object PicklingSpec extends TestSuite
       val askT = Unpickle[StringQueryMessages.StringMessage].fromString(stAsk)
       val res = askT.get
       assertMatch(res){case StringQueryMessages.Ask("query1","myId",_,_)=>}
+      
+      val construct = StringQueryMessages.Construct(q1,id)
+      val stCon = Pickle.intoString[StringQueryMessages.StringMessage](construct)
+      val conT = Unpickle[StringQueryMessages.StringMessage].fromString(stCon)
+      assertMatch(conT.get){
+        case StringQueryMessages.Construct("query1","myId",_,d:Date)=>
+      }
 
     }
    }

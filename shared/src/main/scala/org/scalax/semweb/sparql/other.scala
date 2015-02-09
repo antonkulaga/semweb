@@ -22,8 +22,6 @@ case class Variable(name:String) extends CanBePredicate with SelectElement  {
 
   def stringValue = s"?$name"
 
-
-
   override def isVar = true
 
 }

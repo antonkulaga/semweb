@@ -16,8 +16,6 @@ trait GeneLoader {
     db.parseStream("ontology.ttl",ont)
     val web: InputStream = getClass.getResourceAsStream("/gero.longevityalliance.org.ttl")
     db.parseStream("gero.longevityalliance.org.ttl",web)
-
-
   }
 
 }

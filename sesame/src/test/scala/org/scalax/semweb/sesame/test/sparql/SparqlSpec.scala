@@ -202,20 +202,6 @@ class SparqlSpec  extends  WordSpec with Matchers with SimpleTestData {
 
       db.read{ con=>con.getStatements(null,loves,null,false,cont1,cont2,cont3).toList }.get.size shouldEqual 6
       db.read{ con=>con.getStatements(null,hates,null,false,cont1,cont2,cont3).toList }.get.size shouldEqual 1
-/*val books =
-  """
-    |PREFIX dc: <http://purl.org/dc/elements/1.1/>
-    |INSERT DATA INTO <http://example/bookStore>
-    |{ <http://example/book3>  dc:title  "Fundamentals of Compiler Design" }
-  """.stripMargin
-      import org.scalax.semweb.sesame._
-      db.write{
-        con=>
-          val u = con.prepareUpdate(QueryLanguage.SPARQL,books)
-          u.execute()
-      }
-      db.read{ con=>con.getStatements(null,IRI("http://purl.org/dc/elements/1.1/title"),null,false,IRI("http://example/bookStore")).toList }.get.size shouldEqual 1
-    */
 
       db.shutDown()
     }
