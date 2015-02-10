@@ -1,7 +1,13 @@
 package org.scalax.semweb.shex
 
 import org.scalax.semweb.rdf._
+import org.scalax.semweb.rdf.vocabulary.WI
 
+object ValueClass {
+  //val property = WI.pl("value_of")
+  //val clazz = se / "ValueClass"
+  
+}
 
 
 sealed trait ValueClass extends ToQuads with ToTriplets
@@ -11,12 +17,13 @@ sealed trait ValueClass extends ToQuads with ToTriplets
 
 object ValueType {
   val property = rs / "valueType"
+  //val clazz = se / "ValueType"
 }
 
 case class ValueType(v: Res) extends ValueClass{
 
   override def toQuads(subject: Res)(implicit context: Res): Set[Quad] = {
-    Set(Quad(subject,rs / "valueType", v, context))
+    Set(Quad(subject, ValueType.property, v, context))
   }
 
   override def toTriplets(subject: Res): Set[Trip] = Set(Trip(subject,ValueType.property, v))
@@ -26,6 +33,9 @@ case class ValueType(v: Res) extends ValueClass{
 object ValueSet {
 
   val property: IRI =  rs / "allowedValue"
+  
+  //val clazz = se / "ValueSet"
+  
 }
 
 case class ValueSet(s: Set[RDFValue]) extends ValueClass {
@@ -42,7 +52,11 @@ case class ValueSet(s: Set[RDFValue]) extends ValueClass {
 }
 
 
-object ValueAny
+object ValueAny {
+  
+  val clazz = se / "ValueAny"
+  
+}
 
 case class ValueAny(stem: ValueStem) extends ValueClass {
   override def toQuads(subject: Res)(implicit context: Res): Set[Quad] = ???
@@ -54,6 +68,8 @@ case class ValueAny(stem: ValueStem) extends ValueClass {
 
 object ValueStem {
   val property = se / "stem"
+  
+  //val clazz = se / "ValueStem"
 }
 
 case class ValueStem(s: IRI) extends ValueClass {

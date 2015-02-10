@@ -9,9 +9,10 @@ import org.scalatest.{Matchers, WordSpec}
 import org.scalax.semweb.rdf.{IRI, _}
 import org.scalax.semweb.rdf.vocabulary._
 import org.scalax.semweb.sesame.test.classes.{GeneSchemaData, BigData, GeneLoader}
+import org.scalax.semweb.shex.validation.Valid
 import org.scalax.semweb.shex.{Shape, _}
 import org.scalax.semweb.sesame._
-import org.scalax.semweb.sparql.SelectQuery
+import org.scalax.semweb.sparql.{CONSTRUCT, SelectQuery}
 import org.scalax.semweb.sesame._
 
 import scala.util.Try
@@ -89,7 +90,7 @@ class ModelShapeLoaderSpec  extends  WordSpec with Matchers with GeneLoader with
       }
       classo.isDefined shouldBe true
       val cl = classo.get
-      val qClass = db.extractor.queryExtractor.arcQuery(cl)
+      val qClass = db.queryExtractor.arcQuery(cl)
 
       //println("\n"+qClass.stringValue)
 
@@ -108,7 +109,7 @@ class ModelShapeLoaderSpec  extends  WordSpec with Matchers with GeneLoader with
       }
       //println(codo.toString)
       codo.isDefined shouldBe true
-      val codes: SelectQuery = db.extractor.queryExtractor.arcQuery(codo.get)
+      val codes: SelectQuery = db.queryExtractor.arcQuery(codo.get)
       //println("CODES\n"+codes.stringValue)
       val rCodes = db.justSelect(codes.stringValue)
       val cds = rCodes.get
@@ -120,7 +121,7 @@ class ModelShapeLoaderSpec  extends  WordSpec with Matchers with GeneLoader with
 
       dato.isDefined shouldBe true
       val data = dato.get
-      val dates = db.extractor.queryExtractor.arcQuery(data)
+      val dates = db.queryExtractor.arcQuery(data)
       val ds = db.justSelect(dates.stringValue)
       ds.isSuccess shouldEqual true
       ds.get.size shouldEqual 10
@@ -155,9 +156,8 @@ class ModelShapeLoaderSpec  extends  WordSpec with Matchers with GeneLoader with
       }
       val classShape = db.extractor.arc2Shape(classo.get)
 
-      val sh = db.extractor.queryExtractor.validShapeQuery(shape)
-      sh.isDefined shouldEqual(true)
-      val qsh = sh.get
+      val qsh = db.queryExtractor.validShapeQuery(shape)
+      (qsh.isDefined) shouldEqual true
       val propo: Try[GraphQueryResult] = db.justConstruct(qsh.stringValue)
       propo.isSuccess shouldEqual(true)
       val props = propo.get
@@ -165,6 +165,11 @@ class ModelShapeLoaderSpec  extends  WordSpec with Matchers with GeneLoader with
       val e = sts.count{st=>st.getPredicate.stringValue().contains("has_ENTREZID")}
       e shouldEqual 9//loads everything
       //printGraph(props)
+      val ps = db.statementsExtractor.extractFromStatements(sts)
+      ps.size shouldEqual 9
+      val h = ps.head
+      h.properties.size.shouldEqual(13)
+      h.properties.foreach{ case (p,v) =>v.size shouldEqual (1)}
 
       db.shutDown()
     }
@@ -195,54 +200,42 @@ class ModelShapeLoaderSpec  extends  WordSpec with Matchers with GeneLoader with
       }
       val classShape = db.extractor.arc2Shape(classo.get)
 
-      val sh = db.extractor.queryExtractor.invalidShapeQuery(shape)
-      sh.isDefined shouldEqual(true)
-      val qsh = sh.get
+      val qsh = db.queryExtractor.invalidShapeQuery(shape)
       val propo: Try[GraphQueryResult] = db.justConstruct(qsh.stringValue)
-      propo.isSuccess shouldEqual(true)
+      propo.isSuccess shouldEqual true
       val props = propo.get
       val sts = props.toList
       val e = sts.count{st=>st.getPredicate.stringValue().contains("has_ENTREZID")}
       e shouldEqual 3 //loads everything
       //printGraph(props)
-
-      db.shutDown()
+      val ps = db.statementsExtractor.extractFromStatements(sts)
+      ps.size shouldEqual 3
+      val h = ps.head
+      h.properties.foreach{ case (p,v) =>v.size shouldEqual 1}
     }
-
-/*
-    "construct graphs" in {
+    
+    "load models " in {
       val db = BigData(true)
+
       loadData(db)
 
       val broken: InputStream = getClass.getResourceAsStream("/broken_genes.ttl")
       db.parseStream("broken_genes.ttl",broken)
 
-      val con =
-        """
-          |PREFIX ex: <http://example.org>
-          |CONSTRUCT {
-          |?s ?p ?o
-          |?st ex:was_told_by ex:Bob
-          |} WHERE
-          |{
-          |?s ?p ?o
-          |{
-          | SELECT ?st WHERE {
-          | ?s ?p ?o
-          | BIND (<<?s ?p ?o>> AS ?st) }
-          |}
-          |}
-        """.stripMargin
-      println("CONSTRUCT QEUALS = \n"+con)
-      val g = db.justConstruct(con)
-      g.isSuccess shouldEqual true
-      printGraph(g.get)
-      db.shutDown()
+      val res = gero / "Evidence_Shape"
 
+
+      val shop: Try[Shape] = db.loadShape(res)
+      shop.isSuccess shouldEqual true
+      val shape = shop.get
+      val tmodels = db.loadShapedModels(shape)
+      tmodels.isSuccess shouldEqual true
+      val models = tmodels.get
+      val (valid,invalid) = models.partition(m=>m.validation==Valid)
+      valid.size shouldEqual 9
+      valid.head.properties.size shouldEqual 13
+      invalid.size shouldEqual 3
     }
-*/
-
-
 
     def printGraph(g:GraphQueryResult) = {
       val t = g.toList

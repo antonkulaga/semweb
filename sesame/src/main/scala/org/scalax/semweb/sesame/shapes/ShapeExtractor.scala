@@ -19,6 +19,28 @@ import org.scalax.semweb.sparql.SELECT
 import org.scalax.semweb.sparql._
 import scala.util.Try
 
+
+
+/*
+trait FieldQueryExtractor{
+  
+  def selectSubjectRule(shapeRes:Res) = {
+    val id = ?("id")
+    val base = ?("base")
+    val
+    SELECT (id) WHERE(
+      Pat(shapeRes, SubjectRule.property, id),
+      Pat(id, RDF.TYPE, SubjectRule.clazz),
+      Pat(id, SubjectRule.base,base),
+      Pat(id,ValueStem.property,st)
+      )
+  }
+  
+  
+  
+}
+*/
+
 /**
  * Extracts shape having the connection
  * @param lg
@@ -27,17 +49,29 @@ import scala.util.Try
 class ShapeExtractor[ReadConnection<: RepositoryConnection](val lg:LogLike) extends ArcExtractor[ReadConnection]
 {
   
-  lazy val queryExtractor = new ShapeQueryExtractor()
-  
+
 
   def getShape(shapeRes:Res,con:ReadConnection)(implicit contexts:Seq[Resource] = List.empty[Resource]): Shape = 
   {
-    object shape extends ShapeBuilder(shapeRes)
+    
+    /*object shape extends ShapeBuilder(shapeRes)
     for{
       res<- con.resources(shapeRes:Resource,ArcRule.property:URI,contexts).toSeq
       arc <- getArc(res,con)(contexts)
     } { shape.hasRule(arc) }
-    shape.result
+    shape.result*/
+
+    val arcs = for{
+      res<- con.resources(shapeRes:Resource,ArcRule.property:URI,contexts).toSeq
+      arc <- getArc(res,con)(contexts)
+    } yield arc
+    
+    val subOpt = con.resources(shapeRes:Res,SubjectRule.property,contexts).headOption
+    val contextOpt = con.resources(shapeRes:Res,SubjectRule.property,contexts).headOption
+    
+    val and = AndRule(arcs.toSet,shapeRes)
+    
+    Shape(shapeRes,and)
   }
 
 

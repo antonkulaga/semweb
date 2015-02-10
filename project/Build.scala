@@ -12,7 +12,7 @@ import bintray.Keys._
 object Build extends sbt.Build
 {
 
- val semWebVer = "0.6.18"
+ val semWebVer = "0.6.19"
 
  publishMavenStyle := false
 
@@ -53,8 +53,6 @@ object Build extends sbt.Build
   )
 
   val sharedSettings: Seq[Setting[_]] = sameSettings++Seq(
-      organization := "org.scalax",
-      scalaVersion :="2.11.5",
       name := "semweb",
       version := semWebVer,
       libraryDependencies += "org.parboiled" %%% "parboiled" % "2.0.1",

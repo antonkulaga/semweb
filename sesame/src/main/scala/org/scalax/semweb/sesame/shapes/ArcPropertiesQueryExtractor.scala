@@ -13,7 +13,7 @@ import org.scalax.semweb.sparql._
 import scala.util.Try
 
 
-trait ArcQueryExtractor {
+trait ArcPropertiesQueryExtractor {
 
   protected def arcCaption(arc:ArcRule) = if(arc.title.isDefined) arc.title.get.replace(" ","_") else arc.name match {
     case NameTerm(iri)=>iri.localName

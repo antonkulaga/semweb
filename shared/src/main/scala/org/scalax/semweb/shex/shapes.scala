@@ -2,6 +2,7 @@ package org.scalax.semweb.shex
 
 import org.scalax.semweb.rdf._
 import org.scalax.semweb.rdf.vocabulary.{WI, RDF}
+import org.scalax.semweb.shex.validation.{ValidationResult, Violation, JustFailure}
 
 
 object ShEx {
@@ -27,7 +28,7 @@ object Shape {
 
   val rdfType = rs / "ResourceShape"
 
-  lazy val empty = Shape(WI.PLATFORM.EMPTY, AndRule.empty)
+  lazy val empty = Shape(IRILabel(WI.PLATFORM.EMPTY), AndRule.empty)
 
 }
 
@@ -39,10 +40,16 @@ object Shape {
 case class Shape(id: Label, rule: Rule)  extends Labeled
 {
   
+  def ++ (rules:Seq[Rule]) = rule match {
+    case and:AndRule => if(and==AndRule.empty) this.copy(rule = AndRule(rules.toSet,this.id)) else this.copy(rule = and++rules)
+    case or:OrRule => this.copy(rule = or ++ rules)
+    case other => this.copy(rule = AndRule(rules.toSet+other,id))
+  }
+  
   def + (r:Rule) = rule match {
     case and:AndRule => this.copy(rule = and + r)
     case or:OrRule => this.copy(rule = or + r)
-    case other => this.copy(rule = AndRule(Set(rule,other),id))
+    case other => this.copy(rule = AndRule(Set(r,other),id))
   }
   
   def - (r:Rule) = rule match {
@@ -67,7 +74,6 @@ case class Shape(id: Label, rule: Rule)  extends Labeled
   {
     val model = Quads -- id.asResource
     model -- RDF.TYPE -- Shape.rdfType -- context
-
     model.quads ++ rule.toQuads(model.sub)(context)
   }
 
@@ -98,7 +104,7 @@ case class Shape(id: Label, rule: Rule)  extends Labeled
   def expand[T](fun:PartialFunction[Rule,List[T]]):PartialFunction[Rule,List[T]] = {
     case  and:AndRule=> and.conjoints.flatMap(v=>fold[T](v)(fun)).toList
     case  orRule:OrRule=> orRule.disjoints.flatMap(v=>fold[T](v)(fun)).toList //TODO: figure out what to do with ors
-    case _=>List.empty[T]
+    case other=> if(fun.isDefinedAt(other)) fun(other) else  List.empty[T]
   }
 
   /**
@@ -123,18 +129,11 @@ case class Shape(id: Label, rule: Rule)  extends Labeled
 
   def updated[TR<:Rule](change:PartialFunction[Rule,TR]) =  if(change.isDefinedAt(rule))
     this.copy(rule = change(rule)) else this
+  
+}
 
-/*
-  def updated(newRule:Rule):Option[Shape] = this.rule match {
-    case r if this.id.asResource==newRule.id.asResource=> Some(Shape(newRule.id,newRule))
-    case r if r.id==newRule.id && r!=newRule=> Some(this.copy(rule = newRule))
-    case and:AndRule=> and.updated(newRule).map(r=>this.copy(rule = r))
-
-    case or:OrRule=> or.updated(newRule).map(r=>this.copy(rule = r))
-    case _ => None
-
-  }*/
-
-
-
+case object Draft  extends ValidationResult
+{
+  def and( other: ValidationResult ) = other
+  def or( other: ValidationResult ) = other
 }

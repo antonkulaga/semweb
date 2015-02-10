@@ -11,7 +11,7 @@
 @prefix entrez: <http://ncbi.nlm.nih.gov/gene/> .
 
 entrez:1111 gero:added_on "some time" ;  #broken
-	pl:has_status pl:Draft ;
+	pl:draft_of <http://gero.longevityalliance.org/Evidence_Shape> ;
 	gero:from_db gero:GenAge ;
 	gero:from_model_organism gero:Drosophila_melanogaster ;
 	gero:from_tissue gero:nervous_system , gero:body ;
@@ -26,7 +26,7 @@ entrez:1111 gero:added_on "some time" ;  #broken
 	rdfs:subClassOf entrez:anti-oxidant_enzymes .  #broken
 
 entrez:2222 gero:added_on 2045 ;  #broken
-	pl:has_status pl:Draft ;	
+	pl:draft_of <http://gero.longevityalliance.org/Evidence_Shape> ;
 	gero:from_db gero:GenAge ;
 	gero:from_model_organism gero:Drosophila_melanogaster ;
 	gero:from_tissue gero:nervous_system , gero:body ;
@@ -42,7 +42,7 @@ entrez:2222 gero:added_on 2045 ;  #broken
 
 
 entrez:3333 gero:added_on "2014-11-27"^^xsd:date ;
-	pl:has_status pl:Draft ;
+	pl:draft_of <http://gero.longevityalliance.org/Evidence_Shape> ;
 	gero:from_db gero:GenAge ;
 	gero:from_model_organism gero:Drosophila_melanogaster ;
 	gero:from_tissue gero:nervous_system , gero:body ;

@@ -1,6 +1,7 @@
 package org.scalax.semweb.sesame.shapes
 
 import org.openrdf.model.{Literal, Resource, URI, Value}
+import org.openrdf.query.QueryLanguage
 import org.openrdf.repository.RepositoryConnection
 import org.scalax.semweb.commons.LogLike
 import org.scalax.semweb.rdf._
@@ -9,6 +10,7 @@ import org.scalax.semweb.sesame._
 import org.scalax.semweb.shex._
 import org.scalax.semweb.shex.validation.{Failed, Valid, ValidationResult}
 import org.openrdf.model.vocabulary
+import org.scalax.semweb.sparql.ConstructQuery
 
 import scala.util.Try
 
@@ -22,6 +24,8 @@ import scala.util.Try
 trait ShapeReader extends SesameReader {
 
   val extractor = new ShapeExtractor[ReadConnection](this.lg)
+  lazy val statementsExtractor = new ModelStatementsExtractor()
+  lazy val queryExtractor = new ShapedModelsQueryExtractor()
 
 
 
@@ -65,6 +69,26 @@ trait ShapeReader extends SesameReader {
    */
   def loadModelByShape(sh:Shape,res:Resource)(implicit contexts:Seq[Resource] = List.empty[Resource]): Try[PropertyModel] =
     this.read{con=>   modelByShape(sh,res,con)(contexts) }
+  
+  
+  def loadShapedModels(sh:Shape): Try[Seq[PropertyModel]] = {
+    val qv = this.queryExtractor.validShapeQuery(sh)
+    val qi = this.queryExtractor.invalidShapeQuery(sh)
+    this.read{ case con=>
+      val vs = if(qv.isDefined)
+      {
+        val q = con.prepareGraphQuery(QueryLanguage.SPARQL,qv.stringValue)
+        this.statementsExtractor.extractFromStatements(q.evaluate().toList).toSeq
+      }  else Seq.empty[PropertyModel]
+        
+     val vi = if(qi.isDefined){
+       val i = con.prepareGraphQuery(QueryLanguage.SPARQL,qi.stringValue)
+       this.statementsExtractor.extractFromStatements(i.evaluate().toList,valid = false).toSeq
+     }   else Seq.empty[PropertyModel]
+        vs++vi
+
+    }
+  }
 
   /**
    * Loads shapes that are associated with this type
