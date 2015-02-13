@@ -1,6 +1,6 @@
 package org.scalax.semweb.sesame.test.classes
 
-import java.io.{File, InputStream}
+import java.io.{Reader, File, InputStream}
 import java.util.Properties
 
 import com.bigdata.rdf.rio.turtle.BigdataTurtleParser
@@ -138,14 +138,28 @@ with SesameReader with SelectReader with AskReader with ConstructReader with Sha
       val u = con.prepareNativeSPARQLUpdate(QueryLanguage.SPARQL,updateStr,base)
       u.execute()
   }
-
-  override def parseStream(fileName:String,inputStream:InputStream,contextStr:String=""): Try[Unit] = {
-
-    //val format = Rio.getParserFormatForFileName(fileName)
+  
+  def makeParser() = {
     val parser = new BigdataTurtleParser()
     parser.setPreserveBNodeIDs(true)
     parser.setDatatypeHandling(DatatypeHandling.VERIFY)
     parser.setParserConfig(config)
+    parser
+  }
+  
+  def parseReader(reader:Reader,name:String = "turtle", contextStr:String="") = {
+    val parser = this.makeParser()
+    this.write{con=>
+      val context = if(contextStr=="") null else IRI(contextStr)
+      val r = this.makeListener(name,con,context,lg)
+      parser.setRDFHandler(r)
+      parser.setParseErrorListener(r)
+      parser.parse(reader,contextStr)
+    }
+  }
+
+  override def parseStream(fileName:String,inputStream:InputStream,contextStr:String=""): Try[Unit] = {
+    val parser = this.makeParser()
     this.write{con=>
       val context = if(contextStr=="") null else IRI(contextStr)
       val r = this.makeListener(fileName,con,context,lg)

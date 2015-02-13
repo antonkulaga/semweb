@@ -1,6 +1,6 @@
 package org.scalax.semweb.sparql
 
-import org.scalax.semweb.rdf.{CanBeObject, IRI, RDFElement}
+import org.scalax.semweb.rdf.{RDFValue, CanBeObject, IRI, RDFElement}
 
 trait WithWhere extends RDFElement
 {
@@ -25,6 +25,25 @@ trait WithWhere extends RDFElement
 
   def hasWhere = this.WHERE.hasChildren
 
+
+}
+object VALUES {
+  def apply(children:Variable*) = Values(children,Seq.empty)
+  
+}
+
+case class Values(children:Seq[Variable],values:Seq[Seq[RDFValue]]) extends RDFElement
+{
+  
+  def apply(vals:RDFValue*) = copy(values = values :+ vals)
+  
+  def onlyOneChild = children.size ==1
+
+  def foldChildren: String = children.foldLeft("")((acc,el)=>acc+" "+el.stringValue)
+  
+
+  override def stringValue = s"VALUES( ${this.foldChildren} )" + values.map(v=>v.mkString("("," ",")")).mkString("{\n",s"\n","}\n")
+    s"\n}"
 
 }
 

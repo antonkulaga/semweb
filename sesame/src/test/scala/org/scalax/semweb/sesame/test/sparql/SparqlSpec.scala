@@ -205,6 +205,7 @@ class SparqlSpec  extends  WordSpec with Matchers with SimpleTestData {
 
       db.shutDown()
     }
+
   }
 
   

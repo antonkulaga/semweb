@@ -15,18 +15,44 @@ import org.scalax.semweb.sparql.ConstructQuery
 import scala.util.Try
 
 
+trait ShapeQueryReader extends SelectReader {
+  self:SesameReader =>
+  
+  lazy val modelStatementsExtractor = new ModelStatementsExtractor()
+  lazy val queryExtractor = new ShapedModelsQueryExtractor()
 
+
+  def loadShapedModels(sh:Shape): Try[Seq[PropertyModel]] = {
+    val qv = this.queryExtractor.validShapeQuery(sh)
+    val qi = this.queryExtractor.invalidShapeQuery(sh)
+    
+    
+    this.read{ case con=>
+      val vs = if(qv.isDefined)
+      {
+        val q = con.prepareGraphQuery(QueryLanguage.SPARQL,qv.stringValue)
+        this.modelStatementsExtractor.extractFromStatements(q.evaluate().toList).toSeq
+      }  else Seq.empty[PropertyModel]
+
+      val vi = if(qi.isDefined){
+        val i = con.prepareGraphQuery(QueryLanguage.SPARQL,qi.stringValue)
+        this.modelStatementsExtractor.extractFromStatements(i.evaluate().toList,valid = false).toSeq
+      }   else Seq.empty[PropertyModel]
+      vs++vi
+
+    }
+  }
+
+}
 /**
  * Ugly written
  * TODO: rewrite in future
  * Class that reads shapes from the database and does some other operations (like  loading props from shape)
  */
-trait ShapeReader extends SesameReader {
+trait ShapeReader extends SesameReader with ShapeQueryReader{
 
   val extractor = new ShapeExtractor[ReadConnection](this.lg)
-  lazy val statementsExtractor = new ModelStatementsExtractor()
-  lazy val queryExtractor = new ShapedModelsQueryExtractor()
-
+  
 
 
   def loadShapes(shapes:Resource*)(implicit contexts:Seq[Resource] = List.empty[Resource]) = this.read
@@ -70,25 +96,7 @@ trait ShapeReader extends SesameReader {
   def loadModelByShape(sh:Shape,res:Resource)(implicit contexts:Seq[Resource] = List.empty[Resource]): Try[PropertyModel] =
     this.read{con=>   modelByShape(sh,res,con)(contexts) }
   
-  
-  def loadShapedModels(sh:Shape): Try[Seq[PropertyModel]] = {
-    val qv = this.queryExtractor.validShapeQuery(sh)
-    val qi = this.queryExtractor.invalidShapeQuery(sh)
-    this.read{ case con=>
-      val vs = if(qv.isDefined)
-      {
-        val q = con.prepareGraphQuery(QueryLanguage.SPARQL,qv.stringValue)
-        this.statementsExtractor.extractFromStatements(q.evaluate().toList).toSeq
-      }  else Seq.empty[PropertyModel]
-        
-     val vi = if(qi.isDefined){
-       val i = con.prepareGraphQuery(QueryLanguage.SPARQL,qi.stringValue)
-       this.statementsExtractor.extractFromStatements(i.evaluate().toList,valid = false).toSeq
-     }   else Seq.empty[PropertyModel]
-        vs++vi
 
-    }
-  }
 
   /**
    * Loads shapes that are associated with this type

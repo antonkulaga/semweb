@@ -25,9 +25,7 @@ object ShapesModificationSuite extends TestSuite{
         assert(acs.count(f => f.name.matches(FOAF.NAME)) == 1)
         val f1 = acs.find(f => f.name.matches(FOAF.NAME)).get
         assert(f1.occurs == ExactlyOne)
-        val and2o = and.updated(f1.copy(occurs = Plus))
-        assert(and2o.isDefined)
-        val and2 = and2o.get
+         val and2 =  and.updated(f1.copy(occurs = Plus))
         val arcs2 = and2.items.collect{case r:ArcRule=>r}
         val f2 = arcs2.find(p=>p.name.matches(FOAF.NAME))
         assert(f2.isDefined)
@@ -49,9 +47,8 @@ object ShapesModificationSuite extends TestSuite{
         val pro = ArcRule(fn.id,NameTerm(FOAF.currentProject),ValueType(FOAF.PERSON),ExactlyOne)
         assert(sh.rule.isInstanceOf[AndRule])
 
-        val sho = sh.updated(pro)
-        assert(sho.isDefined)
-        val sh2 = sho.get
+
+        val sh2 = sh.updated(pro)
         val acs2 = sh2.arcRules()
         assert(acs2.length==2)
         assert(acs2.count(f => f.name.matches(FOAF.NAME)) == 0)

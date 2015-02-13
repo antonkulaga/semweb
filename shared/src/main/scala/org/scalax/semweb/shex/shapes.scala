@@ -22,7 +22,7 @@ object ShEx {
  * @param start start shape [optional]
  * @param title title of subject
  */
-case class ShEx(id:Label,rules:Seq[Shape], start: Option[Label] = None, title:Option[String] = None)   extends Labeled
+case class ShEx(id:Label,rules:Seq[Shape], start: Option[Label] = None, title:Option[String] = None, prefixes:Seq[(String,String)] = Seq.empty)   extends Labeled
 
 object Shape {
 
@@ -39,6 +39,7 @@ object Shape {
  */
 case class Shape(id: Label, rule: Rule)  extends Labeled
 {
+  
   
   def ++ (rules:Seq[Rule]) = rule match {
     case and:AndRule => if(and==AndRule.empty) this.copy(rule = AndRule(rules.toSet,this.id)) else this.copy(rule = and++rules)
@@ -130,6 +131,13 @@ case class Shape(id: Label, rule: Rule)  extends Labeled
   def updated[TR<:Rule](change:PartialFunction[Rule,TR]) =  if(change.isDefinedAt(rule))
     this.copy(rule = change(rule)) else this
   
+  lazy val subjectRuleOption = fold(){
+    case rl:SubjectRule=>List(rl)
+  }.headOption
+  
+  lazy val contextRuleOption = fold(){
+    case rl:ContextRule=>List(rl)
+  }.headOption
 }
 
 case object Draft  extends ValidationResult

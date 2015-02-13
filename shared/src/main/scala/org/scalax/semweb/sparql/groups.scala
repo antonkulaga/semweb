@@ -31,24 +31,38 @@ trait GP extends RDFElement{
   def UNION(other:GP):Union = Union(this,other)
 }
 
+/**
+ * Just a trait that can wrao elements with {} 
+ */
+trait Wrapper extends GP{
+  def wrap(el:RDFElement): String = el match {
+    case gp:GP=> gp.stringValue
+    case other => s"{${other.stringValue}}"
+
+  }
+
+}
+
 
 /**
 unites to groups together
  */
-case class Union(left:RDFElement,right:RDFElement) extends GP {
+case class Union(left:RDFElement,right:RDFElement) extends Wrapper {
+  
 
-  override def stringValue = s" ${left.stringValue} UNION ${right.stringValue}"
+  override def stringValue = s"${wrap(left)} UNION ${wrap(right)}"
 
   override val children = left::right::Nil
 
 
 }
 
-case class Optional(gp:RDFElement) extends GP
+case class Optional(el:RDFElement) extends  Wrapper
 {
-  def stringValue = "\n OPTIONAL "+ gp.toString
 
-  override val children = gp::Nil
+  def stringValue = s"\n OPTIONAL ${wrap(el)}"
+
+  override val children = el::Nil
 
 }
 

@@ -8,7 +8,8 @@ import org.openrdf.query.GraphQueryResult
 import org.scalatest.{Matchers, WordSpec}
 import org.scalax.semweb.rdf.{IRI, _}
 import org.scalax.semweb.rdf.vocabulary._
-import org.scalax.semweb.sesame.test.classes.{GeneSchemaData, BigData, GeneLoader}
+import org.scalax.semweb.sesame.test.classes.{BigData, GeneLoader}
+import org.scalax.semweb.sesame.test.data.GeneSchemaData
 import org.scalax.semweb.shex.validation.Valid
 import org.scalax.semweb.shex.{Shape, _}
 import org.scalax.semweb.sesame._
@@ -165,7 +166,7 @@ class ModelShapeLoaderSpec  extends  WordSpec with Matchers with GeneLoader with
       val e = sts.count{st=>st.getPredicate.stringValue().contains("has_ENTREZID")}
       e shouldEqual 9//loads everything
       //printGraph(props)
-      val ps = db.statementsExtractor.extractFromStatements(sts)
+      val ps = db.modelStatementsExtractor.extractFromStatements(sts)
       ps.size shouldEqual 9
       val h = ps.head
       h.properties.size.shouldEqual(13)
@@ -208,7 +209,7 @@ class ModelShapeLoaderSpec  extends  WordSpec with Matchers with GeneLoader with
       val e = sts.count{st=>st.getPredicate.stringValue().contains("has_ENTREZID")}
       e shouldEqual 3 //loads everything
       //printGraph(props)
-      val ps = db.statementsExtractor.extractFromStatements(sts)
+      val ps = db.modelStatementsExtractor.extractFromStatements(sts)
       ps.size shouldEqual 3
       val h = ps.head
       h.properties.foreach{ case (p,v) =>v.size shouldEqual 1}

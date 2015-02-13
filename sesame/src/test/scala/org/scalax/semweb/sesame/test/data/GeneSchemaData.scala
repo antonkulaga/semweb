@@ -1,16 +1,7 @@
-package org.scalax.semweb.sesame.test.classes
-import java.io.InputStream
+package org.scalax.semweb.sesame.test.data
 
-import org.openrdf.model.{Statement, Resource}
-import org.openrdf.query.GraphQueryResult
-import org.scalatest.{Matchers, WordSpec}
-import org.scalax.semweb.rdf.{IRI, _}
+import org.scalax.semweb.rdf.IRI
 import org.scalax.semweb.rdf.vocabulary._
-import org.scalax.semweb.sesame.test.classes.{BigData, GeneLoader}
-import org.scalax.semweb.shex.{Shape, _}
-import org.scalax.semweb.sesame._
-import org.scalax.semweb.sparql.SelectQuery
-import org.scalax.semweb.sesame._
 
 trait GeneSchemaData {
   lazy val gero = IRI("http://gero.longevityalliance.org/")

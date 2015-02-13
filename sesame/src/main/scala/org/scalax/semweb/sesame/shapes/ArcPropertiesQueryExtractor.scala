@@ -1,19 +1,13 @@
 package org.scalax.semweb.sesame.shapes
 
-import org.openrdf.model.{Value, Literal, Resource, URI}
-import org.openrdf.repository.RepositoryConnection
-import org.scalax.semweb.commons.Logged
 import org.scalax.semweb.rdf._
-import org.scalax.semweb.rdf.vocabulary.{RDFS, RDF}
-import org.scalax.semweb.sesame._
+import org.scalax.semweb.rdf.vocabulary.{RDF, RDFS}
 import org.scalax.semweb.shex._
-import org.scalax.semweb.shex.validation.{Valid, Failed, ValidationResult}
-import org.scalax.semweb.sparql
 import org.scalax.semweb.sparql._
-import scala.util.Try
 
 
-trait ArcPropertiesQueryExtractor {
+trait ArcPropertiesQueryExtractor extends QueryExtractor
+{
 
   protected def arcCaption(arc:ArcRule) = if(arc.title.isDefined) arc.title.get.replace(" ","_") else arc.name match {
     case NameTerm(iri)=>iri.localName

@@ -1,7 +1,7 @@
 package org.scalax.semweb.sesame.shapes
 import org.openrdf.model._
 import org.openrdf.model.vocabulary
-import org.openrdf.query.QueryLanguage
+import org.openrdf.query.{TupleQuery, QueryLanguage}
 import org.openrdf.repository.RepositoryConnection
 import org.scalax.semweb.commons.{LogLike, Logged}
 import org.scalax.semweb.rdf._
@@ -21,54 +21,30 @@ import scala.util.Try
 
 
 
-/*
-trait FieldQueryExtractor{
-  
-  def selectSubjectRule(shapeRes:Res) = {
-    val id = ?("id")
-    val base = ?("base")
-    val
-    SELECT (id) WHERE(
-      Pat(shapeRes, SubjectRule.property, id),
-      Pat(id, RDF.TYPE, SubjectRule.clazz),
-      Pat(id, SubjectRule.base,base),
-      Pat(id,ValueStem.property,st)
-      )
-  }
-  
-  
-  
-}
-*/
-
 /**
  * Extracts shape having the connection
  * @param lg
  * @tparam ReadConnection
  */
-class ShapeExtractor[ReadConnection<: RepositoryConnection](val lg:LogLike) extends ArcExtractor[ReadConnection]
+class ShapeExtractor[ReadConnection<: RepositoryConnection](val lg:LogLike) extends 
+ArcExtractor[ReadConnection]
 {
+  //val fieldRulesExtractor = new FieldRulesQueryExtractor()
   
 
 
   def getShape(shapeRes:Res,con:ReadConnection)(implicit contexts:Seq[Resource] = List.empty[Resource]): Shape = 
   {
-    
-    /*object shape extends ShapeBuilder(shapeRes)
-    for{
-      res<- con.resources(shapeRes:Resource,ArcRule.property:URI,contexts).toSeq
-      arc <- getArc(res,con)(contexts)
-    } { shape.hasRule(arc) }
-    shape.result*/
 
     val arcs = for{
       res<- con.resources(shapeRes:Resource,ArcRule.property:URI,contexts).toSeq
       arc <- getArc(res,con)(contexts)
     } yield arc
     
-    val subOpt = con.resources(shapeRes:Res,SubjectRule.property,contexts).headOption
+
+    /*val subOpt = con.resources(shapeRes:Res,SubjectRule.property,contexts).headOption
     val contextOpt = con.resources(shapeRes:Res,SubjectRule.property,contexts).headOption
-    
+    */
     val and = AndRule(arcs.toSet,shapeRes)
     
     Shape(shapeRes,and)

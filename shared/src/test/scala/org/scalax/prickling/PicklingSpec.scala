@@ -8,11 +8,12 @@ import org.scalax.semweb.messages.StringQueryMessages
 import org.scalax.semweb.rdf
 import org.scalax.semweb.rdf._
 
-import prickle.{PicklerPair, CompositePickler, Pickle, Unpickle}
+import prickle._
 import utest.framework.TestSuite
-
+import Pickler._
 import scala.util._
 import utest._
+
 //!Don't do this. Not Necessary
 
 object PicklingSpec extends TestSuite
@@ -62,9 +63,8 @@ object PicklingSpec extends TestSuite
 
 
      }
-    
     "pickling messages" -{
-
+      
       val q1 = "query1"
       val id = "myId"
       val ask = StringQueryMessages.Ask(q1,id)
@@ -81,6 +81,27 @@ object PicklingSpec extends TestSuite
       }
 
     }
+
+
+    "pickling arc" -{
+
+      //this two lines lead to crazy macro errors
+     lazy val gero = IRI("http://gero.longevityalliance.org/")
+     val entrez = IRI("http://ncbi.nlm.nih.gov/gene/")
+      
+      /*
+     val arc = ArcRule(id = IRILabel(gero),name = NameStem(entrez),ValueStem(gero),Plus,title = Some("Hello world"),priority = Some(0))
+
+     val str = Pickle.intoString[ArcRule](arc)
+     val arco = Unpickle[ArcRule].fromString(str)
+     assert(arco.isSuccess)
+     val arc2 = arco.get
+     assert(arc == arc2)
+     */
    }
 
+
+
  }
+
+}

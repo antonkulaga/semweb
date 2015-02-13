@@ -32,7 +32,7 @@ package object shex {
   implicit def iri2Label(iri:IRI): IRILabel = IRILabel(iri)
   implicit def bNode2Label(b:BlankNode): BNodeLabel = BNodeLabel(b)
 
-  implicit def iri2Name(iri:IRI) = NameTerm(iri)
+  implicit def iri2Name(iri:IRI): NameTerm = NameTerm(iri)
 
   /**
    * Converts resource to value type

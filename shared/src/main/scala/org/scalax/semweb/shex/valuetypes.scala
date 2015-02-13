@@ -55,6 +55,7 @@ case class ValueSet(s: Set[RDFValue]) extends ValueClass {
 object ValueAny {
   
   val clazz = se / "ValueAny"
+
   
 }
 

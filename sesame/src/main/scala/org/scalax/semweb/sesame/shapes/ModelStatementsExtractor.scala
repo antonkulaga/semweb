@@ -28,20 +28,7 @@ class ModelStatementsExtractor {
   }
   
   def extractFromStatements[S<:Statement](sts:Seq[Statement],valid:Boolean = true) = modelsFromQuads(sts.map(st=>st:Quad),valid)
-  
-/*  def extractPartitionedPropertyModes(q:GraphQueryResult) = {
-    val (draft,normal) = q.toSeq.map(st=>st:Quad).partition(q=>q.pred==WI.PLATFORM.HAS_STATUS && q.obj == WI.PLATFORM.DRAFT)
-    (modelsFromQuads(draft),modelsFromQuads(normal)
-  }
-  
-  def extractPropertyModels(q:GraphQueryResult) = {
-    this.modelsFromQuads(q.toSeq.map(st=>st:Quad))
-  }*/
-  
 
-
-
-  
   
 }
 
