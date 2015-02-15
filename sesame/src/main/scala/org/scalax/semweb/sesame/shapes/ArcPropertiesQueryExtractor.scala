@@ -2,9 +2,9 @@ package org.scalax.semweb.sesame.shapes
 
 import org.scalax.semweb.rdf._
 import org.scalax.semweb.rdf.vocabulary.{RDF, RDFS}
+import org.scalax.semweb.shex
 import org.scalax.semweb.shex._
 import org.scalax.semweb.sparql._
-
 
 trait ArcPropertiesQueryExtractor extends QueryExtractor
 {
@@ -14,6 +14,29 @@ trait ArcPropertiesQueryExtractor extends QueryExtractor
     case NameStem(stem)=>"stem_"+stem.localName
     case NameAny(any)=> "any_"+any.hashCode()
   }
+
+  /**
+   * * Works only partially for nonzero checking
+   * TODO: add full support of onooptional things*
+   * @param arc
+   * @param patterns
+   * @return
+   */
+  def withOccurence(arc:ArcRule,  patterns:Seq[RDFElement]): Seq[RDFElement] = 
+    arc.occurs match {
+    case ExactlyOne =>patterns
+    case Star =>
+      Seq(Optional(patterns:_*))
+    case Plus => patterns
+    case Opt =>
+      Seq(Optional(patterns:_*))
+    case shex.Range(min,max) if min==0=>
+      Seq(Optional(patterns:_*))
+    case shex.Range(min,max)=>patterns
+
+
+    }
+  
 
   def arcNamePatterns(arc:ArcRule,sub:Variable = Variable("sub"),pred:Variable = ?("pred"),obj:Variable = ?("obj")) = arc.name match {
 

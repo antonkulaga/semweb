@@ -18,7 +18,14 @@ trait ResultsImplicits extends Sesame2ScalaModelImplicits {
   implicit class TupleResult(results: TupleQueryResult)  extends Iterator[BindingSet]
   {
 
-    def extract(prop:String*): scala.Seq[(String, Value)] = this.flatMap{   case v=> v.collect{case p if prop.contains(p.getName)=>p.getName->p.getValue}  }.toSeq
+    def extract(prop:String*): scala.Seq[(String, Value)] = this.flatMap
+      {   
+        case v=> 
+          v.collect{
+            case p if prop.contains(p.getName)=>
+              p.getName->p.getValue
+          }  
+      }.toSeq
 
     def extractVars(vars:Variable*): scala.Seq[(String,Value)]  = this.extract(vars.map(v=>v.name):_*)
 
@@ -29,7 +36,11 @@ trait ResultsImplicits extends Sesame2ScalaModelImplicits {
      * @param prop
      * @return
      */
-    def extractValues(prop:String*): scala.Seq[Value] = this.flatMap{   case v=> v.collect{case p if prop.contains(p.getName)=>p.getValue}  }.toSeq
+    def extractValues(prop:String*): scala.Seq[Value] = this.flatMap{   
+      case v=> 
+        v.collect{
+          case p if prop.contains(p.getName)=>p.getValue}  
+    }.toSeq
 
     def extractVarValues(vars:Variable*): scala.Seq[Value]  = this.extractValues(vars.map(v=>v.name):_*)
 
@@ -65,6 +76,16 @@ implicit class for Repository results that adds some nice features there and tur
     def resources = results.collect{case st if st.getObject.isInstanceOf[Resource]=>st.getObject.asInstanceOf[Resource]}.toList
 
     def uris = results.collect{case st if st.getObject.isInstanceOf[URI]=>st.getObject.asInstanceOf[URI]}.toList
+    
+    def toSortedList = {
+      this.toList.sortWith{ (a,b)=> if(a.getSubject==b.getSubject){
+        if(a.getPredicate==b.getPredicate){
+          if(a.getObject==b.getObject) false else a.getObject.stringValue()<b.getObject.stringValue()
+        } else a.getPredicate.stringValue()<b.getPredicate.stringValue()
+      } else a.getSubject.stringValue()<b.getSubject.stringValue()
+      }
+      
+    }
 
   }
 

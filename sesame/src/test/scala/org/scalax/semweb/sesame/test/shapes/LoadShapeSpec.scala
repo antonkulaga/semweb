@@ -2,11 +2,14 @@ package org.scalax.semweb.sesame.test.shapes
 
 import java.io.{StringReader, InputStream}
 
+import org.openrdf.model.Statement
+import org.openrdf.query.QueryLanguage
 import org.scalatest.{Matchers, WordSpec}
-import org.scalax.semweb.rdf.IRI
+import org.scalax.semweb.rdf.{Res, IRI}
 import org.scalax.semweb.sesame.test.classes.{BigData, GeneLoader}
 import org.scalax.semweb.sesame.test.data.Genes
 import org.scalax.semweb.shex._
+
 
 import scala.util.Try
 
@@ -26,7 +29,7 @@ class LoadShapeSpec  extends  WordSpec with Matchers with GeneLoader {
       shop.isSuccess shouldEqual true
       val shape = shop.get
       shape.id.asResource shouldEqual res
-      shape.arcSorted().size shouldEqual 13
+      shape.arcSorted().size shouldEqual 12//13
 
       db.shutDown()
 
@@ -53,21 +56,33 @@ class LoadShapeSpec  extends  WordSpec with Matchers with GeneLoader {
     }
     
     "write and read back from turtle" in {
-     val sh = Genes.evidenceShape
-     val res = sh.id.asResource
-     val str = Genes.showEvidence() //write str to turtle
-     val db = BigData(true)
-     val reader = new StringReader(str)
-
-     val p = db.parseReader(reader)
-     p.isSuccess shouldEqual true
-    val shop: Try[Shape] = db.loadShape(res)
-    shop.isSuccess shouldEqual true
-    val shape = shop.get
-    shape.id.asResource shouldEqual res
-    shape.arcSorted().size shouldEqual 13
-    
-     db.shutDown()
+      import org.scalax.semweb.sesame._
+      val ruleNum = 12 //13
+      val gero = IRI("http://gero.longevityalliance.org/")
+      val entrez = IRI("http://ncbi.nlm.nih.gov/gene/")
+      val sh = Genes.evidenceShape
+      val res = sh.id.asResource
+      val db = BigData(true)
+      val str = Genes.showEvidence() //write str to turtle
+     // println("\n"+str+"\n")
+      val reader = new StringReader(str)
+      val p = db.parseReader(reader)
+      p.isSuccess shouldEqual true
+      val shop: Try[Shape] = db.loadShape(res)
+      shop.isSuccess shouldEqual true
+      val shape = shop.get
+      shape.id.asResource shouldEqual res
+      shape.arcSorted().size shouldEqual ruleNum
+      import org.scalax.semweb.sparql._
+      val frules=db.read{
+        con=>
+          db.extractor.fieldRulesExtractor.extractFieldRules(Genes.evidenceShape.id.asResource,con)
+      }
+      assert(frules.isSuccess)
+      val soa = shape.subjectRuleOption
+      assert(soa.isDefined)
+      assert(soa.get == Genes.subjectDefs)
+      db.shutDown()
      
     }
   }

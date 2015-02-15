@@ -57,12 +57,12 @@ case class Union(left:RDFElement,right:RDFElement) extends Wrapper {
 
 }
 
-case class Optional(el:RDFElement) extends  Wrapper
+case class Optional(el:RDFElement*) extends GP
 {
 
-  def stringValue = s"\n OPTIONAL ${wrap(el)}"
+  def stringValue = s"\n OPTIONAL {${this.foldChildren}}"
 
-  override val children = el::Nil
+  override lazy val children = el.toList
 
 }
 

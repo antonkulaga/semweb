@@ -29,23 +29,18 @@ import scala.util.Try
 class ShapeExtractor[ReadConnection<: RepositoryConnection](val lg:LogLike) extends 
 ArcExtractor[ReadConnection]
 {
-  //val fieldRulesExtractor = new FieldRulesQueryExtractor()
-  
+  lazy val fieldRulesExtractor = new FieldRulesExtractor[ReadConnection]
 
-
-  def getShape(shapeRes:Res,con:ReadConnection)(implicit contexts:Seq[Resource] = List.empty[Resource]): Shape = 
+  def getShape(shapeRes:Res,con:ReadConnection)(implicit contexts:Seq[Resource] = List.empty[Resource]): Shape =
   {
 
     val arcs = for{
       res<- con.resources(shapeRes:Resource,ArcRule.property:URI,contexts).toSeq
       arc <- getArc(res,con)(contexts)
     } yield arc
-    
 
-    /*val subOpt = con.resources(shapeRes:Res,SubjectRule.property,contexts).headOption
-    val contextOpt = con.resources(shapeRes:Res,SubjectRule.property,contexts).headOption
-    */
-    val and = AndRule(arcs.toSet,shapeRes)
+    val fieldRules: Set[FieldRule] = fieldRulesExtractor.extractFieldRules(shapeRes,con)
+    val and = AndRule(arcs.toSet++fieldRules,shapeRes)
     
     Shape(shapeRes,and)
   }

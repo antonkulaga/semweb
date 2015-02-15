@@ -16,11 +16,11 @@ case class SubjectRule(id:Label = Rule.genRuleLabel(),
 
   override def toQuads(subject: Res)(implicit context: Res): Set[Quad] = 
     super.toQuads(subject,SubjectRule.property,SubjectRule.clazz)(context)++
-      this.base.fold(Set.empty[Quad])(t=>Set(Quad(me, vocabulary.DCElements.title,t,context)))
+      this.base.fold(Set.empty[Quad])(t=>Set(Quad(me, WI.PLATFORM.BASE,t,context)))
 
   override def toTriplets(subject: Res): Set[Trip] = 
     super.toTriplets(subject,SubjectRule.property,SubjectRule.clazz)++
-      this.base.fold(Set.empty[Trip])(t=>Set(Trip(me, vocabulary.DCElements.title,t)))
+      this.base.fold(Set.empty[Trip])(t=>Set(Trip(me, WI.PLATFORM.BASE,t)))
   
   def isCalled(tlt:String) = copy(title = Some(tlt))
   

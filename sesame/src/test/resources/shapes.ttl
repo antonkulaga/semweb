@@ -10,7 +10,35 @@
 @prefix gero: <http://gero.longevityalliance.org/> .
 @prefix entrez: <http://ncbi.nlm.nih.gov/gene/> .
 
-_:02e018891921833301017 <http://open-services.net/ns/core#maxoccurs> 2 ;
+_:02e1217719958596234 <http://open-services.net/ns/core#allowedValue> <http://gero.longevityalliance.org/Pro-Longevity> , <http://gero.longevityalliance.org/Anti-Longevity> ;
+	<http://open-services.net/ns/core#occurs> <http://open-services.net/ns/core#Exactly-one> ;
+	<http://open-services.net/ns/core#propDefinition> <http://gero.longevityalliance.org/has_influence> ;
+	<http://purl.org/dc/elements/1.1/title> "Influence" ;
+	<http://webintelligence.eu/platform/priority> 18 ;
+	a <http://www.w3.org/2013/ShEx/Definition#ArcRule> .
+
+_:02e14464602712543084 <http://open-services.net/ns/core#allowedValue> <http://gero.longevityalliance.org/ncRNA> , <http://gero.longevityalliance.org/gene_product> , <http://gero.longevityalliance.org/transcript> , <http://gero.longevityalliance.org/snRNA> , <http://gero.longevityalliance.org/protein> , <http://gero.longevityalliance.org/microRNA> , <http://gero.longevityalliance.org/snoRNA> , <http://gero.longevityalliance.org/protein_complex> , <http://gero.longevityalliance.org/rRNA> , <http://gero.longevityalliance.org/tRNA> ;
+	<http://open-services.net/ns/core#occurs> <http://open-services.net/ns/core#Exactly-one> ;
+	<http://open-services.net/ns/core#propDefinition> <http://gero.longevityalliance.org/of_type> ;
+	<http://purl.org/dc/elements/1.1/title> "Gene product type" ;
+	<http://webintelligence.eu/platform/priority> 11 ;
+	a <http://www.w3.org/2013/ShEx/Definition#ArcRule> .
+
+_:02e17318384880149873 <http://open-services.net/ns/core#occurs> <http://open-services.net/ns/core#One-or-many> ;
+	<http://open-services.net/ns/core#propDefinition> <http://gero.longevityalliance.org/has_ref> ;
+	<http://open-services.net/ns/core#valueType> <http://www.w3.org/2000/01/rdf-schema#Resource> ;
+	<http://purl.org/dc/elements/1.1/title> "Publication" ;
+	<http://webintelligence.eu/platform/priority> 6 ;
+	a <http://www.w3.org/2013/ShEx/Definition#ArcRule> .
+
+_:02e3826514158525398 <http://open-services.net/ns/core#occurs> <http://open-services.net/ns/core#One-or-many> ;
+	<http://open-services.net/ns/core#propDefinition> <http://gero.longevityalliance.org/from_tissue> ;
+	<http://open-services.net/ns/core#valueType> <http://www.w3.org/2000/01/rdf-schema#Resource> ;
+	<http://purl.org/dc/elements/1.1/title> "Tissue" ;
+	<http://webintelligence.eu/platform/priority> 17 ;
+	a <http://www.w3.org/2013/ShEx/Definition#ArcRule> .
+
+_:02e5613374630830187 <http://open-services.net/ns/core#maxoccurs> 2 ;
 	<http://open-services.net/ns/core#minoccurs> 1 ;
 	<http://open-services.net/ns/core#propDefinition> <http://gero.longevityalliance.org/from_model_organism> ;
 	<http://purl.org/dc/elements/1.1/title> "Organism" ;
@@ -18,89 +46,60 @@ _:02e018891921833301017 <http://open-services.net/ns/core#maxoccurs> 2 ;
 	a <http://www.w3.org/2013/ShEx/Definition#ArcRule> ;
 	<http://www.w3.org/2013/ShEx/Definition#stem> <http://gero.longevityalliance.org/> .
 
-_:02e028471832185793855 <http://open-services.net/ns/core#occurs> <http://open-services.net/ns/core#Exactly-one> ;
+_:02e6015092245730913 <http://open-services.net/ns/core#occurs> <http://open-services.net/ns/core#Exactly-one> ;
 	<http://open-services.net/ns/core#propDefinition> <http://gero.longevityalliance.org/has_symbol> ;
 	<http://open-services.net/ns/core#valueType> <http://www.w3.org/2000/01/rdf-schema#Resource> ;
 	<http://purl.org/dc/elements/1.1/title> "DB Object Symbol" ;
 	<http://webintelligence.eu/platform/priority> 5 ;
 	a <http://www.w3.org/2013/ShEx/Definition#ArcRule> .
 
-_:02e20039126786772077 <http://open-services.net/ns/core#occurs> <http://open-services.net/ns/core#Exactly-one> ;
-	<http://open-services.net/ns/core#propDefinition> <http://gero.longevityalliance.org/added_on> ;
-	<http://open-services.net/ns/core#valueType> <http://www.w3.org/2001/XMLSchema#date> ;
-	<http://purl.org/dc/elements/1.1/title> "Date" ;
-	<http://webintelligence.eu/platform/priority> 13 ;
-	a <http://www.w3.org/2013/ShEx/Definition#ArcRule> .
-
-_:02e2344980312516164 <http://open-services.net/ns/core#allowedValue> <http://gero.longevityalliance.org/Pro-Longevity> , <http://gero.longevityalliance.org/Anti-Longevity> ;
-	<http://open-services.net/ns/core#occurs> <http://open-services.net/ns/core#Exactly-one> ;
-	<http://open-services.net/ns/core#propDefinition> <http://gero.longevityalliance.org/has_influence> ;
-	<http://purl.org/dc/elements/1.1/title> "Influence" ;
-	<http://webintelligence.eu/platform/priority> 18 ;
-	a <http://www.w3.org/2013/ShEx/Definition#ArcRule> .
-
-_:02e3337807454482945 <http://open-services.net/ns/core#occurs> <http://open-services.net/ns/core#Exactly-one> ;
-	<http://open-services.net/ns/core#propDefinition> <http://gero.longevityalliance.org/is_DB_object> ;
-	<http://open-services.net/ns/core#valueType> <http://www.w3.org/2000/01/rdf-schema#Resource> ;
-	<http://purl.org/dc/elements/1.1/title> "DB Object ID" ;
-	<http://webintelligence.eu/platform/priority> 4 ;
-	a <http://www.w3.org/2013/ShEx/Definition#ArcRule> .
-
-_:02e49562996342361787 <http://open-services.net/ns/core#occurs> <http://open-services.net/ns/core#One-or-many> ;
-	<http://open-services.net/ns/core#propDefinition> <http://gero.longevityalliance.org/from_tissue> ;
-	<http://open-services.net/ns/core#valueType> <http://www.w3.org/2000/01/rdf-schema#Resource> ;
-	<http://purl.org/dc/elements/1.1/title> "Tissue" ;
-	<http://webintelligence.eu/platform/priority> 17 ;
-	a <http://www.w3.org/2013/ShEx/Definition#ArcRule> .
-
-_:02e49618752369228114 <http://open-services.net/ns/core#occurs> <http://open-services.net/ns/core#Exactly-one> ;
-	<http://open-services.net/ns/core#propDefinition> <http://gero.longevityalliance.org/has_ENTREZID> ;
-	<http://purl.org/dc/elements/1.1/title> "ENTREZID" ;
-	<http://webintelligence.eu/platform/priority> 1 ;
-	a <http://www.w3.org/2013/ShEx/Definition#ArcRule> ;
-	<http://www.w3.org/2013/ShEx/Definition#stem> <http://ncbi.nlm.nih.gov/gene/> .
-
-_:02e5408743197934837 <http://open-services.net/ns/core#occurs> <http://open-services.net/ns/core#One-or-many> ;
-	<http://open-services.net/ns/core#propDefinition> <http://gero.longevityalliance.org/has_ref> ;
-	<http://open-services.net/ns/core#valueType> <http://www.w3.org/2000/01/rdf-schema#Resource> ;
-	<http://purl.org/dc/elements/1.1/title> "Publication" ;
-	<http://webintelligence.eu/platform/priority> 6 ;
-	a <http://www.w3.org/2013/ShEx/Definition#ArcRule> .
-
-_:02e6557494595942437 <http://open-services.net/ns/core#occurs> <http://open-services.net/ns/core#Exactly-one> ;
-	<http://open-services.net/ns/core#propDefinition> <http://gero.longevityalliance.org/from_db> ;
-	<http://open-services.net/ns/core#valueType> <http://www.w3.org/2000/01/rdf-schema#Resource> ;
-	<http://purl.org/dc/elements/1.1/title> "DB" ;
-	<http://webintelligence.eu/platform/priority> 3 ;
-	a <http://www.w3.org/2013/ShEx/Definition#ArcRule> .
-
-_:02e6747280871621151 <http://open-services.net/ns/core#occurs> <http://open-services.net/ns/core#Exactly-one> ;
-	<http://open-services.net/ns/core#propDefinition> <http://www.w3.org/2000/01/rdf-schema#subClassOf> ;
-	<http://purl.org/dc/elements/1.1/title> "Class" ;
-	<http://webintelligence.eu/platform/priority> 2 ;
-	a <http://www.w3.org/2013/ShEx/Definition#ArcRule> ;
-	<http://www.w3.org/2013/ShEx/Definition#stem> <http://gero.longevityalliance.org/> .
-
-_:02e7072254944893372 <http://open-services.net/ns/core#allowedValue> <http://gero.longevityalliance.org/snoRNA> , <http://gero.longevityalliance.org/tRNA> , <http://gero.longevityalliance.org/gene_product> , <http://gero.longevityalliance.org/rRNA> , <http://gero.longevityalliance.org/snRNA> , <http://gero.longevityalliance.org/ncRNA> , <http://gero.longevityalliance.org/protein_complex> , <http://gero.longevityalliance.org/microRNA> , <http://gero.longevityalliance.org/transcript> , <http://gero.longevityalliance.org/protein> ;
-	<http://open-services.net/ns/core#occurs> <http://open-services.net/ns/core#Exactly-one> ;
-	<http://open-services.net/ns/core#propDefinition> <http://gero.longevityalliance.org/of_type> ;
-	<http://purl.org/dc/elements/1.1/title> "Gene product type" ;
-	<http://webintelligence.eu/platform/priority> 11 ;
-	a <http://www.w3.org/2013/ShEx/Definition#ArcRule> .
-
-_:02e8063945860717855 <http://open-services.net/ns/core#occurs> <http://open-services.net/ns/core#Zero-or-one> ;
-	<http://open-services.net/ns/core#propDefinition> <http://gero.longevityalliance.org/has_name> ;
-	<http://purl.org/dc/elements/1.1/title> "DB object Name" ;
-	<http://webintelligence.eu/platform/priority> 8 ;
-	a <http://www.w3.org/2013/ShEx/Definition#ArcRule> ;
-	<http://www.w3.org/2013/ShEx/Definition#stem> <http://gero.longevityalliance.org/> .
-
-_:02e9893912364723021 <http://open-services.net/ns/core#allowedValue> <http://gero.longevityalliance.org/IGI> , <http://gero.longevityalliance.org/IPI> , <http://gero.longevityalliance.org/TAS> , <http://gero.longevityalliance.org/IDA> , <http://gero.longevityalliance.org/ND> , <http://gero.longevityalliance.org/IC> , <http://gero.longevityalliance.org/IEP> , <http://gero.longevityalliance.org/IMP> , <http://gero.longevityalliance.org/NAS> ;
+_:02e6631014131134969 <http://open-services.net/ns/core#allowedValue> <http://gero.longevityalliance.org/IMP> , <http://gero.longevityalliance.org/IC> , <http://gero.longevityalliance.org/NAS> , <http://gero.longevityalliance.org/IEP> , <http://gero.longevityalliance.org/IDA> , <http://gero.longevityalliance.org/ND> , <http://gero.longevityalliance.org/TAS> , <http://gero.longevityalliance.org/IGI> , <http://gero.longevityalliance.org/IPI> ;
 	<http://open-services.net/ns/core#occurs> <http://open-services.net/ns/core#Exactly-one> ;
 	<http://open-services.net/ns/core#propDefinition> <http://gero.longevityalliance.org/has_code> ;
 	<http://purl.org/dc/elements/1.1/title> "Evidence Code" ;
 	<http://webintelligence.eu/platform/priority> 7 ;
 	a <http://www.w3.org/2013/ShEx/Definition#ArcRule> .
 
-<http://gero.longevityalliance.org/Evidence_Shape> <http://open-services.net/ns/core#property> _:02e028471832185793855 , _:02e6747280871621151 , _:02e018891921833301017 , _:02e5408743197934837 , _:02e7072254944893372 , _:02e20039126786772077 , _:02e49562996342361787 , _:02e49618752369228114 , _:02e9893912364723021 , _:02e6557494595942437 , _:02e2344980312516164 , _:02e3337807454482945 , _:02e8063945860717855 ;
+_:02e7047308273374315 <http://open-services.net/ns/core#occurs> <http://open-services.net/ns/core#Exactly-one> ;
+	<http://open-services.net/ns/core#propDefinition> <http://gero.longevityalliance.org/from_db> ;
+	<http://open-services.net/ns/core#valueType> <http://www.w3.org/2000/01/rdf-schema#Resource> ;
+	<http://purl.org/dc/elements/1.1/title> "DB" ;
+	<http://webintelligence.eu/platform/priority> 3 ;
+	a <http://www.w3.org/2013/ShEx/Definition#ArcRule> .
+
+_:02e8028607371416439 <http://open-services.net/ns/core#occurs> <http://open-services.net/ns/core#Exactly-one> ;
+	<http://open-services.net/ns/core#propDefinition> <http://gero.longevityalliance.org/is_DB_object> ;
+	<http://open-services.net/ns/core#valueType> <http://www.w3.org/2000/01/rdf-schema#Resource> ;
+	<http://purl.org/dc/elements/1.1/title> "DB Object ID" ;
+	<http://webintelligence.eu/platform/priority> 4 ;
+	a <http://www.w3.org/2013/ShEx/Definition#ArcRule> .
+
+_:02e8615227013465004 <http://open-services.net/ns/core#occurs> <http://open-services.net/ns/core#Exactly-one> ;
+	<http://open-services.net/ns/core#propDefinition> <http://gero.longevityalliance.org/added_on> ;
+	<http://open-services.net/ns/core#valueType> <http://www.w3.org/2001/XMLSchema#date> ;
+	<http://purl.org/dc/elements/1.1/title> "Date" ;
+	<http://webintelligence.eu/platform/priority> 13 ;
+	a <http://www.w3.org/2013/ShEx/Definition#ArcRule> .
+
+_:02e86842863682202 <http://open-services.net/ns/core#occurs> <http://open-services.net/ns/core#Exactly-one> ;
+	<http://open-services.net/ns/core#propDefinition> <http://www.w3.org/2000/01/rdf-schema#subClassOf> ;
+	<http://purl.org/dc/elements/1.1/title> "Class" ;
+	<http://webintelligence.eu/platform/priority> 2 ;
+	a <http://www.w3.org/2013/ShEx/Definition#ArcRule> ;
+	<http://www.w3.org/2013/ShEx/Definition#stem> <http://gero.longevityalliance.org/> .
+
+_:02e9204648238474267 <http://open-services.net/ns/core#occurs> <http://open-services.net/ns/core#Zero-or-one> ;
+	<http://open-services.net/ns/core#propDefinition> <http://gero.longevityalliance.org/has_name> ;
+	<http://purl.org/dc/elements/1.1/title> "DB object Name" ;
+	<http://webintelligence.eu/platform/priority> 8 ;
+	a <http://www.w3.org/2013/ShEx/Definition#ArcRule> ;
+	<http://www.w3.org/2013/ShEx/Definition#stem> <http://gero.longevityalliance.org/> .
+
+<http://gero.longevityalliance.org/EvidenceShape/EntrezGene> <http://purl.org/dc/elements/1.1/title> "ENTREZ ID" ;
+	<http://webintelligence.eu/platform/has_base> "http://ncbi.nlm.nih.gov/gene/" ;
+	a <http://webintelligence.eu/platform/Subject> ;
+	<http://www.w3.org/2013/ShEx/Definition#stem> <http://ncbi.nlm.nih.gov/gene/> .
+
+<http://gero.longevityalliance.org/Evidence_Shape> <http://open-services.net/ns/core#property> _:02e14464602712543084 , _:02e1217719958596234 , _:02e86842863682202 , _:02e17318384880149873 , _:02e8028607371416439 , _:02e8615227013465004 , _:02e6015092245730913 , _:02e9204648238474267 , _:02e3826514158525398 , _:02e7047308273374315 , _:02e6631014131134969 , _:02e5613374630830187 ;
+	<http://webintelligence.eu/platform/has_subject_settings> <http://gero.longevityalliance.org/EvidenceShape/EntrezGene> ;
 	a <http://open-services.net/ns/core#ResourceShape> .

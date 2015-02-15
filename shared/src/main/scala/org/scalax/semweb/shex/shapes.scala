@@ -75,7 +75,7 @@ case class Shape(id: Label, rule: Rule)  extends Labeled
   {
     val model = Quads -- id.asResource
     model -- RDF.TYPE -- Shape.rdfType -- context
-    model.quads ++ rule.toQuads(model.sub)(context)
+    model.quads ++ rule.toQuads(model.sub)(context) ++ subjectRuleOption.fold(Set.empty[Quad])(v=>{v.toQuads(model.sub)})
   }
 
 

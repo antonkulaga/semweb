@@ -7,23 +7,32 @@ import org.scalax.semweb.composites.SemanticComposites
 import org.scalax.semweb.messages.StringQueryMessages
 import org.scalax.semweb.rdf
 import org.scalax.semweb.rdf._
+import org.scalax.semweb.rdf.vocabulary.{XSD, FOAF}
 
 import prickle._
 import utest.framework.TestSuite
 import Pickler._
+import Unpickler._
 import scala.util._
 import utest._
+import org.scalax.semweb.shex.{BNodeLabel, IRILabel,Label,ValueClass,
+ValueType,ValueAny,ValueSet,ValueStem,
+NameClass,NameStem,NameAny,ExactlyOne,Plus,Star,Opt,
+NameTerm,Cardinality,Action,ArcRule,Rule,SubjectRule,ContextRule,ShapeBuilder,Shape,ShEx
+} //because of crazy behaviour of prickle macro and implicit search
 
+//because of crazy behaviour of prickle macro
 //!Don't do this. Not Necessary
+
+
 
 object PicklingSpec extends TestSuite
  {
-  import SemanticComposites._
-
-
+  
   def tests =  TestSuite{
 
      "pickling of RDF types" - {
+       import SemanticComposites._
        val bar = IRI("http://bar")
        val ur: String = Pickle.intoString(bar)
        val unp:Try[IRI] = Unpickle[IRI].fromString(ur)
@@ -55,16 +64,12 @@ object PicklingSpec extends TestSuite
        val unps3 = Unpickle[RDFValue].fromString(st)
        assert(unps3.isSuccess)
        assert( unps3.get.stringValue.contains(hello))
-       
-/*       val tryLit = Unpickle[StringLiteral].fromString(st)
-       assert(tryLit.isSuccess)
-       assert(tryLit.get.label==hello)*/
-       
+
 
 
      }
     "pickling messages" -{
-      
+      import SemanticComposites._
       val q1 = "query1"
       val id = "myId"
       val ask = StringQueryMessages.Ask(q1,id)
@@ -82,25 +87,82 @@ object PicklingSpec extends TestSuite
 
     }
 
-
-    "pickling arc" -{
-
+    "pickling ArcRule" -{
+      import SemanticComposites._
       //this two lines lead to crazy macro errors
-     lazy val gero = IRI("http://gero.longevityalliance.org/")
-     val entrez = IRI("http://ncbi.nlm.nih.gov/gene/")
+
+      val gero = IRI("http://gero.longevityalliance.org/")
+      val entrez = IRI("http://ncbi.nlm.nih.gov/gene/")
+      val ns = NameStem(entrez)
+      val vs = ValueStem(gero)
+      val sex = Pickle.intoString[Cardinality](ExactlyOne)
+
+      val arc: ArcRule = ArcRule(id = IRILabel(gero),
+        name = ns,vs,
+        ExactlyOne,
+        title = Some("Hello world"),
+        priority = Some(0),
+        default = Some(IRI(":hello"))
+      )
+
+
+      val sns = Pickle.intoString(arc.name)
+      val nso = Unpickle[NameClass].fromString(sns)
+      assert(nso.isSuccess)
+      assert(nso.get==ns)
+
+      val svs = Pickle.intoString(arc.value)
+      val vso = Unpickle[ValueClass].fromString(svs)
+      assert(vso.isSuccess)
+      assert(vso.get==vs)
+
+      val soc = Pickle.intoString(arc.occurs)
+      val exo = Unpickle[Cardinality].fromString(soc)
+      assert(exo.isSuccess)
+      assert(exo.get == arc.occurs)
+
+      val st = Pickle.intoString(arc.title)
+      val to = Unpickle[Option[String]].fromString(st)
+      assert(to.isSuccess)
+      assert(to.get==arc.title)
+
+      val si = Pickle.intoString(arc.id)
+      val sio = Unpickle[Label].fromString(si)
+      assert(sio.isSuccess)
+      assert(sio.get==arc.id)
+
+      val sa = Pickle.intoString(arc.actions)
+      val sao =Unpickle[Seq[Action]].fromString(sa)
+      assert(sao.isSuccess)
+      assert(sao.get==arc.actions)
+
+      val sp =  Pickle.intoString(arc.priority)
+      val spo = Unpickle[Option[Int]].fromString(sp)
+      assert(spo.isSuccess)
+      assert(spo.get==arc.priority)
+
+      val dp = Pickle.intoString(arc.default)
+      val dpo = Unpickle[Option[RDFValue]].fromString(dp)
+      assert(dpo.isSuccess)
+      assert(dpo.get==arc.default)
+
+      val sarc = Pickle.intoString(arc)
+      val arco = Unpickle[ArcRule].fromString(sarc)
+      assert(arco.isSuccess)
+      assert(arco.get==arc)
+
+
+    }
+    
+    "pickling shape" -{
+      object shape extends ShapeBuilder(IRI("http://myshape.com"))
+      shape has FOAF.NAME of XSD.StringDatatypeIRI occurs ExactlyOne
+      shape has FOAF.KNOWS oneOf (FOAF.PERSON,FOAF.Group) occurs Plus
+      shape.hasRule(SubjectRule())
+
+      val res: Shape = shape.result
       
-      /*
-     val arc = ArcRule(id = IRILabel(gero),name = NameStem(entrez),ValueStem(gero),Plus,title = Some("Hello world"),priority = Some(0))
-
-     val str = Pickle.intoString[ArcRule](arc)
-     val arco = Unpickle[ArcRule].fromString(str)
-     assert(arco.isSuccess)
-     val arc2 = arco.get
-     assert(arc == arc2)
-     */
-   }
-
-
+    }
 
  }
 

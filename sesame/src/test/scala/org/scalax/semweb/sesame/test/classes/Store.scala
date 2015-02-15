@@ -12,7 +12,7 @@ import org.w3.banana.sesame.io.{SesameSyntax, SesameRDFWriter}
 
 import scala.util.{Failure, Success, Try}
 import scalaz.NonEmptyList
-
+import org.w3.banana.sesame.SesameModule
 
 abstract class Store[Rdf <: RDF, M[+_] , Sin, Sout](implicit
                                                     val ops: RDFOps[Rdf],

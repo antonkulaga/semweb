@@ -52,6 +52,8 @@ trait ShapeQueryReader extends SelectReader {
 trait ShapeReader extends SesameReader with ShapeQueryReader{
 
   val extractor = new ShapeExtractor[ReadConnection](this.lg)
+
+  val fieldRulesExtractor = new FieldRulesExtractor[ReadConnection]
   
 
 

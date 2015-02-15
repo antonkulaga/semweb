@@ -31,7 +31,7 @@ entrez:31220 gero:added_on "2014-11-27"^^xsd:date ;
 	gero:has_ENTREZID entrez:31220 ;
 	gero:has_code gero:IMP ;
 	gero:has_influence gero:Pro-Longevity ;
-	gero:has_name gero:Insulin-like_peptide_6 ;
+	#gero:has_name gero:Insulin-like_peptide_6 ;  #AS IT IS ZERO-OR_MORE IT SHOULD BE OK NOT OT HAVE IT
 	gero:has_ref pmid:22935001 ;
 	gero:has_symbol gero:Ilp6 ;
 	gero:is_DB_object gero:1756 ;

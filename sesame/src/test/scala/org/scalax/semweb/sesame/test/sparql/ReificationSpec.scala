@@ -56,7 +56,7 @@ class ReificationSpec  extends  WordSpec with Matchers with SimpleTestData {
         Pat( informer,tells:IRI,statement),
         BIND(RDR(who,hates:IRI,RDF:IRI),statement)
         )
-      println("RDR QUERY = \n"+rdrQuery.stringValue)
+      //println("RDR QUERY = \n"+rdrQuery.stringValue)
 
       val tales = db.justSelect(rdrQuery.stringValue).get.extractVars(who,informer)
       tales.size shouldEqual 2

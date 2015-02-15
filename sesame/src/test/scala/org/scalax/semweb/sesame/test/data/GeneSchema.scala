@@ -31,7 +31,8 @@ trait GeneSchema extends ItemsMock with GeneSchemaData{
 
   }
   
-  lazy val subjectDefs = SubjectRule(IRILabel(gero / "Evidence_Shape" / "Subject"),title = "")
+  lazy val subjectDefs =  SubjectRule(id = IRILabel(gero / "EvidenceShape" / "EntrezGene"))
+    .startsWith(entrez).hasBase(entrez).isCalled("ENTREZ ID")
 
   lazy val evidenceForm = new ShapeBuilder(gero / "Evidence_Shape")
 
@@ -75,7 +76,7 @@ trait GeneSchema extends ItemsMock with GeneSchemaData{
   //evidenceForm has product isCalled "Gene Product Form ID" occurs Opt hasPriority 15
   evidenceForm has tissue isCalled "Tissue" occurs Plus hasPriority 17
   evidenceForm has influence isCalled "Influence" occurs ExactlyOne hasPriority 18 from(gero / "Pro-Longevity", gero / "Anti-Longevity")
-  evidenceForm hasRule SubjectRule(id = IRILabel(gero / "EvidenceShape" / "EntrezGene")).startsWith(entrez).hasBase(entrez)
+  evidenceForm hasRule this.subjectDefs
   
   lazy val evidenceShape = evidenceForm.result
 
