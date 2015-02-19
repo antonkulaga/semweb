@@ -3,14 +3,14 @@ import sbt.Keys._
 import scala.scalajs.sbtplugin.ScalaJSPlugin._
 object Versions {
 
+  val semWeb = "0.6.20"
+
   val bigData =  "1.5.0"
 
   val bigDataSesame = "2.7.13" //BigData devs are lazy to update, but I have to use their sesame in order no to brake my apps that depend on sesame
 
   val banana = "0.7.1"
 
-  val semWeb = "0.6.19"
-  
   val prickle = "1.1.2"
   
   val parboiled =  "2.0.1"

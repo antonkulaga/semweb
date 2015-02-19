@@ -7,7 +7,7 @@ import org.scalax.semweb.composites.SemanticComposites
 import org.scalax.semweb.messages.StringQueryMessages
 import org.scalax.semweb.rdf
 import org.scalax.semweb.rdf._
-import org.scalax.semweb.rdf.vocabulary.{XSD, FOAF}
+import org.scalax.semweb.rdf.vocabulary.{WI, XSD, FOAF}
 
 import prickle._
 import utest.framework.TestSuite
@@ -15,11 +15,9 @@ import Pickler._
 import Unpickler._
 import scala.util._
 import utest._
-import org.scalax.semweb.shex.{BNodeLabel, IRILabel,Label,ValueClass,
-ValueType,ValueAny,ValueSet,ValueStem,
-NameClass,NameStem,NameAny,ExactlyOne,Plus,Star,Opt,
-NameTerm,Cardinality,Action,ArcRule,Rule,SubjectRule,ContextRule,ShapeBuilder,Shape,ShEx
-} //because of crazy behaviour of prickle macro and implicit search
+import org.scalax.semweb.shex._
+
+//because of crazy behaviour of prickle macro and implicit search
 
 //because of crazy behaviour of prickle macro
 //!Don't do this. Not Necessary
@@ -28,6 +26,8 @@ NameTerm,Cardinality,Action,ArcRule,Rule,SubjectRule,ContextRule,ShapeBuilder,Sh
 
 object PicklingSpec extends TestSuite
  {
+  val gero = IRI("http://gero.longevityalliance.org/")
+  val entrez = IRI("http://ncbi.nlm.nih.gov/gene/")
   
   def tests =  TestSuite{
 
@@ -91,19 +91,12 @@ object PicklingSpec extends TestSuite
       import SemanticComposites._
       //this two lines lead to crazy macro errors
 
-      val gero = IRI("http://gero.longevityalliance.org/")
-      val entrez = IRI("http://ncbi.nlm.nih.gov/gene/")
+   
       val ns = NameStem(entrez)
       val vs = ValueStem(gero)
       val sex = Pickle.intoString[Cardinality](ExactlyOne)
 
-      val arc: ArcRule = ArcRule(id = IRILabel(gero),
-        name = ns,vs,
-        ExactlyOne,
-        title = Some("Hello world"),
-        priority = Some(0),
-        default = Some(IRI(":hello"))
-      )
+      val arc: ArcRule = ArcRule(IRILabel(gero),ns,vs,  ExactlyOne, Seq.empty[Action], Some(0), Some("Hello world"), Some(IRI(":hello")) )
 
 
       val sns = Pickle.intoString(arc.name)
@@ -154,13 +147,61 @@ object PicklingSpec extends TestSuite
 
     }
     
+    "AND RULE pickling" -{
+      import SemanticComposites._
+      val ns = NameStem(entrez)
+      val vs = ValueStem(gero)
+      val arc: ArcRule = ArcRule(IRILabel(gero),ns,vs,  ExactlyOne, Seq.empty[Action], Some(0), Some("Hello world"), Some(IRI(":hello")) )
+      val and = AndRule(Set(arc),WI.PLATFORM.EMPTY)
+      val stand = Pickle.intoString[AndRule](and)
+      val ando = Unpickle[AndRule].fromString(stand)
+      assert(ando.isSuccess)
+      assert(ando.get==and)
+      val srule = Pickle.intoString[Rule](and)
+      val srulo = Unpickle[Rule].fromString(srule)
+      assert(srulo.isSuccess)
+      assert(and==srulo.get)
+
+    }
+    
+    "subject rule pickling" -{
+      import SemanticComposites._
+      /*
+     val id = IRI("http://myshape.com")
+     val sub = gero / "has_ENTREZID"
+     val sr = SubjectRule(sub).isCalled("Gene").hasBase(gero)
+     val ssr = Pickle.intoString(sr)
+     val sro = Unpickle[SubjectRule].fromString(ssr)
+     assert(sro.get==sr)
+
+     val rrs = Pickle.intoString[Rule](sr)
+     val rso = Unpickle[Rule].fromString(rrs)
+     assert(rso.get==sr)*/
+    }
+
     "pickling shape" -{
-      object shape extends ShapeBuilder(IRI("http://myshape.com"))
+      import SemanticComposites._
+      val id = IRI("http://myshape.com")
+      val sub = gero / "has_ENTREZID"
+      val sr = SubjectRule(sub).isCalled("Gene").hasBase(gero)
+      
+      object shape extends ShapeBuilder(id)
       shape has FOAF.NAME of XSD.StringDatatypeIRI occurs ExactlyOne
       shape has FOAF.KNOWS oneOf (FOAF.PERSON,FOAF.Group) occurs Plus
-      shape.hasRule(SubjectRule())
+      shape.hasRule(sr)
 
-      val res: Shape = shape.result
+      val sh: Shape = shape.result
+      
+      val st = Pickle.intoString(sh)
+      val sho = Unpickle[Shape].fromString(st)
+      assert(sho.get==sh)
+      
+      val ss = new ShEx(Rule.genRuleLabel(),Seq(sh),Some(sh.id),Some("hello"),Seq(":"->gero.stringValue,"rdf"->vocabulary.RDF.namespace))
+      val sss = Pickle.intoString(ss)
+      val sso = Unpickle[ShEx].fromString(sss)
+      assert(sso.isSuccess)
+      assert(sso.get==ss)
+      assert(sso.get.rules.head==sh)
       
     }
 

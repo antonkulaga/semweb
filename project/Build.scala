@@ -51,6 +51,7 @@ object Build extends sbt.Build
     initialCommands in console := """
                                     |import org.scalax.semweb.rdf._
                                     |import org.scalax.semweb.sparql._
+                                    |import org.scalax.semweb.composites
                                     |""".stripMargin
   )
 
