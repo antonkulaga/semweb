@@ -1,6 +1,7 @@
 package org.scalax.semweb.composites
 
-import org.scalax.semweb.messages.{Read, StorageMessage, StringQueryMessages}
+import org.scalax.semweb.messages.ShapeMessages.ShapeMessage
+import org.scalax.semweb.messages.{ShapeMessages, Read, StorageMessage, StringQueryMessages}
 import org.scalax.semweb.shex.{ValueReference, OrRule, AndRule}
 import org.scalax.semweb.{shex, rdf}
 import org.scalax.semweb.rdf._
@@ -101,9 +102,26 @@ trait ShapePicklers extends RDFComposites{
 
   implicit lazy val shexPickler = Pickler.materializePickler[ShEx]
   implicit lazy val shexUnpickler = Unpickler.materializeUnpickler[ShEx]
+  
+  import org.scalax.semweb.shex.validation._
+  import org.scalax.semweb.shex.{Draft,PropertyModel}
+
+  implicit lazy val justFailedPickler = Pickler.materializePickler[JustFailure]
+  implicit lazy val justFailedUnpickler = Unpickler.materializeUnpickler[JustFailure]
+  
+  implicit lazy val violationPickler: PicklerPair[Violation] = CompositePickler[Violation].concreteType[JustFailure]
+
+  implicit lazy val failedPickler = Pickler.materializePickler[Failed]
+  implicit lazy val failedUnpickler = Unpickler.materializeUnpickler[Failed]
+
+  implicit lazy val validationPickler = CompositePickler[ValidationResult].concreteType[Failed].concreteType[Valid.type ].concreteType[Draft.type]
+
+  implicit lazy val propertyModelPickler = Pickler.materializePickler[PropertyModel]
+  implicit lazy val propertyModelUnpickler = Unpickler.materializeUnpickler[PropertyModel]
 
 
 }
+
 
 
 trait RDFComposites extends CommonComposites{
@@ -124,8 +142,12 @@ trait RDFComposites extends CommonComposites{
     .concreteType[rdf.DoubleLiteral].concreteType[rdf.IntLiteral]
 }
 
-trait MessagesComposites{
-  
+trait MessagesComposites {
+  self:ShapePicklers=>
+
+
+  implicit lazy val datePickler = Pickler.DatePickler
+  implicit lazy val dateUnpickler = Unpickler.DateUnpickler
 
   implicit lazy val stringQueryMessage = CompositePickler[StringQueryMessages.StringMessage]
     .concreteType[StringQueryMessages.Ask].concreteType[StringQueryMessages.Construct]
@@ -135,6 +157,21 @@ trait MessagesComposites{
   implicit lazy val readQueryMessage = CompositePickler[Read.ReadMessage]
     .concreteType[Read.Bind].concreteType[Read.Construct].concreteType[Read.Query].
     concreteType[Read.Question].concreteType[Read.Search].concreteType[Read.Select]
+
+  implicit lazy val allResPickler = Pickler.materializePickler[ShapeMessages.AllResourcesForShape]
+  implicit lazy val allResUnpickler = Unpickler.materializeUnpickler[ShapeMessages.AllResourcesForShape]
+  implicit lazy val getShapesPickler = Pickler.materializePickler[ShapeMessages.GetShapes]
+  implicit lazy val getShapesUnpickler = Unpickler.materializeUnpickler[ShapeMessages.GetShapes]
+  
+  implicit lazy val shapeMessage = CompositePickler[ShapeMessages.ShapeMessage]
+    .concreteType[ShapeMessages.AllResourcesForShape]
+    .concreteType[ShapeMessages.AllShapesForResource]
+    .concreteType[ShapeMessages.GetShapes]
+    .concreteType[ShapeMessages.GetShEx]
+    .concreteType[ShapeMessages.UpdateShape]
+    .concreteType[ShapeMessages.UpdateShEx]
+
+
 
 }
 

@@ -146,6 +146,19 @@ object PicklingSpec extends TestSuite
 
 
     }
+
+    "pickling property model" -{
+      import SemanticComposites._
+      val sub = WI.re("Subject")
+      val pred = WI.re("Predicate")
+      val obj = WI.re("Object")
+      val pm = PropertyModel(sub,pred->obj)
+      val spm = Pickle.intoString(pm)
+      val pmo = Unpickle[PropertyModel].fromString(spm)
+      assert(pmo.isSuccess)
+      assert(pmo.get==pm)
+    
+    }
     
     "AND RULE pickling" -{
       import SemanticComposites._

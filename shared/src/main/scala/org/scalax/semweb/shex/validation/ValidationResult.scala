@@ -13,11 +13,11 @@ case object Valid extends ValidationResult {
   def or( other: ValidationResult ) = this
 }
 
-case class JustFailure(constraint:String,value:Any) extends Violation
+case class JustFailure(constraint:String,value:String) extends Violation
 
 object Failed
 {
-  def apply(constraint:String,value:Any): Failed = Failed(Set(JustFailure(constraint,value)))
+  def apply(constraint:String,value:Any): Failed = Failed(Set(JustFailure(constraint,value.toString)))
 }
 
 /** An object representing a failed validation ValidationResult.
