@@ -1,13 +1,11 @@
-import com.inthenow.sbt.scalajs.XModule
 import sbt.Keys._
 import sbt._
-import com.inthenow.sbt.scalajs._
-import com.inthenow.sbt.scalajs.SbtScalajs._
-import scala.scalajs.sbtplugin.ScalaJSPlugin._
 import bintray.Opts
 import bintray.Plugin.bintraySettings
 import bintray.Keys._
-
+import org.scalajs.sbtplugin.ScalaJSPlugin
+import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
+import org.scalajs.sbtplugin.cross.CrossProject
 
 object Build extends sbt.Build
 {
@@ -21,9 +19,9 @@ object Build extends sbt.Build
 
 
   lazy val publishSettings: Seq[Setting[_]] =  bintraySettings ++ Seq(
-    repository in bintray :=  "scalax-releases",
+    repository in bintray :=  "denigma-releases",
 
-    bintrayOrganization in bintray := Some("scalax"),
+    bintrayOrganization in bintray := Some("denigma"),
 
     licenses += ("MPL-2.0", url("http://opensource.org/licenses/MPL-2.0")),
 
@@ -42,7 +40,7 @@ object Build extends sbt.Build
   )
 
   val sameSettings:Seq[Setting[_]] = Seq(
-    organization := "org.scalax",
+    organization := "org.denigma",
     scalaVersion :="2.11.5",
     version := Versions.semWeb,
     resolvers += "bintray-alexander_myltsev" at "http://dl.bintray.com/alexander-myltsev/maven/",
@@ -58,26 +56,36 @@ object Build extends sbt.Build
   val sharedSettings: Seq[Setting[_]] = sameSettings++Seq(
       name := "semweb",
       version := Versions.semWeb,
-      libraryDependencies ++= Dependencies.shared.value,
-      testFrameworks += new TestFramework("utest.runner.JvmFramework")
-
+      libraryDependencies ++= Dependencies.shared.value
   )
 
-  val jsSettings: Seq[Setting[_]] = Seq(  libraryDependencies ++=  Dependencies.semWebJS.value  )
+  val jsSettings: Seq[Setting[_]] = Seq(
+    libraryDependencies ++=  Dependencies.semWebJS.value,
+    testFrameworks += new TestFramework("utest.runner.Framework")
+  )
 
-  val jvmSettings : Seq[Setting[_]] = Seq(  libraryDependencies ++=  Dependencies.semWebJVM.value  )
+  val jvmSettings : Seq[Setting[_]] = Seq(
+    libraryDependencies ++=  Dependencies.semWebJVM.value,
+    testFrameworks += new TestFramework("utest.runner.Framework")
+  )
+
+  //val semwebModule = XModule(id = "semweb",  defaultSettings = publishSettings ++ sharedSettings ++ XScalaSettings )
+
+  lazy val semweb = CrossProject("semweb",new File("."),CrossType.Full).
+    settings(sharedSettings: _*).
+    jsSettings(jsSettings: _* ).
+    jvmSettings( jvmSettings: _* )
+
+  lazy val semwebJs = semweb.js
+  lazy val semwebJvm   = semweb.jvm
 
 
-  implicit val js: JsTarget = new JsTarget(settings = JsTarget.js.settings ++ jsSettings)
-  implicit val jvm: JvmTarget = new JvmTarget(settings = JvmTarget.jvm.settings ++ jvmSettings)
 
-  val semwebModule = XModule(id = "semweb",  defaultSettings = publishSettings ++ sharedSettings ++ XScalaSettings )
-
-  lazy val semweb            = semwebModule.project(semwebJvm, semwebJs)
+/*  lazy val semweb            = semwebModule.project(semwebJvm, semwebJs)
   lazy val semwebJvm         = semwebModule.jvmProject(semwebSharedJvm)
   lazy val semwebJs          = semwebModule.jsProject(semwebSharedJs)
   lazy val semwebSharedJvm   = semwebModule.jvmShared()
-  lazy val semwebSharedJs    = semwebModule.jsShared(semwebSharedJvm)
+  lazy val semwebSharedJs    = semwebModule.jsShared(semwebSharedJvm)*/
 
   lazy val sesame = Project(
     id = "sesame",

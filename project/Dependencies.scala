@@ -1,9 +1,10 @@
 import sbt._
-import sbt.Keys._
-import scala.scalajs.sbtplugin.ScalaJSPlugin._
+import Keys._
+import org.scalajs.sbtplugin.ScalaJSPlugin._
+import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 object Versions {
 
-  val semWeb = "0.6.21"
+  val semWeb = "0.6.3"
 
   val bigData =  "1.5.0"
 
@@ -11,13 +12,13 @@ object Versions {
 
   val banana = "0.7.1"
 
-  val prickle = "1.1.2"
+  val prickle = "1.1.4"
   
   val parboiled =  "2.0.1"
   
-  val utest = "0.2.4"
+  val utest = "0.3.1" // is totally broken for me for JS subprojects
   
-  val scalaTest = "2.2.1"
+  val scalaTest = "2.2.4"
   
   val framian = "0.3.3"
 

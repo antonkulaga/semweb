@@ -42,7 +42,7 @@ class TestRdfTermParser(input:ParserInput) extends BasicElementsParser(input)
 
 
   def BooleanLiteral = rule {
-    (TRUE~push(rdf.BooleanLiteral(value = true))) | (FALSE~push(rdf.BooleanLiteral(false)))
+    (TRUE~push(org.scalax.semweb.rdf.BooleanLiteral(true))) | (FALSE~push(org.scalax.semweb.rdf.BooleanLiteral(false)))
   }
 
   def String = rule {
@@ -72,7 +72,7 @@ class TestRdfTermParser(input:ParserInput) extends BasicElementsParser(input)
     ignoreCaseWS("LANG")
   }
   def BLANK_NODE_LABEL()  = rule{
-    capture("_:" ~ PN_LOCAL)~>(v=>rdf.BlankNode(v)) ~ WS
+    capture("_:" ~ PN_LOCAL)~>(v=>org.scalax.semweb.rdf.BlankNode(v)) ~ WS
   }
 
 
@@ -87,7 +87,7 @@ class TestRdfTermParser(input:ParserInput) extends BasicElementsParser(input)
             LESS_NO_COMMENT | GREATER | '"' | OPEN_CURLY_BRACE |
               CLOSE_CURLY_BRACE | '|' | '^' | '\\' | '`' | CharPredicate('\u0000' to '\u0020')
 
-            ) ~ ANY)) ~>(v=>rdf.IRI(v)) ~   GREATER
+            ) ~ ANY)) ~>(v=>org.scalax.semweb.rdf.IRI(v)) ~   GREATER
   }
 
 
