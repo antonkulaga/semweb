@@ -1,12 +1,10 @@
-package org.scalax.semweb.parsers
+package org.scalax
 
+import org.parboiled2.{CharPredicate, ParserInput, Rule}
 import org.scalax.semweb.parsers.sample.BasicElementsParser
 import org.scalax.semweb.rdf
-
-import org.parboiled2.{Rule, CharPredicate, ParserInput}
-import org.scalax.semweb.rdf.{BooleanLiteral, IRI}
+import org.scalax.semweb.rdf.IRI
 import shapeless.{::, HNil}
-
 
 
 class TestRdfTermParser(input:ParserInput) extends BasicElementsParser(input)

@@ -3,7 +3,7 @@ import sbt.Keys._
 import scala.scalajs.sbtplugin.ScalaJSPlugin._
 object Versions {
 
-  val semWeb = "0.6.20"
+  val semWeb = "0.6.21"
 
   val bigData =  "1.5.0"
 
@@ -35,13 +35,11 @@ object Dependencies
 
   lazy val semWebJS:Def.Initialize[Seq[ModuleID]] =  Def.setting(base.value ++Seq(
     "com.lihaoyi" %% "utest" % Versions.utest % "test",
-    "org.scalajs" %%% "scalajs-pickling" % "0.3.1",
    "com.github.benhutchison" %%% "prickle" % Versions.prickle
   ))
 
 
   lazy val semWebJVM:Def.Initialize[Seq[ModuleID]] =  Def.setting(base.value ++Seq(
-    "org.scalajs" %% "scalajs-pickling-play-json" % "0.3.1",
     "com.github.benhutchison" %% "prickle" % Versions.prickle
   ))
 

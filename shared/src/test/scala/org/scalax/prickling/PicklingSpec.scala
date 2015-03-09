@@ -2,20 +2,17 @@ package org.scalax.prickling
 
 import java.util.Date
 
-import org.scalajs.spickling.PicklerRegistry._
-import org.scalax.semweb.composites.SemanticComposites
 import org.scalax.semweb.messages.StringQueryMessages
-import org.scalax.semweb.rdf
 import org.scalax.semweb.rdf._
-import org.scalax.semweb.rdf.vocabulary.{WI, XSD, FOAF}
-
-import prickle._
-import utest.framework.TestSuite
-import Pickler._
-import Unpickler._
-import scala.util._
-import utest._
+import org.scalax.semweb.rdf.vocabulary.{FOAF, WI, XSD}
 import org.scalax.semweb.shex._
+import prickle.Pickler._
+import prickle.Unpickler._
+import prickle._
+import utest._
+import utest.framework.TestSuite
+
+import scala.util._
 
 //because of crazy behaviour of prickle macro and implicit search
 
@@ -32,7 +29,7 @@ object PicklingSpec extends TestSuite
   def tests =  TestSuite{
 
      "pickling of RDF types" - {
-       import SemanticComposites._
+       import org.scalax.semweb.composites.SemanticComposites._
        val bar = IRI("http://bar")
        val ur: String = Pickle.intoString(bar)
        val unp:Try[IRI] = Unpickle[IRI].fromString(ur)
@@ -69,7 +66,7 @@ object PicklingSpec extends TestSuite
 
      }
     "pickling messages" -{
-      import SemanticComposites._
+      import org.scalax.semweb.composites.SemanticComposites._
       val q1 = "query1"
       val id = "myId"
       val ask = StringQueryMessages.Ask(q1,id)
@@ -88,7 +85,7 @@ object PicklingSpec extends TestSuite
     }
 
     "pickling ArcRule" -{
-      import SemanticComposites._
+      import org.scalax.semweb.composites.SemanticComposites._
       //this two lines lead to crazy macro errors
 
    
@@ -148,7 +145,7 @@ object PicklingSpec extends TestSuite
     }
 
     "pickling property model" -{
-      import SemanticComposites._
+      import org.scalax.semweb.composites.SemanticComposites._
       val sub = WI.re("Subject")
       val pred = WI.re("Predicate")
       val obj = WI.re("Object")
@@ -161,7 +158,7 @@ object PicklingSpec extends TestSuite
     }
     
     "AND RULE pickling" -{
-      import SemanticComposites._
+      import org.scalax.semweb.composites.SemanticComposites._
       val ns = NameStem(entrez)
       val vs = ValueStem(gero)
       val arc: ArcRule = ArcRule(IRILabel(gero),ns,vs,  ExactlyOne, Seq.empty[Action], Some(0), Some("Hello world"), Some(IRI(":hello")) )
@@ -178,7 +175,6 @@ object PicklingSpec extends TestSuite
     }
     
     "subject rule pickling" -{
-      import SemanticComposites._
       /*
      val id = IRI("http://myshape.com")
      val sub = gero / "has_ENTREZID"
@@ -193,7 +189,7 @@ object PicklingSpec extends TestSuite
     }
 
     "pickling shape" -{
-      import SemanticComposites._
+      import org.scalax.semweb.composites.SemanticComposites._
       val id = IRI("http://myshape.com")
       val sub = gero / "has_ENTREZID"
       val sr = SubjectRule(sub).isCalled("Gene").hasBase(gero)

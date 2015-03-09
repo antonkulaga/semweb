@@ -25,6 +25,40 @@ import scala.util.Try
 
 trait  CommonComposites{
 
+  implicit lazy val config = PConfig.Default.copy(areSharedObjectsSupported=false)
+
+  implicit def listPickler[T](implicit pickler: Pickler[T]):Pickler[List[T]] = new Pickler[List[T]] {
+    def pickle[P](value: List[T], state: PickleState)(implicit config: PConfig[P]): P = {
+      Pickler.resolvingSharingCollection[P](value, value.map(e => Pickle(e, state)), state, config)
+    }
+  }
+
+  implicit def listUnpickler[T](implicit unpickler: Unpickler[T]): Unpickler[List[T]] =  new Unpickler[List[T]] {
+    def unpickle[P](pickle: P, state: collection.mutable.Map[String, Any])(implicit config: PConfig[P]): Try[List[T]] = {
+      unpickleSeqish[T, List[T], P](x => x.toList, pickle, state)
+    }
+  }
+
+  def unpickleSeqish[T, S, P](f: Seq[T] => S, pickle: P, state: collection.mutable.Map[String, Any])
+                             (implicit config: PConfig[P],
+                              u: Unpickler[T]): Try[S] = {
+
+    import config._
+    readObjectField(pickle, prefix + "ref").transform(
+      (p: P) => {
+        readString(p).flatMap(ref => Try(state(ref).asInstanceOf[S]))
+      },
+      _ => readObjectField(pickle, prefix + "elems").flatMap(p => {
+        readArrayLength(p).flatMap(len => {
+          val seq = (0 until len).map(index => u.unpickle(readArrayElem(p, index).get, state).get)
+          val result = f(seq)
+          Unpickler.resolvingSharing(result, pickle, state, config)
+          Try(result)
+        })
+      }
+      ))
+  }
+
   //implicit lazy val nonePickler = CompositePickler[None.type ]
 
 
@@ -57,9 +91,6 @@ trait ShapePicklers extends RDFComposites{
   implicit lazy val actionPickler = CompositePickler[Action]
   
 
-  implicit lazy val arcPickler = Pickler.materializePickler[ArcRule]
-  implicit lazy val arcUnpickler = Unpickler.materializeUnpickler[ArcRule]
-
   /* and example how Arc rules look like when it is pickled
   {"name": {"#cls": "org.scalax.semweb.shex.NameStem", 
   "#val": {"#id": "4", "s": {"#id": "3", "uri": "http:\/\/ncbi.nlm.nih.gov\/gene\/"}}}, 
@@ -75,6 +106,10 @@ trait ShapePicklers extends RDFComposites{
   "value": {"#cls": "org.scalax.semweb.shex.ValueStem", 
   "#val": {"#id": "5", "s": {"#ref": "1"}}}}
   */
+
+
+  implicit lazy val arcPickler = Pickler.materializePickler[ArcRule]
+  implicit lazy val arcUnpickler = Unpickler.materializeUnpickler[ArcRule]
 
 
   implicit lazy val subPickler = Pickler.materializePickler[SubjectRule]
@@ -136,10 +171,16 @@ trait RDFComposites extends CommonComposites{
   
   def withResource[T >: Res <:RDFValue](pair:PicklerPair[T]):PicklerPair[T] = pair.concreteType[BlankNode].concreteType[IRI]
 
+  /**
+   * Fix to be moved to Semweb
+   * @param pair
+   * @tparam T
+   * @return
+   */
   def withLiterals[T>: Lit <:RDFValue](pair:PicklerPair[T]):PicklerPair[T] =pair
     .concreteType[rdf.TypedLiteral].concreteType[rdf.StringLiteral]
     .concreteType[rdf.DateTimeLiteral].concreteType[rdf.DateLiteral]
-    .concreteType[rdf.DoubleLiteral].concreteType[rdf.IntLiteral]
+    .concreteType[rdf.DoubleLiteral].concreteType[rdf.IntLiteral].concreteType[rdf.BooleanLiteral]
 }
 
 trait MessagesComposites {
