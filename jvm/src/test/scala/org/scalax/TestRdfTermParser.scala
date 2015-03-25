@@ -2,7 +2,6 @@ package org.scalax
 
 import org.parboiled2.{CharPredicate, ParserInput, Rule}
 import org.scalax.semweb.parsers.sample.BasicElementsParser
-import org.scalax.semweb.rdf
 import org.scalax.semweb.rdf.IRI
 import shapeless.{::, HNil}
 

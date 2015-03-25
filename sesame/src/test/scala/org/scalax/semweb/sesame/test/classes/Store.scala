@@ -32,9 +32,9 @@ object TurtleMaster extends Store[Sesame,Try,Turtle,Turtle] with TurtleStore
 trait TurtleStore{
   self:Store[Sesame,Try,Turtle,Turtle]=>
   
-  implicit val readerSyn =  new Syntax[Turtle] {
+/*  implicit val readerSyn =  new Syntax[Turtle] {
     val mimeTypes: NonEmptyList[MimeType] = NonEmptyList(MimeType.RdfTurtle)
-  }
+  }*/
   
   override implicit val writer =   new org.scalax.semweb.sesame.io.SesameRDFWriter[Turtle] //MONKEY OVERRIDING
 
@@ -53,16 +53,14 @@ trait TurtleStore{
 abstract class OntologyClasses[Rdf <: RDF, M[+_] , Sin, Sout](implicit
                                                               o: RDFOps[Rdf],
                                                               r: RDFReader[Rdf, M, Sin],
-                                                              rSyn: Syntax[Sin],
-                                                              wr: RDFWriter[Rdf, M, Sout],
-                                                              wrSyn: Syntax[Sout]
+                                                              wr: RDFWriter[Rdf, M, Sout]
                                                                ) extends Store[Rdf,M,Sin,Sout](
 
 ) {
 
-  object gero extends PrefixBuilder("gero", "http://gero.longevityalliance.org/")(ops)
+  lazy val gero  = Prefix("gero", "http://gero.longevityalliance.org/")(ops)
 
-  object go extends PrefixBuilder("gero", "http://gero.longevityalliance.org/")(ops)
+  lazy val go =  Prefix("gero", "http://gero.longevityalliance.org/")(ops)
 
   val owl = OWLPrefix[Rdf]
   val rdf = RDFPrefix[Rdf]
@@ -125,6 +123,8 @@ abstract class OntologyClasses[Rdf <: RDF, M[+_] , Sin, Sout](implicit
 
   lazy val allFacts: List[PointedGraph[Rdf]] = {
     import org.w3.banana.diesel._
+    import org.w3.banana.syntax.DieselSyntax._
+
 
     val g: List[PointedGraph[Rdf]] = List (
         agingGene.a(gene)   -- rdfs.subClassOf ->- gene  ,

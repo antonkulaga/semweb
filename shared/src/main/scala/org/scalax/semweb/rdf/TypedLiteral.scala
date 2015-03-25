@@ -152,11 +152,12 @@ object DateTimeFormats{
   }
 
   def timeFormat(value:Date):String = {
-    val offset = value.getTimezoneOffset
+/*    val offset = value.getTimezoneOffset
     val ho: Int = offset / 60
     val min = offset % 60
     val strOffset: String = if(offset==0) "" else (if(offset>0) "+" else "")+format2(ho)+":"+format2(min)
-    s"${format2(value.getHours)}:${format2(value.getMinutes)}:${format2(value.getSeconds)}$strOffset"
+    s"${format2(value.getHours)}:${format2(value.getMinutes)}:${format2(value.getSeconds)}$strOffset"*/
+    s"${format2(value.getHours)}:${format2(value.getMinutes)}:${format2(value.getSeconds)}"
   }
 
   def dateTimeFormat(value:Date) = {

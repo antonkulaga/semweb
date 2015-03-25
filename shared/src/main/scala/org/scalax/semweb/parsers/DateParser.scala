@@ -1,9 +1,7 @@
 package org.scalax.semweb.parsers
-import org.parboiled2.RuleFrame.ZeroOrMore
+import java.util.Date
+
 import org.parboiled2._
-import org.scalax.semweb.sparql
-import org.scalax.semweb.sparql._
-import java.util.{Calendar, Date}
 
 class DateParser(val input:ParserInput) extends BasicParser {
 
@@ -13,6 +11,20 @@ class DateParser(val input:ParserInput) extends BasicParser {
 
 
   /**
+   * Allocates a <code>Date</code> object and initializes it so that
+   * it represents midnight, local time, at the beginning of the day
+   * specified by the <code>year</code>, <code>month</code>, and
+   * <code>date</code> arguments.
+   *
+   * @param   year    the year minus 1900.
+   * @param   month   the month between 0-11.
+   * @param   date    the day of the month between 1-31.
+   * @see     java.util.Calendar
+   * @deprecated As of JDK version 1.1,
+   * replaced by <code>Calendar.set(year + 1900, month, date)</code>
+   * or <code>GregorianCalendar(year + 1900, month, date)</code>.
+   */
+  /**
    * creates date by using calendar
    * @param year
    * @param month
@@ -20,9 +32,10 @@ class DateParser(val input:ParserInput) extends BasicParser {
    * @return
    */
   protected def date(year:Int,month:Int,day:Int) = {
-    val c = Calendar.getInstance()
+    new Date(year-1900,month-1,day)
+    /*val c = Calendar.getInstance()
     c.set(year,month-1,day)
-    new Date(c.getTimeInMillis)
+    new Date(c.getTimeInMillis)*/
   }
 
 

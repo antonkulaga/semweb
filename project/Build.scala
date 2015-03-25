@@ -7,6 +7,7 @@ import org.scalajs.sbtplugin.ScalaJSPlugin
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 import org.scalajs.sbtplugin.cross.CrossProject
 
+
 object Build extends sbt.Build
 {
 
@@ -41,7 +42,7 @@ object Build extends sbt.Build
 
   val sameSettings:Seq[Setting[_]] = Seq(
     organization := "org.denigma",
-    scalaVersion :="2.11.5",
+    scalaVersion :="2.11.6",
     version := Versions.semWeb,
     resolvers += "bintray-alexander_myltsev" at "http://dl.bintray.com/alexander-myltsev/maven/",
     resolvers += "Sonatype OSS Releases" at "https://oss.sonatype.org/content/repositories/releases",
@@ -59,18 +60,20 @@ object Build extends sbt.Build
       libraryDependencies ++= Dependencies.shared.value
   )
 
-  val jsSettings: Seq[Setting[_]] = Seq(
+  val jsSettings: Seq[Setting[_]] = publishSettings++ Seq(
+    name := "semweb",
     libraryDependencies ++=  Dependencies.semWebJS.value,
-    testFrameworks += new TestFramework("utest.runner.Framework")
+    testFrameworks += new TestFramework("utest.runner.Framework"),
+    jsDependencies += RuntimeDOM % "test"
   )
 
-  val jvmSettings : Seq[Setting[_]] = Seq(
+  val jvmSettings : Seq[Setting[_]] =  publishSettings++Seq(
+    name := "semweb",
     libraryDependencies ++=  Dependencies.semWebJVM.value,
     testFrameworks += new TestFramework("utest.runner.Framework")
   )
 
   //val semwebModule = XModule(id = "semweb",  defaultSettings = publishSettings ++ sharedSettings ++ XScalaSettings )
-
   lazy val semweb = CrossProject("semweb",new File("."),CrossType.Full).
     settings(sharedSettings: _*).
     jsSettings(jsSettings: _* ).

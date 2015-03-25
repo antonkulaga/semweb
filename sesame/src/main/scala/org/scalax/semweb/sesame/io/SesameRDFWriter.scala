@@ -3,14 +3,13 @@ package org.scalax.semweb.sesame.io
 import java.io._
 
 import org.openrdf.rio
-import org.w3.banana.RDFWriterSelector
 import org.w3.banana.io._
-import org.w3.banana.sesame.io.SesameSyntax
 import org.w3.banana.sesame.{Sesame, SesameOps}
+
 import scala.collection.JavaConversions._
 import scala.util._
 
-class SesameRDFWriter[T: Syntax](implicit
+class SesameRDFWriter[T](implicit
                                  ops: SesameOps,
                                  sesameSyntax: SesameSyntax[T]
                                   ) extends RDFWriter[Sesame, Try, T] {
@@ -60,11 +59,13 @@ class SesameRDFWriterHelper(implicit ops: SesameOps) {
 
   implicit val jsonldFlattenedWriter: RDFWriter[Sesame, Try, JsonLdFlattened] = new SesameRDFWriter[JsonLdFlattened]
 
+/*
   val selector: RDFWriterSelector[Sesame, Try] =
     WriterSelector[Sesame#Graph, Try, RDFXML] combineWith
       WriterSelector[Sesame#Graph, Try, Turtle] combineWith
       WriterSelector[Sesame#Graph, Try, JsonLdCompacted] combineWith
       WriterSelector[Sesame#Graph, Try, JsonLdExpanded] combineWith
       WriterSelector[Sesame#Graph, Try, JsonLdFlattened]
+*/
 
 }
