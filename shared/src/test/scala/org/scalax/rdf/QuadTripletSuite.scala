@@ -1,6 +1,6 @@
-package org.scalax.rdf
+package org.denigma.rdf
 
-import org.scalax.semweb.rdf.{Quad, AnyLit, IRI}
+import org.denigma.semweb.rdf.{Quad, AnyLit, IRI}
 import utest._
 import utest.framework.TestSuite
 
@@ -30,7 +30,7 @@ object QuadTripletSuite extends TestSuite{
 
 
   def tests = TestSuite {
-    "quads in scalax should" - {
+    "quads in denigma should" - {
 
       "compare well to each other" - {
 

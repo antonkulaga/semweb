@@ -1,7 +1,7 @@
-package org.scalax.shapes
-import org.scalax.semweb.rdf.IRI
-import org.scalax.semweb.rdf.vocabulary.{FOAF, XSD}
-import org.scalax.semweb.shex._
+package org.denigma.shapes
+import org.denigma.semweb.rdf.IRI
+import org.denigma.semweb.rdf.vocabulary.{FOAF, XSD}
+import org.denigma.semweb.shex._
 import utest._
 
 object ShapesModificationSuite extends TestSuite{

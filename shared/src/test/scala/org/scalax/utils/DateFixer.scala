@@ -1,4 +1,4 @@
-package org.scalax.utils
+package org.denigma.utils
 
 import java.util.Date
 

@@ -1,13 +1,13 @@
-package org.scalax.parsers
+package org.denigma.parsers
 
 import java.util.{Calendar, Date}
 
-import org.scalax.semweb.parsers.DateParser
-import org.scalax.semweb.parsers.sample.Calculator
-import org.scalax.semweb.rdf.DateTimeFormats
-import org.scalax.utils.{DateFixer, DateTester}
+import org.denigma.semweb.parsers.DateParser
+import org.denigma.semweb.parsers.sample.Calculator
+import org.denigma.semweb.rdf.DateTimeFormats
+import org.denigma.utils.{DateFixer, DateTester}
 import utest._
-import org.scalax.semweb._
+import org.denigma.semweb._
 
 import scala.util.Try
 

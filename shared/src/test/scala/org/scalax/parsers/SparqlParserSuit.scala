@@ -1,10 +1,10 @@
-package org.scalax.parsers
+package org.denigma.parsers
 
 import org.parboiled2._
-import org.scalax.semweb.parsers.TermParser
-import org.scalax.semweb.rdf
-import org.scalax.semweb.rdf.{IRI, BlankNode, BooleanLiteral}
-import org.scalax.utils.{DateTester, DateFixer}
+import org.denigma.semweb.parsers.TermParser
+import org.denigma.semweb.rdf
+import org.denigma.semweb.rdf.{IRI, BlankNode, BooleanLiteral}
+import org.denigma.utils.{DateTester, DateFixer}
 import utest._
 import utest.framework.TestSuite
 

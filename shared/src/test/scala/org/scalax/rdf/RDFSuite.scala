@@ -1,9 +1,9 @@
-package org.scalax.rdf
+package org.denigma.rdf
 
 import java.util.{Calendar, Date}
 
-import org.scalax.semweb.rdf._
-import org.scalax.utils.DateFixer
+import org.denigma.semweb.rdf._
+import org.denigma.utils.DateFixer
 
 import utest._
 
@@ -11,7 +11,7 @@ object RDFSuite extends TestSuite with DateFixer{
 
 
   def tests = TestSuite {
-    "RDF classes in scalax.rdf should" - {
+    "RDF classes in denigma.rdf should" - {
 
       "work well with trailing slashes" - {
 

@@ -20,22 +20,22 @@ Setting up:
 
     resolvers += Resolver.url("bintray-sbt-plugin-releases",url("http://dl.bintray.com/content/sbt/sbt-plugin-releases"))(Resolver.ivyStylePatterns)
 
-    addSbtPlugin("me.lessis" % "bintray-sbt" % "0.2.0")
+    addSbtPlugin("me.lessis" % "bintray-sbt" % "0.2.1")
 ```
 
-2 Add scalax resolvers:
+2 Add denigma resolvers:
 ```scala
 resolvers += bintray.Opts.resolver.repo("denigma", "denigma-releases") //for releases
 ```
 
-3) Add version that you want to use (see published versions at bintray https://bintray.com/scalax )
+3) Add version that you want to use (see published versions at bintray https://bintray.com/denigma )
 If you use release version it looks like:
 
 ```scala
 
-    libraryDependencies += "org.scalax" %% "semweb" % "0.6.7"// for scala projects
+    libraryDependencies += "org.denigma" %% "semweb" % "0.7.0"// for scala projects
 
-    libraryDependencies += "org.scalax" %%% "semweb" % "0.6.7"// for scalajs projects, note %%% is used
+    libraryDependencies += "org.denigma" %%% "semweb" % "0.7.0"// for scalajs projects, note %%% is used
 ```
 
 4). Use it in your project!
@@ -47,7 +47,7 @@ Contribution:
 
 Ideas and pull-requests are always welcome:
 ```
-    git clone https://github.com/scalax/semweb
+    git clone https://github.com/denigma/semweb
     sbt test //to run tests
 ```
 
@@ -62,7 +62,7 @@ semweb packages:
 ================
 
 
-org.scalax.semweb.rdf
+org.denigma.semweb.rdf
 ---------------------
 
 IRI, Resource, BlankNode, Literals, Quads/Triplets as well as some other basic RDF classes + vocabulary.
@@ -70,7 +70,7 @@ What is the most important is that they can be easily pickled/unpickled to be us
 RDF classes also inherit from PatterElement and other QueryElement traits so you can easily use them in SPARQL DSL without conversions
 
 
-org.scalax.semweb.sparql
+org.denigma.semweb.sparql
 ------------------------
 
 SPARQL DSL that allows making typesafe SPARQL quries. Thy syntax is like:
@@ -87,7 +87,7 @@ SPARQL DSL that allows making typesafe SPARQL quries. Thy syntax is like:
 Where ?("variable_name") is for SPARQL variables, and Pat is for SPARQL graph patterns.
 At the moment SPARQL DSL is on rather early stage (only the most widely used operators are supported). Big part of the code maybe rewritten in future
 
-org.scalax.semweb.shex
+org.denigma.semweb.shex
 ----------------------
 
 RDF Shape Expressions ( see specification here http://www.w3.org/2001/sw/wiki/ShEx and http://www.w3.org/2013/ShEx/Primer.html ) were one of the main reasons why
@@ -96,7 +96,7 @@ this library was created they allow to validate user input and can be used for g
 Only several classes are there at the moment, most of the code is yet to be transferred from https://github.com/labra/ShExcala
 
 
-org.scalax.semweb.sesame
+org.denigma.semweb.sesame
 -------------------------
 
 Implicit conversions from semweb.rdf classes to sesame rdf model and vice versa.

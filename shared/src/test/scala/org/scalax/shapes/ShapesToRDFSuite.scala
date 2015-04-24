@@ -1,8 +1,8 @@
-package org.scalax.shapes
+package org.denigma.shapes
 
-import org.scalax.semweb.rdf.{IRI, IntLiteral, Quad}
-import org.scalax.semweb.rdf.vocabulary._
-import org.scalax.semweb.shex._
+import org.denigma.semweb.rdf.{IRI, IntLiteral, Quad}
+import org.denigma.semweb.rdf.vocabulary._
+import org.denigma.semweb.shex._
 import utest._
 
 object ShapesToRDFSuite extends TestSuite{

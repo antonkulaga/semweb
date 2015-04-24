@@ -48,9 +48,9 @@ object Build extends sbt.Build
     resolvers += "Sonatype OSS Releases" at "https://oss.sonatype.org/content/repositories/releases",
     parallelExecution in Test := false,
     initialCommands in console := """
-                                    |import org.scalax.semweb.rdf._
-                                    |import org.scalax.semweb.sparql._
-                                    |import org.scalax.semweb.composites
+                                    |import org.denigma.semweb.rdf._
+                                    |import org.denigma.semweb.sparql._
+                                    |import org.denigma.semweb.composites
                                     |""".stripMargin
   )
 
@@ -83,13 +83,6 @@ object Build extends sbt.Build
   lazy val semwebJvm   = semweb.jvm
 
 
-
-/*  lazy val semweb            = semwebModule.project(semwebJvm, semwebJs)
-  lazy val semwebJvm         = semwebModule.jvmProject(semwebSharedJvm)
-  lazy val semwebJs          = semwebModule.jsProject(semwebSharedJs)
-  lazy val semwebSharedJvm   = semwebModule.jvmShared()
-  lazy val semwebSharedJs    = semwebModule.jsShared(semwebSharedJvm)*/
-
   lazy val sesame = Project(
     id = "sesame",
 
@@ -110,9 +103,9 @@ object Build extends sbt.Build
     libraryDependencies ++= Dependencies.semWebSesame.value,
 
     initialCommands in console := """
-                                    |import org.scalax.semweb.rdf._
-                                    |import org.scalax.semweb.sparql._
-                                    |import org.scalax.semweb.sesame._
+                                    |import org.denigma.semweb.rdf._
+                                    |import org.denigma.semweb.sparql._
+                                    |import org.denigma.semweb.sesame._
                                     |""".stripMargin
 
   )).dependsOn(semwebJvm)

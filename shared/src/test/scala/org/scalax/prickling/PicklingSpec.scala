@@ -1,11 +1,12 @@
-package org.scalax.prickling
+package org.denigma.prickling
 
 import java.util.Date
 
-import org.scalax.semweb.messages.StringQueryMessages
-import org.scalax.semweb.rdf._
-import org.scalax.semweb.rdf.vocabulary.{FOAF, WI, XSD}
-import org.scalax.semweb.shex._
+import org.denigma.semweb.composites.SemanticComposites
+import org.denigma.semweb.messages.StringQueryMessages
+import org.denigma.semweb.rdf._
+import org.denigma.semweb.rdf.vocabulary.{FOAF, WI, XSD}
+import org.denigma.semweb.shex._
 import prickle.Pickler._
 import prickle.Unpickler._
 import prickle._
@@ -29,7 +30,7 @@ object PicklingSpec extends TestSuite
   def tests =  TestSuite{
 
      "pickling of RDF types" - {
-       import org.scalax.semweb.composites.SemanticComposites._
+       import SemanticComposites._
        val bar = IRI("http://bar")
        val ur: String = Pickle.intoString(bar)
        val unp:Try[IRI] = Unpickle[IRI].fromString(ur)
@@ -39,7 +40,7 @@ object PicklingSpec extends TestSuite
        /*
        * TODO: write abut weird results:
        * URI IS {"#id": "1", "uri": "http:\/\/bar"}
-       * But Res string is 222STRING IS  {"#cls": "org.scalax.semweb.rdf.IRI", "#val": {"#id": "1", "uri": "http:\/\/bar"}}
+       * But Res string is 222STRING IS  {"#cls": "org.denigma.semweb.rdf.IRI", "#val": {"#id": "1", "uri": "http:\/\/bar"}}
        * * * * */
 
        val re: String = Pickle.intoString[Res](bar)
@@ -66,7 +67,7 @@ object PicklingSpec extends TestSuite
 
      }
     "pickling messages" -{
-      import org.scalax.semweb.composites.SemanticComposites._
+      import SemanticComposites._
       val q1 = "query1"
       val id = "myId"
       val ask = StringQueryMessages.Ask(q1,id)
@@ -85,7 +86,7 @@ object PicklingSpec extends TestSuite
     }
 
     "pickling ArcRule" -{
-      import org.scalax.semweb.composites.SemanticComposites._
+      import SemanticComposites._
       //this two lines lead to crazy macro errors
 
    
@@ -145,7 +146,7 @@ object PicklingSpec extends TestSuite
     }
 
     "pickling property model" -{
-      import org.scalax.semweb.composites.SemanticComposites._
+      import SemanticComposites._
       val sub = WI.re("Subject")
       val pred = WI.re("Predicate")
       val obj = WI.re("Object")
@@ -158,7 +159,7 @@ object PicklingSpec extends TestSuite
     }
     
     "AND RULE pickling" -{
-      import org.scalax.semweb.composites.SemanticComposites._
+      import SemanticComposites._
       val ns = NameStem(entrez)
       val vs = ValueStem(gero)
       val arc: ArcRule = ArcRule(IRILabel(gero),ns,vs,  ExactlyOne, Seq.empty[Action], Some(0), Some("Hello world"), Some(IRI(":hello")) )
@@ -189,7 +190,7 @@ object PicklingSpec extends TestSuite
     }
 
     "pickling shape" -{
-      import org.scalax.semweb.composites.SemanticComposites._
+      import SemanticComposites._
       val id = IRI("http://myshape.com")
       val sub = gero / "has_ENTREZID"
       val sr = SubjectRule(sub).isCalled("Gene").hasBase(gero)
