@@ -205,8 +205,10 @@ object PicklingSpec extends TestSuite
       val st = Pickle.intoString(sh)
       val sho = Unpickle[Shape].fromString(st)
       assert(sho.get==sh)
-      
-      val ss = new ShEx(Rule.genRuleLabel(),Seq(sh),Some(sh.id),Some("hello"),Seq(":"->gero.stringValue,"rdf"->vocabulary.RDF.namespace))
+
+
+      val testShex = IRI(WI.PLATFORM / "test")
+      val ss = new ShEx(testShex,Seq(sh),Some(sh.id),Some("hello"),Seq(":"->gero.stringValue,"rdf"->vocabulary.RDF.namespace))
       val sss = Pickle.intoString(ss)
       val sso = Unpickle[ShEx].fromString(sss)
       assert(sso.isSuccess)
