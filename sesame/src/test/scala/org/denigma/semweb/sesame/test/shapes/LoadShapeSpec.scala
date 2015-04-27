@@ -1,6 +1,6 @@
 package org.denigma.semweb.sesame.test.shapes
 
-import java.io.{StringReader, InputStream}
+import java.io.{File, StringReader, InputStream}
 
 import org.denigma.semweb.sesame.test.classes.{BigData, GeneLoader}
 import org.denigma.semweb.sesame.test.data.Genes
@@ -65,7 +65,7 @@ class LoadShapeSpec  extends  WordSpec with Matchers with GeneLoader {
       val res = sh.id.asResource
       val db = BigData(true)
       val str = Genes.showEvidence() //write str to turtle
-     // println("\n"+str+"\n")
+      //this.writeToFile("/home/antonkulaga/Documents/evidence.ttl",str)
       val reader = new StringReader(str)
       val p = db.parseReader(reader)
       p.isSuccess shouldEqual true

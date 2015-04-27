@@ -1,11 +1,11 @@
 package org.denigma.semweb.sesame.test.classes
 
-import java.io.InputStream
+import java.io.{FileWriter, InputStream}
 
 /**
  * Loads genes resources into database
  */
-trait GeneLoader {
+trait GeneLoader extends Write2File{
 
   def loadData(db:BigData) = {
     val st: InputStream = getClass.getResourceAsStream("/genes_shape.ttl")
@@ -18,4 +18,16 @@ trait GeneLoader {
     db.parseStream("gero.longevityalliance.org.ttl",web)
   }
 
+
+}
+
+trait Write2File {
+
+  def using[A <: {def close(): Unit}, B](param: A)(f: A => B): B =
+    try { f(param) } finally { param.close() }
+
+  def writeToFile(fileName:String, data:String) =
+    using (new FileWriter(fileName)) {
+      fileWriter => fileWriter.write(data)
+    }
 }

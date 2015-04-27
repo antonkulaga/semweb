@@ -87,7 +87,6 @@ class ShapeSerializationSpec extends  WordSpec with Matchers {
       u.isSuccess shouldEqual true
       val ids = db.loadAllShapeIds
       ids.isSuccess shouldEqual true
-      ids.get == page
 
       object test extends ShapeBuilder(page)
 

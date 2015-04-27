@@ -10,84 +10,96 @@
 @prefix gero: <http://gero.longevityalliance.org/> .
 @prefix entrez: <http://ncbi.nlm.nih.gov/gene/> .
 
-_:0.06983549548166279 shex:occurs shex:One-or-many ;
-	shex:propDefinition gero:has_ref ;
-	shex:valueType rdfs:Resource ;
-	dc:title "Publication"^^xsd:string ;
-	pl:priority "6"^^xsd:integer .
-
-_:0.08181387037359245 shex:maxoccurs "2"^^xsd:integer ;
-	shex:minoccurs "1"^^xsd:integer ;
-	shex:propDefinition gero:from_model_organism ;
-	dc:title "Organism"^^xsd:string ;
-	pl:priority "12"^^xsd:integer ;
-	def:stem <http://gero.longevityalliance.org/> .
-
-_:0.12277200221755658 shex:allowedValue gero:Anti-Longevity , gero:Pro-Longevity ;
-	shex:occurs shex:Exactly-one ;
-	shex:propDefinition gero:has_influence ;
-	dc:title "Influence"^^xsd:string ;
-	pl:priority "18"^^xsd:integer .
-
-_:0.19040589414661124 shex:occurs shex:Exactly-one ;
-	shex:propDefinition gero:from_db ;
-	shex:valueType rdfs:Resource ;
-	dc:title "DB"^^xsd:string ;
-	pl:priority "3"^^xsd:integer .
-
-_:0.3481228727618151 shex:occurs shex:Exactly-one ;
-	shex:propDefinition rdfs:subClassOf ;
-	dc:title "Class"^^xsd:string ;
-	pl:priority "2"^^xsd:integer ;
-	def:stem <http://gero.longevityalliance.org/> .
-
-_:0.4572922448754929 shex:occurs shex:One-or-many ;
-	shex:propDefinition gero:from_tissue ;
-	shex:valueType rdfs:Resource ;
-	dc:title "Tissue"^^xsd:string ;
-	pl:priority "17"^^xsd:integer .
-
-_:0.5991651959786445 shex:occurs shex:Zero-or-one ;
-	shex:propDefinition gero:has_name ;
-	dc:title "DB object Name"^^xsd:string ;
-	pl:priority "8"^^xsd:integer ;
-	def:stem <http://gero.longevityalliance.org/> .
-
-_:0.6295704268506844 shex:occurs shex:Exactly-one ;
-	shex:propDefinition gero:has_ENTREZID ;
-	dc:title "ENTREZID"^^xsd:string ;
-	pl:priority "1"^^xsd:integer ;
+<http://gero.longevityalliance.org/EvidenceShape/EntrezGene> dc:title "ENTREZ ID" ;
+	pl:has_base "http://ncbi.nlm.nih.gov/gene/" ;
+	a pl:Subject ;
 	def:stem <http://ncbi.nlm.nih.gov/gene/> .
 
-_:0.762911506754341 shex:allowedValue gero:ND , gero:IC , gero:IMP , gero:IDA , gero:NAS , gero:IPI , gero:IEP , gero:IGI , gero:TAS ;
-	shex:occurs shex:Exactly-one ;
-	shex:propDefinition gero:has_code ;
-	dc:title "Evidence Code"^^xsd:string ;
-	pl:priority "7"^^xsd:integer .
+gero:Evidence_Shape shex:property <http://gero.longevityalliance.org/Evidence_Shape/from_model_organism> , <http://gero.longevityalliance.org/Evidence_Shape/has_ref> , <http://gero.longevityalliance.org/Evidence_Shape/added_on> , <http://gero.longevityalliance.org/Evidence_Shape/is_DB_object> , <http://gero.longevityalliance.org/Evidence_Shape/has_influence> , <http://gero.longevityalliance.org/Evidence_Shape/has_name> , <http://gero.longevityalliance.org/Evidence_Shape/subClassOf> , <http://gero.longevityalliance.org/Evidence_Shape/from_tissue> , <http://gero.longevityalliance.org/Evidence_Shape/has_code> , <http://gero.longevityalliance.org/Evidence_Shape/has_symbol> , <http://gero.longevityalliance.org/Evidence_Shape/from_db> , <http://gero.longevityalliance.org/Evidence_Shape/of_type> ;
+	pl:has_subject_settings <http://gero.longevityalliance.org/EvidenceShape/EntrezGene> ;
+	a shex:ResourceShape .
 
-_:0.8486975306013855 shex:allowedValue gero:gene_product , gero:protein , gero:transcript , gero:rRNA , gero:protein_complex , gero:microRNA , gero:snoRNA , gero:snRNA , gero:tRNA , gero:ncRNA ;
-	shex:occurs shex:Exactly-one ;
-	shex:propDefinition gero:of_type ;
-	dc:title "Gene product type"^^xsd:string ;
-	pl:priority "11"^^xsd:integer .
-
-_:0.8987915229673961 shex:occurs shex:Exactly-one ;
-	shex:propDefinition gero:has_symbol ;
-	shex:valueType rdfs:Resource ;
-	dc:title "DB Object Symbol"^^xsd:string ;
-	pl:priority "5"^^xsd:integer .
-
-_:0.923746210365575 shex:occurs shex:Exactly-one ;
-	shex:propDefinition gero:is_DB_object ;
-	shex:valueType rdfs:Resource ;
-	dc:title "DB Object ID"^^xsd:string ;
-	pl:priority "4"^^xsd:integer .
-
-_:0.9492724118794664 shex:occurs shex:Exactly-one ;
+<http://gero.longevityalliance.org/Evidence_Shape/added_on> shex:occurs shex:Exactly-one ;
 	shex:propDefinition gero:added_on ;
 	shex:valueType xsd:date ;
-	dc:title "Date"^^xsd:string ;
-	pl:priority "13"^^xsd:integer .
+	dc:title "Date" ;
+	pl:priority 13 ;
+	a def:ArcRule .
 
-gero:Evidence_Shape shex:property _:0.3481228727618151 , _:0.4572922448754929 , _:0.08181387037359245 , _:0.923746210365575 , _:0.12277200221755658 , _:0.9492724118794664 , _:0.8486975306013855 , _:0.06983549548166279 , _:0.5991651959786445 , _:0.8987915229673961 , _:0.6295704268506844 , _:0.19040589414661124 , _:0.762911506754341 ;
-	a shex:ResourceShape .
+<http://gero.longevityalliance.org/Evidence_Shape/from_db> shex:occurs shex:Exactly-one ;
+	shex:propDefinition gero:from_db ;
+	shex:valueType rdfs:Resource ;
+	dc:title "DB" ;
+	pl:priority 3 ;
+	a def:ArcRule .
+
+<http://gero.longevityalliance.org/Evidence_Shape/from_model_organism> shex:maxoccurs 2 ;
+	shex:minoccurs 1 ;
+	shex:propDefinition gero:from_model_organism ;
+	dc:title "Organism" ;
+	pl:priority 12 ;
+	a def:ArcRule ;
+	def:stem <http://gero.longevityalliance.org/> .
+
+<http://gero.longevityalliance.org/Evidence_Shape/from_tissue> shex:occurs shex:One-or-many ;
+	shex:propDefinition gero:from_tissue ;
+	shex:valueType rdfs:Resource ;
+	dc:title "Tissue" ;
+	pl:priority 17 ;
+	a def:ArcRule .
+
+<http://gero.longevityalliance.org/Evidence_Shape/has_code> shex:allowedValue gero:TAS , gero:ND , gero:IMP , gero:NAS , gero:IDA , gero:IPI , gero:IGI , gero:IEP , gero:IC ;
+	shex:occurs shex:Exactly-one ;
+	shex:propDefinition gero:has_code ;
+	dc:title "Evidence Code" ;
+	pl:priority 7 ;
+	a def:ArcRule .
+
+<http://gero.longevityalliance.org/Evidence_Shape/has_influence> shex:allowedValue gero:Pro-Longevity , gero:Anti-Longevity ;
+	shex:occurs shex:Exactly-one ;
+	shex:propDefinition gero:has_influence ;
+	dc:title "Influence" ;
+	pl:priority 18 ;
+	a def:ArcRule .
+
+<http://gero.longevityalliance.org/Evidence_Shape/has_name> shex:occurs shex:Zero-or-one ;
+	shex:propDefinition gero:has_name ;
+	dc:title "DB object Name" ;
+	pl:priority 8 ;
+	a def:ArcRule ;
+	def:stem <http://gero.longevityalliance.org/> .
+
+<http://gero.longevityalliance.org/Evidence_Shape/has_ref> shex:occurs shex:One-or-many ;
+	shex:propDefinition gero:has_ref ;
+	shex:valueType rdfs:Resource ;
+	dc:title "Publication" ;
+	pl:priority 6 ;
+	a def:ArcRule .
+
+<http://gero.longevityalliance.org/Evidence_Shape/has_symbol> shex:occurs shex:Exactly-one ;
+	shex:propDefinition gero:has_symbol ;
+	shex:valueType rdfs:Resource ;
+	dc:title "DB Object Symbol" ;
+	pl:priority 5 ;
+	a def:ArcRule .
+
+<http://gero.longevityalliance.org/Evidence_Shape/is_DB_object> shex:occurs shex:Exactly-one ;
+	shex:propDefinition gero:is_DB_object ;
+	shex:valueType rdfs:Resource ;
+	dc:title "DB Object ID" ;
+	pl:priority 4 ;
+	a def:ArcRule .
+
+<http://gero.longevityalliance.org/Evidence_Shape/of_type> shex:allowedValue gero:gene_product , gero:protein_complex , gero:protein , gero:transcript , gero:rRNA , gero:snoRNA , gero:microRNA , gero:snRNA , gero:ncRNA , gero:tRNA ;
+	shex:occurs shex:Exactly-one ;
+	shex:propDefinition gero:of_type ;
+	dc:title "Gene product type" ;
+	pl:priority 11 ;
+	a def:ArcRule .
+
+<http://gero.longevityalliance.org/Evidence_Shape/subClassOf> shex:occurs shex:Exactly-one ;
+	shex:propDefinition rdfs:subClassOf ;
+	dc:title "Class" ;
+	pl:priority 2 ;
+	a def:ArcRule ;
+	def:stem <http://gero.longevityalliance.org/> .

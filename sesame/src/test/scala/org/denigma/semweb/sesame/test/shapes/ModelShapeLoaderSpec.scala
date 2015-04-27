@@ -51,7 +51,7 @@ class ModelShapeLoaderSpec  extends  WordSpec with Matchers with GeneLoader with
       val shape = shop.get
       shape.id.asResource shouldEqual res
 
-      shape.arcSorted().size shouldEqual 13
+      shape.arcSorted().size shouldEqual 12
 
       val query = "SELECT ?gene WHERE { ?gene <http://gero.longevityalliance.org/has_ENTREZID> ?entrezId   }"
 
@@ -59,11 +59,11 @@ class ModelShapeLoaderSpec  extends  WordSpec with Matchers with GeneLoader with
       val models: Set[PropertyModel] = mods.get
       models.size shouldEqual 9
       val first = models.head
-      first.properties.keys.size shouldEqual 13
-      val geno = models.find(m=>m.properties.contains(entrezId) && m.properties(entrezId).exists(p=>p.stringValue.contains("31220")))
+      first.properties.keys.size shouldEqual 12
+      val geno = models.find(m=>m.id.stringValue.contains("31220"))//m.properties.contains(entrezId) && m.properties(entrezId).exists(p=>p.stringValue.contains("31220")))
       val gene = geno.get
-      gene.properties.size shouldEqual 13
-      gene.properties(entrezId) shouldEqual Set(IRI("http://ncbi.nlm.nih.gov/gene/31220"))
+      gene.properties.size shouldEqual 12
+      //gene.properties(entrezId) shouldEqual Set(IRI("http://ncbi.nlm.nih.gov/gene/31220"))
       gene.properties(RDFS.SUBCLASSOF) shouldEqual Set(gero / "growth_factors")
 
       db.shutDown()
@@ -163,7 +163,7 @@ class ModelShapeLoaderSpec  extends  WordSpec with Matchers with GeneLoader with
       propo.isSuccess shouldEqual(true)
       val props = propo.get
       val sts: List[Statement] = props.toList
-      val e = sts.count{st=>st.getPredicate.stringValue().contains("has_ENTREZID")}
+      val e = sts.count{st=>st.getPredicate.stringValue().contains("has_code")}
       e shouldEqual 9//loads everything
       val subunit = sts.count(st=>st.getPredicate.stringValue().contains("has_name") && st.getObject.stringValue().contains("Glutamate-cysteine_ligase_catalytic_subunit"))
       subunit shouldEqual 1
@@ -172,7 +172,7 @@ class ModelShapeLoaderSpec  extends  WordSpec with Matchers with GeneLoader with
       ps.exists(p=>p.properties.exists(p=>p._1.stringValue.contains("has_name"))) shouldBe true
       ps.exists(p=>p.properties.exists(p=>p._2.exists(s=>s.stringValue.contains("Glutamate-cysteine_ligase_catalytic_subunit")))) shouldBe true
       val totalProps = ps.foldLeft(0)((acc,p)=>acc+p.properties.size)
-      totalProps shouldEqual (13*9-1)
+      totalProps shouldEqual (12*9-1)
       db.shutDown()
     }
 
@@ -207,7 +207,7 @@ class ModelShapeLoaderSpec  extends  WordSpec with Matchers with GeneLoader with
       propo.isSuccess shouldEqual true
       val props = propo.get
       val sts = props.toList
-      val e = sts.count{st=>st.getPredicate.stringValue().contains("has_ENTREZID")}
+      val e = sts.count{st=>st.getPredicate.stringValue().contains("has_name")}
       e shouldEqual 3 //loads everything
       //printGraph(props)
       val ps = db.modelStatementsExtractor.extractFromStatements(sts)
