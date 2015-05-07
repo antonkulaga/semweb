@@ -3,7 +3,7 @@ package org.denigma.semweb.sesame.test.shapes
 import java.io.InputStream
 
 import org.denigma.semweb.sesame.test.classes.{GeneLoader, BigData}
-import org.denigma.semweb.sesame.test.data.GeneSchemaData
+import org.denigma.semweb.sesame.test.data.genes.GeneSchemaData
 import org.openrdf.model.{Statement, Resource}
 import org.openrdf.query.GraphQueryResult
 import org.scalatest.{Matchers, WordSpec}
@@ -51,7 +51,7 @@ class ModelShapeLoaderSpec  extends  WordSpec with Matchers with GeneLoader with
       val shape = shop.get
       shape.id.asResource shouldEqual res
 
-      shape.arcSorted().size shouldEqual 12
+      shape.arcSorted.size shouldEqual 12
 
       val query = "SELECT ?gene WHERE { ?gene <http://gero.longevityalliance.org/has_ENTREZID> ?entrezId   }"
 
@@ -84,7 +84,7 @@ class ModelShapeLoaderSpec  extends  WordSpec with Matchers with GeneLoader with
       val shop: Try[Shape] = db.loadShape(res)
       shop.isSuccess shouldEqual true
       val shape = shop.get
-      val arcs = shape.arcSorted()
+      val arcs = shape.arcSorted
       val classo = arcs.collectFirst{
         case arc @ ArcRule(  id: Label, name, ValueStem(st),occurs: Cardinality,  actions,  priority,  Some("Class"),   default) =>
           arc
@@ -150,7 +150,7 @@ class ModelShapeLoaderSpec  extends  WordSpec with Matchers with GeneLoader with
       val shape = shop.get
 
 
-      val arcs = shape.arcSorted()
+      val arcs = shape.arcSorted
       val classo = arcs.collectFirst{
         case arc @ ArcRule(  id: Label, name, ValueStem(st),occurs: Cardinality,  actions,  priority,  Some("Class"),   default) =>
           arc
@@ -195,7 +195,7 @@ class ModelShapeLoaderSpec  extends  WordSpec with Matchers with GeneLoader with
       val shape = shop.get
 
 
-      val arcs = shape.arcSorted()
+      val arcs = shape.arcSorted
       val classo = arcs.collectFirst{
         case arc @ ArcRule(  id: Label, name, ValueStem(st),occurs: Cardinality,  actions,  priority,  Some("Class"),   default) =>
           arc

@@ -18,19 +18,15 @@ class FromShapeLoadSpec extends  WordSpec with Matchers {
   "Shapes" should {
 
     val page = WI.re("Page")
-
-    object shape extends ShapeBuilder(page)
-
     val title = WI.pl("title")
-    shape has title of XSD.StringDatatypeIRI occurs ExactlyOne result
     val text = WI.pl("text")
-    shape has text of XSD.StringDatatypeIRI occurs ExactlyOne result
     val author = WI.pl("author")
-    shape has author of FOAF.PERSON occurs Plus result
 
+    val sh = ShapeBuilder(page) has
+      title of XSD.StringDatatypeIRI occurs ExactlyOne and
+      text of XSD.StringDatatypeIRI occurs ExactlyOne and
+      author of FOAF.PERSON occurs Plus shape
     //val pub = shape has WI.pl("published") of XSD.Date  occurs ExactlyOne result
-
-    val sh = shape.result
     val c: IRI = WI.re("context")
     val shapeQuads: Set[Quad] = sh.asQuads(c)
 

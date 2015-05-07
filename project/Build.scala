@@ -102,6 +102,8 @@ object Build extends sbt.Build
     
     libraryDependencies ++= Dependencies.semWebSesame.value,
 
+    updateOptions := updateOptions.value.withCachedResolution(true),
+
     initialCommands in console := """
                                     |import org.denigma.semweb.rdf._
                                     |import org.denigma.semweb.sparql._

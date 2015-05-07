@@ -19,6 +19,7 @@ package object shex {
   lazy val NoActions : Seq[Action] = Seq.empty[Action]
 
 
+  lazy val sh = IRI("http://www.w3.org/ns/shacl#")
 
   lazy val rs =  IRI("http://open-services.net/ns/core#")
   lazy val se =  IRI("http://www.w3.org/2013/ShEx/Definition#") //URL does not work but it is in

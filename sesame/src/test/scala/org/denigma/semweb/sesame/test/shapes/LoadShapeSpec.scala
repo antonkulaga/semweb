@@ -3,7 +3,7 @@ package org.denigma.semweb.sesame.test.shapes
 import java.io.{File, StringReader, InputStream}
 
 import org.denigma.semweb.sesame.test.classes.{BigData, GeneLoader}
-import org.denigma.semweb.sesame.test.data.Genes
+import org.denigma.semweb.sesame.test.data.genes.Genes
 import org.openrdf.model.Statement
 import org.openrdf.query.QueryLanguage
 import org.scalatest.{Matchers, WordSpec}
@@ -30,7 +30,7 @@ class LoadShapeSpec  extends  WordSpec with Matchers with GeneLoader {
       shop.isSuccess shouldEqual true
       val shape = shop.get
       shape.id.asResource shouldEqual res
-      shape.arcSorted().size shouldEqual 12//13
+      shape.arcSorted.size shouldEqual 12//13
 
       db.shutDown()
 
@@ -43,7 +43,7 @@ class LoadShapeSpec  extends  WordSpec with Matchers with GeneLoader {
       val shapo: Try[Shape] = db.loadShape(res)
       shapo.isSuccess shouldEqual true
       val shape = shapo.get
-      val arcs = shape.arcSorted()
+      val arcs = shape.arcSorted
 
 
       arcs.exists(arc=>arc.title.contains("DB Object ID")) shouldEqual true
@@ -73,7 +73,7 @@ class LoadShapeSpec  extends  WordSpec with Matchers with GeneLoader {
       shop.isSuccess shouldEqual true
       val shape = shop.get
       shape.id.asResource shouldEqual res
-      shape.arcSorted().size shouldEqual ruleNum
+      shape.arcSorted.size shouldEqual ruleNum
       import org.denigma.semweb.sparql._
       val frules=db.read{
         con=>

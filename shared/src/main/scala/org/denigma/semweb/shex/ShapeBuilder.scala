@@ -1,15 +1,40 @@
 package org.denigma.semweb.shex
 
 import org.denigma.semweb.rdf.vocabulary.RDFS
-import org.denigma.semweb.rdf.{IRI, RDFBuilder, Res}
+import org.denigma.semweb.rdf.{RDFValue, IRI, RDFBuilder, Res}
 
 import scala.collection.immutable._
+import com.softwaremill.quicklens._
 
 
+/*object Property{
+
+  def apply(id:Res,property:IRI) = {
+    new WithShapeProperty(ArcRule(property,id))
+  }
+}
+case class WithShapeProperty(arc:ArcRule = ArcRule.empty)
+{
+
+  def occurs(c:Cardinality) = modify(this)(t=>t.pointer.occurs).setTo(c)
+  def hasPriority(prior: Int) = modify(this)(t=>t.pointer.priority).setTo(Some(prior))
+  def hasNoPriority = modify(this)(t=>t.pointer.priority).setTo(None)
+  def default(value:RDFValue) = modify(this)(t=>t.pointer.default).setTo(Some(value))
+  def from(vals:IRI*) = modify(this)(t=>t.pointer.value).setTo(ValueSet(vals.toSet))
+  def startsWith(start:IRI) = modify(this)(t=>t.pointer.value).setTo(ValueStem(start))
+  def of(tp:IRI) = modify(this)(t=>t.pointer.value).setTo(ValueType(tp))
+  def oneOf(params: IRI*) = from(params:_*) //produces valueset
+  def ofShape(shape:Shape) = modify(this)(t=>t.pointer.value).setTo(ValueReference(shape.id))
+  def isCalled(title:String) = modify(this)(t=>t.pointer.title).setTo(Some(title))
+
+  def result = if(arc==ArcRule.empty) None else Some(arc) //temporal will be deleted in future
+}*/
+
+/*
 trait WithValueProperty {
   protected var vc: ValueClass = ValueType(RDFS.RESOURCE)
 
-  type This = this.type 
+  type This = this.type
 
   def from(vals:IRI*):This = {
     vc = ValueSet(vals.toSet)
@@ -32,12 +57,17 @@ trait WithValueProperty {
     this
   }
 
+  def ofShape(sh:Shape):This = {
+    vc = ValueReference(sh.id.asResource)
+    this
+  }
+
 
 }
 trait WithTitledProperty {
   protected var title: Option[String] = None
-  
-  type This = this.type 
+
+  type This = this.type
 
   def isCalled(tlt:String):This = {
     title = Some(tlt)
@@ -45,8 +75,6 @@ trait WithTitledProperty {
   }
 
 }
-
-
 /**
  * For nice shape building
  * @param propertyIRI
@@ -54,7 +82,8 @@ trait WithTitledProperty {
 class WithShapeProperty(id:Res,propertyIRI:IRI) extends WithValueProperty with WithTitledProperty{
   protected var occ: Cardinality = Plus
   protected var priority: Option[Int] = None
-  lazy val result: Option[ArcRule] = Some(ArcRule(Label.apply(id), propertyIRI, vc, occ, Seq.empty, this.priority, this.title))
+  protected var defaultValue:Option[RDFValue] = None
+  lazy val result: Option[ArcRule] = Some(ArcRule(Label.apply(id), propertyIRI, vc, occ, Seq.empty, this.priority, this.title,default = this.defaultValue))
 
   override type This = this.type
 
@@ -79,17 +108,69 @@ class WithShapeProperty(id:Res,propertyIRI:IRI) extends WithValueProperty with W
   }
 
 
+  def default(v:RDFValue) = {
+    this.defaultValue = Some(v)
+    this
+  }
 }
-/**
- * Quad builder
- */
+
+*/
+
+
+case class ShapeBuilder(shapeIRI:IRI,pointer:ArcRule = ArcRule.empty,rules:Set[Rule] = Set.empty){
+
+  self=> //to avoid confusion when copying
+  protected def genId(property:IRI) = shapeIRI / property.localName
+
+  
+  lazy val andRule =  new AndRule(rules+self.pointer,Label.apply(shapeIRI))
+  lazy val shape:Shape = Shape(shapeIRI,andRule)
+  
+  def -- : ShapeBuilder = this.withNewPointer
+
+  protected def withNewPointer = if(pointer==ArcRule.empty) self else self.copy(pointer = ArcRule.empty,rules = rules+self.pointer)
+
+  def has(property:IRI): ShapeBuilder = this.copy(pointer = ArcRule(property,genId(property)))
+
+  def and(prop:IRI) = this.withNewPointer.has(prop) 
+
+
+  def occurs(c:Cardinality) = modify(this)(t=>t.pointer.occurs).setTo(c)
+  def hasPriority(prior: Int) = modify(this)(t=>t.pointer.priority).setTo(Some(prior))
+  def hasNoPriority = modify(this)(t=>t.pointer.priority).setTo(None)
+  def default(value:RDFValue) = modify(this)(t=>t.pointer.default).setTo(Some(value))
+  def from(vals:IRI*) = modify(this)(t=>t.pointer.value).setTo(ValueSet(vals.toSet))
+  def startsWith(start:IRI) = modify(this)(t=>t.pointer.value).setTo(ValueStem(start))
+  def of(tp:IRI) = modify(this)(t=>t.pointer.value).setTo(ValueType(tp))
+  def oneOf(params: IRI*) = from(params:_*) //produces ValueSet
+  def ofShape(shape:Shape) = modify(this)(t=>t.pointer.value).setTo(ValueReference(shape.id))
+  def isCalled(title:String) = modify(this)(t=>t.pointer.title).setTo(Some(title))
+
+  /**
+   * If it is Empty rule then None, Some(pointer) otherwise
+   * @return
+   */
+  def pointerOption = if(pointer==ArcRule.empty) None else Some(pointer) //temporal will be deleted in future
+
+  def hasRule(rule:Rule) = this.copy(rules = self.rules + rule)
+}
+
+/*
 class ShapeBuilder(shapeIRI:IRI) extends RDFBuilder[WithShapeProperty]{
 
   protected def genId(property:IRI) = shapeIRI / property.localName
   
-  def has(iri:IRI) = this -- new WithShapeProperty(genId(iri), iri)
+  def has(iri:IRI) = this -- hasProperty(genId(iri), iri)
+  //def has(property: WithShapeProperty) = this -- hasProperty(genId(iri), iri)
 
-  def hasProperty(res:Res,iri:IRI) = this -- new WithShapeProperty(res,iri)
+
+  /**
+   *
+   * @param res id of arcrule
+   * @param iri property name
+   * @return
+   */
+  def hasProperty(res:Res,iri:IRI) = this -- Property(res,iri)
 
   def hasRule(rule:Rule):this.type  = {
     this.rules = this.rules + rule
@@ -109,11 +190,9 @@ class ShapeBuilder(shapeIRI:IRI) extends RDFBuilder[WithShapeProperty]{
    * @return
    */
   def result:Shape = {
-    val allRules: Set[Rule] = this.values.filter(_.result.isDefined).map(_.result.get) ++ this.rules 
+    val allRules: Set[Rule] = this.values.collect{case v if v.arc!=ArcRule.empty=>v.arc} ++ this.rules
     val and: AndRule = new AndRule(allRules,Label.apply(shapeIRI))
     Shape(shapeIRI,and)
   }
 
-
-
-}
+}*/

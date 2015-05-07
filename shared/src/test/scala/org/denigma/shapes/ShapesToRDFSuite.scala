@@ -28,7 +28,7 @@ object ShapesToRDFSuite extends TestSuite{
 
     "quads conversions" - {
 
-      "should work well for cadinality constrains:" - {
+      "should work well for cardinality constrains:" - {
         "ExactlyOne and Plus" - {
           val q1 = ExactlyOne.toQuads(subject).head
 
@@ -76,16 +76,15 @@ object ShapesToRDFSuite extends TestSuite{
 
         "write simple shapes" - {
 
-
-
-          object shape extends ShapeBuilder(page)
-
-          val title= shape has WI.pl("title") of XSD.StringDatatypeIRI occurs ExactlyOne result
-          val text = shape has WI.pl("text") of XSD.StringDatatypeIRI occurs ExactlyOne result
-          val author = shape has WI.pl("author") of FOAF.PERSON occurs Plus result
+          val withTitle = ShapeBuilder(page) has WI.pl("title") of XSD.StringDatatypeIRI occurs ExactlyOne
+          val title: Option[ArcRule] = withTitle.pointerOption
+          val withText = withTitle and WI.pl("text") of XSD.StringDatatypeIRI occurs ExactlyOne
+          val text = withText.pointerOption
+          val withAuthor = withText and WI.pl("author") of FOAF.PERSON occurs Plus
+          val author = withAuthor pointerOption
           //val pub = shape has WI.pl("published") of XSD.Date  occurs ExactlyOne result
 
-          val sh = shape.result
+          val sh = withAuthor shape
 
           val quads: Set[Quad] = sh.asQuads(c)
 
@@ -120,15 +119,15 @@ object ShapesToRDFSuite extends TestSuite{
 
         "write shape with context and subject rules" - {
           val page = WI.re("Page")
-
-          object shape extends ShapeBuilder(page)
-
-          val title= shape has WI.pl("title") of XSD.StringDatatypeIRI occurs ExactlyOne result
-          val text = shape has WI.pl("text") of XSD.StringDatatypeIRI occurs ExactlyOne result
-          val author = shape has WI.pl("author") of FOAF.PERSON occurs Plus result
+          val withTitle = ShapeBuilder(page) has WI.pl("title") of XSD.StringDatatypeIRI occurs ExactlyOne
+          val title= withTitle.pointerOption
+          val withText = withTitle and WI.pl("text") of XSD.StringDatatypeIRI occurs ExactlyOne
+          val text = withText.pointerOption
+          val withAuthor = withText and WI.pl("author") of FOAF.PERSON occurs Plus
+          val author = withAuthor pointerOption
           //val pub = shape has WI.pl("published") of XSD.Date  occurs ExactlyOne result
 
-          val sh = shape.result
+          val sh = withAuthor shape
           val c = WI.re("context")
           val quads: Set[Quad] = sh.asQuads(c)
 

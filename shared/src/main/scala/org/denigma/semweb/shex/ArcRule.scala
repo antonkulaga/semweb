@@ -10,9 +10,9 @@ object ArcRule {
 
   val property = rs / "property"
 
-  val priority: IRI = WI.pl("priority")
+  val priority: IRI = WI.PLATFORM.priority
 
-  val default: IRI = WI.pl("default")
+  val default: IRI = WI.PLATFORM.default
 
   def apply(propertyName:IRI,id:Res): ArcRule = apply(propertyName,RDF.VALUE,Star,None,id)
 
@@ -24,6 +24,8 @@ object ArcRule {
   {
     ArcRule(id,NameTerm(propertyName),ValueType(tp),card, priority = priority)
   }
+
+  lazy val empty  =  ArcRule.apply(RDF.VALUE,WI.PLATFORM.EMPTY)
 
 }
 

@@ -8,8 +8,9 @@ package object vocabulary {
 
 
   implicit class StringPath(str:String) {
+    def  isPartOfUrl = str.startsWith("/") || str.startsWith("#") || str.startsWith("?")
 
-    def /(child:String): String = if(str.endsWith("/") || str.endsWith("#")) str+child else str+ "/" +child
+    def /(child:String): String = if(str.endsWith("/") || str.endsWith("#") || str.endsWith("?")) str+child else str+ "/" +child
 
     def /(child:IRI): IRI =  IRI(str / child.toString)
 

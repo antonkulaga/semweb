@@ -15,7 +15,7 @@ class ShapedModelsQueryExtractor extends ArcPropertiesQueryExtractor
    * @param shape
    * @return
    */
-  def validShapeQuery(shape:Shape):ConstructQuery = shape.arcSorted() match
+  def validShapeQuery(shape:Shape):ConstructQuery = shape.arcSorted match
   {
     case no if no.isEmpty=> CONSTRUCT.empty
     case arcs=>
@@ -32,7 +32,7 @@ class ShapedModelsQueryExtractor extends ArcPropertiesQueryExtractor
       }
       val conds: Seq[RDFElement] = vars.foldLeft(Seq.empty[RDFElement]) {
         case (acc, (arc,(p,o))) =>
-          val ps: Seq[RDFElement] = this.arcValuePatters(arc,sub,o)++arcNamePatterns(arc,sub,p,o)
+          val ps: Seq[RDFElement] = this.arcValuePatterns(arc,sub,o)++arcNamePatterns(arc,sub,p,o)
           acc++this.withOccurence(arc,ps)
       }
       
@@ -41,7 +41,7 @@ class ShapedModelsQueryExtractor extends ArcPropertiesQueryExtractor
 
   
 
-  def invalidShapeQuery(shape:Shape,draftsOnly:Boolean = true):ConstructQuery = shape.arcSorted() match
+  def invalidShapeQuery(shape:Shape,draftsOnly:Boolean = true):ConstructQuery = shape.arcSorted match
   {
     case no if no.isEmpty=>CONSTRUCT.empty
     case arcs=>

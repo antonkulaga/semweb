@@ -1,4 +1,4 @@
-package org.denigma.semweb.sesame.test.data
+package org.denigma.semweb.sesame.test.data.genes
 
 import org.denigma.semweb.rdf.IRI
 import org.denigma.semweb.rdf.vocabulary._

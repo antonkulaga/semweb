@@ -1,13 +1,12 @@
-package org.denigma.semweb.sesame.test.data
+package org.denigma.semweb.sesame.test.data.genes
 
 import java.io.InputStream
 
-import org.denigma.semweb.sesame.test.classes.{Ontology, TurtleMaster}
-import org.openrdf.model.Statement
 import org.denigma.semweb.rdf.{BasicTriplet, IRI, Quad, Trip}
-import org.denigma.semweb.sesame.test.classes.Ontology
+import org.denigma.semweb.sesame.test.classes.{Ontology, TurtleMaster}
 import org.denigma.semweb.shex.PropertyModel
-import org.denigma.semweb.sesame._
+import org.openrdf.model.Statement
+
 import scala.io.Source
 
 /**
@@ -46,6 +45,7 @@ object Genes extends LoadGenAge{
 
   def ontology() = {
       import org.denigma.semweb.sesame._
+
       import scala.collection.JavaConversions._
       val statements: List[Statement] = Ontology.allFacts.flatMap(g=>g.graph)
 

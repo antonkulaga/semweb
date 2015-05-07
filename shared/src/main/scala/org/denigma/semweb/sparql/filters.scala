@@ -16,7 +16,9 @@ case class FILTER(elements:FilterElement*) extends GP
 {
   lazy val children = elements.toList
 
-  override def stringValue: String = if(hasChildren)  s"\nFILTER $foldChildren" else ""
+  //def foldChildren: String = children.foldLeft("")((acc,el)=>acc+" "+el.stringValue)
+
+  override def stringValue: String = if(hasChildren)  s"\nFILTER($foldChildren)" else ""
 
 }
 
@@ -72,13 +74,18 @@ case class DATATYPE(v:Variable,tp:Res) extends FilterElement {
   override def stringValue =s"( datatype(${v.toString}) = ${tp.toString} )"
   
 }
-
+object STR_STARTS{
+  def apply(o:CanBeObject,substring:String):STR_STARTS = STR_STARTS(STR(o),substring)
+}
 case class STR_STARTS(str:STR, start:String) extends FilterElement {
-  override def stringValue: String = s"""STRSTARTS(str(${str.stringValue}), "$start")"""
+  override def stringValue: String = s"""STRSTARTS(${str.stringValue}, "$start")"""
 }
 
+object STR_CONTAINS{
+  def apply(o:CanBeObject,substring:String):STR_CONTAINS = STR_CONTAINS(STR(o),substring)
+}
 case class STR_CONTAINS(str:STR, substring:String) extends FilterElement {
-  override def stringValue: String = s"""STRCONTAINS(str(${str.stringValue}), "$substring")"""
+  override def stringValue: String = s"""CONTAINS(${str.stringValue}, "$substring")"""
 }
 
 

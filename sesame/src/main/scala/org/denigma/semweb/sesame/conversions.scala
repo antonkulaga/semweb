@@ -60,7 +60,7 @@ trait Scala2SesameModelImplicits{
   implicit def doubleLit2Literal(lit:DoubleLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.DOUBLE)
   implicit def booleanLit2Literal(lit:BooleanLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.BOOLEAN)
   implicit def decimalLit2Literal(lit:DecimalLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.DECIMAL)
-  //implicit def longLit2Literal(lit:LongLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.LONG)
+  //implicit def longLit2Literal(lit:IntLiteral):Literal = new LiteralImpl(lit.value.toString,vocabulary.XMLSchema.LONG)
   implicit def dateLit2Literal(lit:DateLiteral):Literal = new LiteralImpl(lit.label,vocabulary.XMLSchema.DATE)
   implicit def dateTimeLit2Literal(lit:DateTimeLiteral):Literal = new LiteralImpl(lit.label,vocabulary.XMLSchema.DATETIME)
 

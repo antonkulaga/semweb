@@ -1,16 +1,14 @@
-package org.denigma.semweb.sesame.test.data
+package org.denigma.semweb.sesame.test.data.genes
 
 import java.text.SimpleDateFormat
 
 import framian._
+import framian.csv.CsvFormat.{CSV, TSV}
 import framian.csv.{Csv, LabeledCsv}
 import org.denigma.semweb.rdf._
 import org.denigma.semweb.rdf.vocabulary.{RDFS, XSD}
 import org.denigma.semweb.shex._
 import spire.implicits._
-
-import framian.csv.CsvFormat.CSV
-import framian.csv.CsvFormat.TSV
 
 import scala.collection.immutable._
 import scala.io.Source

@@ -195,13 +195,11 @@ object PicklingSpec extends TestSuite
       val sub = gero / "has_ENTREZID"
       val sr = SubjectRule(sub).isCalled("Gene").hasBase(gero)
       
-      object shape extends ShapeBuilder(id)
-      shape has FOAF.NAME of XSD.StringDatatypeIRI occurs ExactlyOne
-      shape has FOAF.KNOWS oneOf (FOAF.PERSON,FOAF.Group) occurs Plus
-      shape.hasRule(sr)
+      val sh = ShapeBuilder(id) has
+        FOAF.NAME of XSD.StringDatatypeIRI occurs ExactlyOne and
+        FOAF.KNOWS oneOf (FOAF.PERSON,FOAF.Group) occurs Plus hasRule sr shape
 
-      val sh: Shape = shape.result
-      
+
       val st = Pickle.intoString(sh)
       val sho = Unpickle[Shape].fromString(st)
       assert(sho.get==sh)

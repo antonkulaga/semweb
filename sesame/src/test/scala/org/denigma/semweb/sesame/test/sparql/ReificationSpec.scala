@@ -21,7 +21,7 @@ class ReificationSpec  extends  WordSpec with Matchers with SimpleTestData {
 
     def tellThat(sub: IRI,st:BigdataStatement)(implicit con:BigData#WriteConnection){
       val node = con.getValueFactory.createBNode(st)
-      val rst = con.getValueFactory.createStatement(sub,tells,node)
+      val rst: BigdataStatement = con.getValueFactory.createStatement(sub,tells,node)
       con.add(rst)
       rst
     }

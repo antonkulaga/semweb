@@ -54,7 +54,15 @@ trait ArcPropertiesQueryExtractor extends QueryExtractor
       pats.toSeq
   }
 
-  def arcValuePatters(arc:ArcRule,sub:Variable = Variable("subject"),obj:Variable = ?("object")) =  arc.value match {
+  def suggestPatterns(typed:String, arc:ArcRule,sub:Variable = Variable("subject"),obj:Variable = ?("object"))= {
+    arcNamePatterns(arc,sub,obj) ++ arcValuePatterns(arc,sub,obj) ++ containsPatterns(typed,obj)
+  }
+
+  def containsPatterns(typed:String,obj:Variable = ?("object")) = {
+    Seq(FILTER(STR_CONTAINS(STR(obj),typed)))
+  }
+
+  def arcValuePatterns(arc:ArcRule,sub:Variable = Variable("subject"),obj:Variable = ?("object")) =  arc.value match {
     case ValueStem(stem) =>
       Seq(
         FILTER(IsIRI(obj)),
@@ -67,7 +75,7 @@ trait ArcPropertiesQueryExtractor extends QueryExtractor
       )
 
     case ValueType(tp) if tp == vocabulary.RDF.VALUE=>
-      Seq(Pat(sub,?("any"),obj))
+      Seq(Pat(sub,?("any_property"),obj))
 
     case ValueType(tp) if tp == vocabulary.RDFS.RESOURCE =>
       Seq(
@@ -75,11 +83,8 @@ trait ArcPropertiesQueryExtractor extends QueryExtractor
       )
 
     case ValueType(other) =>
-      val subType = Br(
-        Pat(obj,RDF.TYPE,obj)
-      )
-      val subClass = Br(
-        Pat(obj,RDFS.SUBCLASSOF,obj))
+      val subType = Br(  Pat(obj,RDF.TYPE,other)   )
+      val subClass = Br (Pat(obj,RDFS.SUBCLASSOF,obj) )
       Seq(Union(subType,subClass))
 
     case ValueSet(set)=>
@@ -91,9 +96,11 @@ trait ArcPropertiesQueryExtractor extends QueryExtractor
   def arcQuery(arc:ArcRule,sub:Variable = Variable("sub"),pred:Variable = ?("pred"),obj:Variable = ?("obj")):SelectQuery = {
 
     val namePattern = this.arcNamePatterns(arc,sub,pred,obj)
-    val valuePattern = this.arcValuePatters(arc,sub,obj)
+    val valuePattern = this.arcValuePatterns(arc,sub,obj)
     val arcPatterns = namePattern++valuePattern
     SELECT (sub,pred,obj) WHERE(arcPatterns:_*)
   }
+
+
 
 }

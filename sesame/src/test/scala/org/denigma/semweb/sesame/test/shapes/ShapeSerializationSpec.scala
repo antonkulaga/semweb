@@ -17,19 +17,17 @@ class ShapeSerializationSpec extends  WordSpec with Matchers {
   "RDF shapes" should {
 
     val page = WI.re("Page")
-
-    object shape extends ShapeBuilder(page)
-
     val title = WI.pl("title")
-    shape has title of XSD.StringDatatypeIRI occurs ExactlyOne hasPriority 1 result
     val text = WI.pl("text")
-    shape has text of XSD.StringDatatypeIRI occurs ExactlyOne isCalled ("text") result
     val author = WI.pl("author")
-    shape has author of FOAF.PERSON occurs Plus result
+
+    val sh =  ShapeBuilder(page) has
+      title of XSD.StringDatatypeIRI occurs ExactlyOne hasPriority 1 and
+      text of XSD.StringDatatypeIRI occurs ExactlyOne isCalled ("text") and
+      author of FOAF.PERSON occurs Plus shape
 
     //val pub = shape has WI.pl("published") of XSD.Date  occurs ExactlyOne result
 
-    val sh = shape.result
     val c: IRI = WI.re("context")
     val quads: Set[Quad] = sh.asQuads(c)
 

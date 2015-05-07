@@ -5,10 +5,9 @@ import org.denigma.semweb.shex._
 import utest._
 
 object ShapesModificationSuite extends TestSuite{
-  object shape extends ShapeBuilder(IRI("http://myshape.com"))
-  shape has FOAF.NAME of XSD.StringDatatypeIRI occurs ExactlyOne
-  shape has FOAF.KNOWS oneOf (FOAF.PERSON,FOAF.Group) occurs Plus
-  val sh = shape.result
+  val sh = ShapeBuilder(IRI("http://myshape.com")) has
+    FOAF.NAME of XSD.StringDatatypeIRI occurs ExactlyOne and
+    FOAF.KNOWS oneOf (FOAF.PERSON,FOAF.Group) occurs Plus shape
   val acs = sh.arcRules()
 
   def tests = TestSuite {

@@ -34,13 +34,13 @@ trait Sliced {
    */
   object LIMIT extends RDFElement
   {
-    var limit:Long = Long.MaxValue
-    def apply(limitValue:Long):self.type = {
+    var limit:Int = Int.MaxValue
+    def apply(limitValue:Int):self.type = {
       this.limit = limitValue
       self
     }
 
-    def hasLimit:Boolean = this.limit!=Long.MaxValue && limit>0
+    def hasLimit:Boolean = this.limit!=Int.MaxValue && limit>0
 
 
     override def stringValue = if(hasLimit) s" LIMIT $limit" else ""
@@ -48,8 +48,8 @@ trait Sliced {
 
   object OFFSET extends RDFElement
   {
-    var offset:Long = 0
-    def apply(offsetValue:Long):self.type  = {
+    var offset:Int = 0
+    def apply(offsetValue:Int):self.type  = {
       this.offset = offsetValue
       self
     }

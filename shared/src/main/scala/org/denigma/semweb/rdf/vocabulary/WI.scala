@@ -15,10 +15,11 @@ object WI extends PrefixConfig("http://webintelligence.eu/"){
   /**
    * Useful properties for Web projects
    */
-  object PLATFORM extends PrefixConfig(WI.namespace / "platform"){
+  object PLATFORM extends PrefixConfig(WI.namespace / "platform/"){
 
     val SHAPE_FOR = IRI(this / "shapeFor")
     val HAS_SHAPE = IRI(this / "hasShape")
+    val ALL_SHAPES = IRI(this / "AllShapes")
     val EMPTY = IRI(this / "Empty")
     val DRAFT_OF = IRI(this / "draft_of")
     val BASE = IRI(this / "has_base")
@@ -27,6 +28,16 @@ object WI extends PrefixConfig("http://webintelligence.eu/"){
     val hasMenu = IRI(this / "has_menu" )
     val hasItem = IRI(this / "has_item" )
     val hasTitle = IRI(this / "has_title" )
+    val hasHeader = (this / "has_header").iri
+    val hasText = (this / "has_text").iri
+    val hasName = (this / "has_name").iri
+
+
+    val priority: IRI = IRI(this / "priority")
+
+    val default: IRI = IRI(this / "default")
+
+
   }
 
 

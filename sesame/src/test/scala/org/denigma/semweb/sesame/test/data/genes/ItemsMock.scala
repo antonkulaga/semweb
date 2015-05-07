@@ -1,6 +1,6 @@
-package org.denigma.semweb.sesame.test.data
+package org.denigma.semweb.sesame.test.data.genes
 
-import org.denigma.semweb.rdf.{Res, IRI, vocabulary}
+import org.denigma.semweb.rdf.{IRI, Res, vocabulary}
 import org.denigma.semweb.shex.{PropertyModel, Shape, ShapeBuilder}
 
 trait ItemsMock

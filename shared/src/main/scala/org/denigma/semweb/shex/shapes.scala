@@ -86,7 +86,7 @@ case class Shape(id: Label, rule: Rule)  extends Labeled
 
   }
 
-  def arcSorted()= this.arcRules(this.rule).sortBy(f=>f.priority)
+  lazy val arcSorted = this.arcRules(this.rule).sortBy(f=>f.priority)
 
   def expand[T](fun:PartialFunction[Rule,List[T]]):PartialFunction[Rule,List[T]] = {
     case  and:AndRule=> and.conjoints.flatMap(v=>fold[T](v)(fun)).toList

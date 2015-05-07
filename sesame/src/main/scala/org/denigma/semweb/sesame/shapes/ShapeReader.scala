@@ -83,7 +83,7 @@ trait ShapeReader extends SesameReader with ShapeQueryReader{
   }
 
   def modelByShape(sh:Shape,res:Resource,con:ReadConnection)(implicit contexts:Seq[Resource] = List.empty[Resource]): PropertyModel  =
-  sh.arcSorted()
+  sh.arcSorted
     .foldLeft[PropertyModel](PropertyModel.clean(res))
     {
       case (model: PropertyModel,arc)=>  extractor.modelWithArc(model,arc)(con,contexts)

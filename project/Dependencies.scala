@@ -4,7 +4,7 @@ import org.scalajs.sbtplugin.ScalaJSPlugin._
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 object Versions {
 
-  val semWeb = "0.7.0"
+  val semWeb = "0.7.1"
 
   val bigData =  "1.5.1"
 
@@ -22,6 +22,8 @@ object Versions {
   
   val framian = "0.3.3"
 
+  val quickLens = "1.3.1"
+
 }
 
 object Dependencies
@@ -36,13 +38,15 @@ object Dependencies
   lazy val semWebJS:Def.Initialize[Seq[ModuleID]] =  Def.setting(base.value ++Seq(
     "com.lihaoyi" %% "utest" % Versions.utest % "test",
    "com.github.benhutchison" %%% "prickle" % Versions.prickle,
-    "com.github.japgolly.fork.parboiled" %%% "parboiled" % Versions.parboiled
+    "com.github.japgolly.fork.parboiled" %%% "parboiled" % Versions.parboiled,
+    "com.softwaremill.quicklens" %%% "quicklens" % "1.3.1"
   ))
 
 
   lazy val semWebJVM:Def.Initialize[Seq[ModuleID]] =  Def.setting(base.value ++Seq(
     "com.github.benhutchison" %% "prickle" % Versions.prickle,
-    "org.parboiled" %% "parboiled" % Versions.parboiled
+    "org.parboiled" %% "parboiled" % Versions.parboiled,
+    "com.softwaremill.quicklens" %% "quicklens" % "1.3.1"
   ))
 
   lazy val semWebSesame: Def.Initialize[Seq[ModuleID]] = Def.setting(base.value ++Seq(
