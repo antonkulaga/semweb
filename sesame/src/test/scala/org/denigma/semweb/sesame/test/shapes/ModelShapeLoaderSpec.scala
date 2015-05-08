@@ -2,8 +2,9 @@ package org.denigma.semweb.sesame.test.shapes
 
 import java.io.InputStream
 
-import org.denigma.semweb.sesame.test.classes.{GeneLoader, BigData}
-import org.denigma.semweb.sesame.test.data.genes.GeneSchemaData
+import org.denigma.schemas.genes.GeneSchemaData
+import org.denigma.semweb.sesame.test.classes.BigData
+import org.denigma.semweb.sesame.test.data.GeneLoader
 import org.openrdf.model.{Statement, Resource}
 import org.openrdf.query.GraphQueryResult
 import org.scalatest.{Matchers, WordSpec}

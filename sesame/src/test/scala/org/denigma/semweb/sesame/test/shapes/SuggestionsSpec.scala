@@ -1,20 +1,15 @@
 package org.denigma.semweb.sesame.test.shapes
 
-import java.io.InputStream
-
-import org.denigma.semweb.sesame.test.classes.{GeneLoader, BigData}
-import org.denigma.semweb.sesame.test.data.genes.GeneSchemaData
-import org.openrdf.model.{Statement, Resource}
+import org.denigma.schemas.genes.GeneSchemaData
+import org.denigma.semweb.rdf._
+import org.denigma.semweb.rdf.vocabulary._
+import org.denigma.semweb.sesame._
+import org.denigma.semweb.sesame.test.classes.BigData
+import org.denigma.semweb.sesame.test.data.GeneLoader
+import org.denigma.semweb.shex.{Shape, _}
+import org.openrdf.model.Resource
 import org.openrdf.query.GraphQueryResult
 import org.scalatest.{Matchers, WordSpec}
-import org.denigma.semweb.rdf.{IRI, _}
-import org.denigma.semweb.rdf.vocabulary._
-import org.denigma.semweb.sesame.test.classes.BigData
-import org.denigma.semweb.shex.validation.Valid
-import org.denigma.semweb.shex.{Shape, _}
-import org.denigma.semweb.sesame._
-import org.denigma.semweb.sparql.{CONSTRUCT, SelectQuery}
-import org.denigma.semweb.sesame._
 
 import scala.util.Try
 
@@ -53,8 +48,9 @@ class SuggestionsSpec  extends  WordSpec with Matchers with GeneLoader with Gene
       val o = ?("o")
       val tp = "liga"
 
+      println(arc)
       val q = SELECT (o)  WHERE (db.queryExtractor.suggestPatterns(tp,arc,sub,o):_*)
-      //println(q.stringValue)
+      println(q.stringValue)
       val result = db.justSelect(q.stringValue)
       result.isSuccess shouldEqual true
       result.get.size shouldEqual 2

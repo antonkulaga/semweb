@@ -1,12 +1,12 @@
 package org.denigma.semweb.sesame.test.sparql
 
 import com.bigdata.rdf.model.{BigdataBNodeImpl, BigdataStatement}
-import org.denigma.semweb.sesame.test.classes.{BigData, SimpleTestData}
+import org.denigma.semweb.sesame.test.classes.BigData
+import org.denigma.semweb.sesame.test.data.SimpleTestData
 import org.openrdf.model.Value
 import org.scalatest.{Matchers, _}
 import org.denigma.semweb.rdf.IRI
 import org.denigma.semweb.sesame._
-import org.denigma.semweb.sesame.test.classes.SimpleTestData
 import org.denigma.semweb.sparql.{Pat, _}
 
 /**
@@ -19,7 +19,7 @@ class ReificationSpec  extends  WordSpec with Matchers with SimpleTestData {
 
     val tells = this.predicate("tells_that")
 
-    def tellThat(sub: IRI,st:BigdataStatement)(implicit con:BigData#WriteConnection){
+    def tellThat(sub: IRI,st:BigdataStatement)(implicit con:BigData#WriteConnection) = {
       val node = con.getValueFactory.createBNode(st)
       val rst: BigdataStatement = con.getValueFactory.createStatement(sub,tells,node)
       con.add(rst)

@@ -14,18 +14,9 @@ will allow you to send quries in easy format  [works]
 Setting up:
 -----------
 
-1 Add sbt-bintray plugin (for more info see https://github.com/softprops/bintray-sbt ) to your plugins.sbt:
-
+1 Add denigma resolvers:
 ```scala
-
-    resolvers += Resolver.url("bintray-sbt-plugin-releases",url("http://dl.bintray.com/content/sbt/sbt-plugin-releases"))(Resolver.ivyStylePatterns)
-
-    addSbtPlugin("me.lessis" % "bintray-sbt" % "0.2.1")
-```
-
-2 Add denigma resolvers:
-```scala
-resolvers += bintray.Opts.resolver.repo("denigma", "denigma-releases") //for releases
+    resolvers += sbt.Resolver.bintrayRepo("denigma", "denigma-releases")
 ```
 
 3) Add version that you want to use (see published versions at bintray https://bintray.com/denigma )
@@ -33,9 +24,9 @@ If you use release version it looks like:
 
 ```scala
 
-    libraryDependencies += "org.denigma" %% "semweb" % "0.7.0"// for scala projects
+    libraryDependencies += "org.denigma" %% "semweb" % "0.7.3"// for scala projects
 
-    libraryDependencies += "org.denigma" %%% "semweb" % "0.7.0"// for scalajs projects, note %%% is used
+    libraryDependencies += "org.denigma" %%% "semweb" % "0.7.3"// for scalajs projects, note %%% is used
 ```
 
 4). Use it in your project!

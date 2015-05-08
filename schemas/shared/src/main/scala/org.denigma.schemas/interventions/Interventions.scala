@@ -1,4 +1,6 @@
-package org.denigma.semweb.sesame.test.data.schemas
+package org.denigma.schemas.interventions
+
+import org.denigma.schemas.common.BasicSchema
 
 trait Interventions extends BasicSchema{
 

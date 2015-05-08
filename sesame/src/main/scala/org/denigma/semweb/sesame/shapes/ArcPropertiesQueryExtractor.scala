@@ -54,8 +54,8 @@ trait ArcPropertiesQueryExtractor extends QueryExtractor
       pats.toSeq
   }
 
-  def suggestPatterns(typed:String, arc:ArcRule,sub:Variable = Variable("subject"),obj:Variable = ?("object"))= {
-    arcNamePatterns(arc,sub,obj) ++ arcValuePatterns(arc,sub,obj) ++ containsPatterns(typed,obj)
+  def suggestPatterns(typed:String, arc:ArcRule,sub:Variable = Variable("subject"),o:Variable = ?("object"))= {
+    arcNamePatterns(arc,sub,obj = o) ++ arcValuePatterns(arc,sub,o) ++ containsPatterns(typed,o)
   }
 
   def containsPatterns(typed:String,obj:Variable = ?("object")) = {
@@ -75,7 +75,7 @@ trait ArcPropertiesQueryExtractor extends QueryExtractor
       )
 
     case ValueType(tp) if tp == vocabulary.RDF.VALUE=>
-      Seq(Pat(sub,?("any_property"),obj))
+      Seq(Pat(sub,?("anyproperty"),obj))
 
     case ValueType(tp) if tp == vocabulary.RDFS.RESOURCE =>
       Seq(

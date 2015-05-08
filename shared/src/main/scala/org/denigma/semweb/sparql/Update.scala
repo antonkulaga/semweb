@@ -3,26 +3,26 @@ package org.denigma.semweb.sparql
 import org.denigma.semweb.rdf._
 
 
-case class InsertQuery(insert:Insert)
-case class DeleteQuery(delete:Delete)
-case class InsertDeleteQuery(insert:Insert,delete:Delete)
-case class DeleteInsertQuery(delete:Delete,insert:Insert)
+case class INSERTQuery(insert:INSERT)
+case class DELETEQuery(delete:DELETE)
+case class INSERTDELETEQuery(insert:INSERT,delete:DELETE)
+case class DELETEINSERTQuery(delete:DELETE,insert:INSERT)
 
-case class InsertOnlyIf(insert:Insert,question:AskQuery)
-case class DeleteOnlyIf(delete:Delete,question:AskQuery)
-case class InsertDeleteOnlyIf(insert:Insert,delete:Delete,question:AskQuery)
-case class DeleteInsertOnlyIf(delete:Delete,insert:Insert,question:AskQuery)
+case class INSERTOnlyIf(insert:INSERT,question:AskQuery)
+case class DELETEOnlyIf(delete:DELETE,question:AskQuery)
+case class INSERTDELETEOnlyIf(insert:INSERT,delete:DELETE,question:AskQuery)
+case class DELETEINSERTOnlyIf(delete:DELETE,insert:INSERT,question:AskQuery)
 
-case class InsertUnless(insert:Insert,question:AskQuery)
-case class DeleteUnless(delete:Delete,question:AskQuery)
-case class InsertDeleteUnless(insert:Insert,delete:Delete,question:AskQuery)
-case class DeleteInsertUnless(delete:Delete,insert:Insert,question:AskQuery)
+case class INSERTUnless(insert:INSERT,question:AskQuery)
+case class DELETEUnless(delete:DELETE,question:AskQuery)
+case class INSERTDELETEUnless(insert:INSERT,delete:DELETE,question:AskQuery)
+case class DELETEINSERTUnless(delete:DELETE,insert:INSERT,question:AskQuery)
 
 
-class Insert(var children: List[RDFElement],context:Option[IRI] = None) extends GP with WithWhere
+class INSERT(var children: List[RDFElement],context:Option[IRI] = None) extends GP with WithWhere
 {
 
-  lazy val hasDATA = children.exists(_.isInstanceOf[Data])
+  lazy val hasDATA = children.exists(_.isInstanceOf[DATA])
 
   lazy val into = context.map(c=>s"INTO ${c.toString}").getOrElse("")
 
@@ -34,21 +34,21 @@ class Insert(var children: List[RDFElement],context:Option[IRI] = None) extends 
 object INSERT
 {
 
-  //def INTO(iri:IRI)(elements: RDFElement*) =   new Insert(elements.toList ,Some(iri))
+  //def INTO(iri:IRI)(elements: RDFElement*) =   new INSERT(elements.toList ,Some(iri))
 
-  def apply(data:Data): Insert = new Insert(data::Nil)
+  def apply(data:DATA): INSERT = new INSERT(data::Nil)
 
-  def apply(graph:PatternGraph): Insert = new Insert(graph::Nil)
+  def apply(graph:PatternGraph): INSERT = new INSERT(graph::Nil)
 }
 
 
 
 /**
- * Class to Delete values
+ * Class to DELETE values
  */
-class Delete(var children: List[RDFElement]) extends GP with WithWhere {
+class DELETE(var children: List[RDFElement]) extends GP with WithWhere {
 
-  lazy val hasDATA = children.exists(_.isInstanceOf[Data])
+  lazy val hasDATA = children.exists(_.isInstanceOf[DATA])
 
   override def stringValue: String = if(hasDATA) s"DELETE${this.foldChildren} "
   else s"DELETE \n{ ${this.foldChildren} } "+ WHERE.stringValue
@@ -56,26 +56,26 @@ class Delete(var children: List[RDFElement]) extends GP with WithWhere {
 }
 
 object DELETE {
-  def apply(data:Data): Delete = {
-    new Delete(data::Nil)
+  def apply(data:DATA): DELETE = {
+    new DELETE(data::Nil)
   }
 
-  def apply(graph:PatternGraph): Delete = {
-    new Delete(graph::Nil)
+  def apply(graph:PatternGraph): DELETE = {
+    new DELETE(graph::Nil)
   }
 }
 
 
 object DATA {
 
-  def INTO(iri:IRI)(triplets:Trip*) =   new Data(new TripletGraph(iri)(triplets.toList)::Nil)//new Data(triplets.toList,Some(iri))
+  def INTO(iri:IRI)(triplets:Trip*) =   new DATA(new TripletGraph(iri)(triplets.toList)::Nil)//new Data(triplets.toList,Some(iri))
 
   def apply(triplets:Trip*) = {
-    new Data(triplets.toList)
+    new DATA(triplets.toList)
 
   }
 
-  def apply(graph:TripletGraph) = new Data(graph::Nil)
+  def apply(graph:TripletGraph) = new DATA(graph::Nil)
 
 }
 
@@ -88,7 +88,7 @@ object GRAPH {
 
 
 
-class Data(val children:List[RDFElement],context:Option[IRI] = None) extends GP {
+class DATA(val children:List[RDFElement],context:Option[IRI] = None) extends GP {
 
 
   lazy val into = context.map(c=>s"INTO ${c.toString}").getOrElse("")

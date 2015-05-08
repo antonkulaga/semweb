@@ -1,7 +1,7 @@
-package org.denigma.semweb.sesame.test.data.schemas
+package org.denigma.schemas.interventions
 
-import org.denigma.semweb.rdf._
-import org.denigma.semweb.rdf.vocabulary.{RDF, RDFS, WI, XSD}
+import org.denigma.schemas.common.BasicSchema
+import org.denigma.semweb.rdf.vocabulary.{RDF, XSD}
 import org.denigma.semweb.shex._
 
 trait FlySchema extends BasicSchema{

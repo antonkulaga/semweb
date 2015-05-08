@@ -1,16 +1,12 @@
 package org.denigma.semweb.sesame.test.shapes
 
-import java.io.{File, StringReader, InputStream}
+import java.io.{InputStream, StringReader}
 
-import org.denigma.semweb.sesame.test.classes.{BigData, GeneLoader}
-import org.denigma.semweb.sesame.test.data.genes.Genes
-import org.openrdf.model.Statement
-import org.openrdf.query.QueryLanguage
-import org.scalatest.{Matchers, WordSpec}
-import org.denigma.semweb.rdf.{Res, IRI}
+import org.denigma.semweb.rdf.IRI
 import org.denigma.semweb.sesame.test.classes.BigData
+import org.denigma.semweb.sesame.test.data.{Genes, GeneLoader}
 import org.denigma.semweb.shex._
-
+import org.scalatest.{Matchers, WordSpec}
 
 import scala.util.Try
 
@@ -57,7 +53,6 @@ class LoadShapeSpec  extends  WordSpec with Matchers with GeneLoader {
     }
     
     "write and read back from turtle" in {
-      import org.denigma.semweb.sesame._
       val ruleNum = 12 //13
       val gero = IRI("http://gero.longevityalliance.org/")
       val entrez = IRI("http://ncbi.nlm.nih.gov/gene/")
@@ -74,7 +69,6 @@ class LoadShapeSpec  extends  WordSpec with Matchers with GeneLoader {
       val shape = shop.get
       shape.id.asResource shouldEqual res
       shape.arcSorted.size shouldEqual ruleNum
-      import org.denigma.semweb.sparql._
       val frules=db.read{
         con=>
           db.extractor.fieldRulesExtractor.extractFieldRules(Genes.evidenceShape.id.asResource,con)

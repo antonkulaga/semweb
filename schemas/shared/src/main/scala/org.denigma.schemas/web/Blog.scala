@@ -1,9 +1,8 @@
-package org.denigma.semweb.sesame.test.data.schemas
+package org.denigma.schemas.web
 
-import org.denigma.semweb.rdf._
+import org.denigma.schemas.common.BasicSchema
 import org.denigma.semweb.rdf.vocabulary
-import org.denigma.semweb.rdf.vocabulary.{RDF, RDFS, WI, XSD}
-import org.denigma.semweb.shex
+import org.denigma.semweb.rdf.vocabulary.{WI, XSD}
 import org.denigma.semweb.shex._
 
 

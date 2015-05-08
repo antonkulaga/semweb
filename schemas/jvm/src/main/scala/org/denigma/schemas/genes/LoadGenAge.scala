@@ -1,4 +1,4 @@
-package org.denigma.semweb.sesame.test.data.genes
+package org.denigma.schemas.genes
 
 import java.text.SimpleDateFormat
 
@@ -14,10 +14,14 @@ import scala.collection.immutable._
 import scala.io.Source
 import scala.util.Try
 
+
+
+
 /**
  * load TSV data downloaded from GenAge*
  */
-trait LoadGenAge extends GeneSchema{
+trait LoadGenAge extends GeneSchema
+{
 
   val formats:List[SimpleDateFormat] = List(
     new SimpleDateFormat("dd/MM/yyyy"),

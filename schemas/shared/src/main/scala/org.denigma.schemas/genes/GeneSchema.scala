@@ -1,15 +1,13 @@
-package org.denigma.semweb.sesame.test.data.genes
+package org.denigma.schemas.genes
 
+import org.denigma.schemas.common.BasicSchema
 import org.denigma.semweb.rdf._
 import org.denigma.semweb.rdf.vocabulary.{RDF, RDFS, WI, XSD}
-import org.denigma.semweb.sesame._
-import org.denigma.semweb.sesame.test.classes.Ontology
 import org.denigma.semweb.shex._
 
 
-trait GeneSchema extends ItemsMock with GeneSchemaData{
+trait GeneSchema extends   GeneSchemaData{
 
-  val entrez = IRI("http://ncbi.nlm.nih.gov/gene/")
 
   object Codes {
     abstract class Evidence {
@@ -34,21 +32,6 @@ trait GeneSchema extends ItemsMock with GeneSchemaData{
   lazy val subjectDefs =  SubjectRule(id = IRILabel(gero / "EvidenceShape" / "EntrezGene"))
     .startsWith(entrez).hasBase(entrez).isCalled("ENTREZ ID")
 
-
-  val cls = Ontology.classes.map(cl=>cl:IRI).toSeq
-
-  val prefixes: Seq[(String, String)] =       Seq("rdf"->RDF.namespace,
-  "rdfs"->RDFS.namespace,
-  "xsd"->XSD.namespace,
-  "owl"->vocabulary.OWL.namespace,
-  "dc"->vocabulary.DCElements.namespace,
-  "pl"->(WI.PLATFORM.namespace+"/"),
-  "shex"-> org.denigma.semweb.shex.rs.stringValue,
-  "def"->org.denigma.semweb.shex.se.stringValue,
-  "pmid"->"http://ncbi.nlm.nih.gov/pubmed/",
-  "gero"->gero.stringValue,
-  "entrez"->entrez.stringValue
-  )
 
   import Codes._
   //evidenceForm has entrezId isCalled "ENTREZID" startsWith entrez occurs ExactlyOne hasPriority 1

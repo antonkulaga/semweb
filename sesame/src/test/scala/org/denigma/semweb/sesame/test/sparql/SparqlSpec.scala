@@ -1,12 +1,12 @@
 package org.denigma.semweb.sesame.test.sparql
 
-import org.denigma.semweb.sesame.test.classes.{BigData, SimpleTestData}
+import org.denigma.semweb.sesame.test.classes.BigData
+import org.denigma.semweb.sesame.test.data.SimpleTestData
 import org.openrdf.model.Statement
 import org.openrdf.repository.RepositoryResult
 import org.scalatest.{Matchers, _}
 import org.denigma.semweb.rdf.{IRI, Trip}
 import org.denigma.semweb.sesame._
-import org.denigma.semweb.sesame.test.classes.SimpleTestData
 import org.denigma.semweb.sparql.{Pat, _}
 
 import scala.util.Try
@@ -64,7 +64,7 @@ class SparqlSpec  extends  WordSpec with Matchers with SimpleTestData {
     }
 
 
-    val del: Delete = DELETE (
+    val del: DELETE = DELETE (
       DATA (
         Trip(
           IRI("http://denigma.org/actors/resources/Daniel"),
@@ -74,7 +74,7 @@ class SparqlSpec  extends  WordSpec with Matchers with SimpleTestData {
       )
     )
 
-    val ins: Insert = INSERT (
+    val ins: INSERT = INSERT (
       DATA (
         Trip(
           IRI("http://denigma.org/actors/resources/Anton"),

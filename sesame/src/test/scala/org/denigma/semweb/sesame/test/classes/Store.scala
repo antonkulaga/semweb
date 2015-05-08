@@ -2,18 +2,13 @@ package org.denigma.semweb.sesame.test.classes
 
 import java.io.StringWriter
 
-import org.denigma.semweb
-import org.denigma.semweb.sesame.io.SesameRDFWriterHelper
 import org.denigma.semweb.rdf.BasicTriplet
-import org.denigma.semweb.sesame._
 import org.w3.banana._
 import org.w3.banana.io._
-import org.w3.banana.sesame.{SesameOps, Sesame}
-import org.w3.banana.sesame.io.{SesameSyntax, SesameRDFWriter}
-
+import org.w3.banana.sesame.Sesame
+import org.w3.banana.sesame.io.SesameRDFWriter
+import org.denigma.semweb.sesame._
 import scala.util.{Failure, Success, Try}
-import scalaz.NonEmptyList
-import org.w3.banana.sesame.SesameModule
 
 abstract class Store[Rdf <: RDF, M[+_] , Sin, Sout](implicit
                                                     val ops: RDFOps[Rdf],
@@ -37,7 +32,7 @@ trait TurtleStore{
     val mimeTypes: NonEmptyList[MimeType] = NonEmptyList(MimeType.RdfTurtle)
   }*/
   
-  override implicit val writer =   new semweb.sesame.io.SesameRDFWriter[Turtle] //MONKEY OVERRIDING
+  override implicit val writer =   new SesameRDFWriter[Turtle] //MONKEY OVERRIDING
 
 
   override def write[T <:BasicTriplet](trips: Set[T],namespaces:(String,String)*): Try[String] = {
@@ -123,7 +118,6 @@ abstract class OntologyClasses[Rdf <: RDF, M[+_] , Sin, Sout](implicit
   val foaf = FOAFPrefix[Rdf]
 
   lazy val allFacts: List[PointedGraph[Rdf]] = {
-    import org.w3.banana.diesel._
     import org.w3.banana.syntax.DieselSyntax._
 
 

@@ -28,11 +28,11 @@ trait WithWhere extends RDFElement
 
 }
 object VALUES {
-  def apply(children:Variable*) = Values(children,Seq.empty)
+  def apply(children:Variable*):VALUES =VALUES(children,Seq.empty)
   
 }
 
-case class Values(children:Seq[Variable],values:Seq[Seq[RDFValue]]) extends RDFElement
+case class VALUES(children:Seq[Variable],values:Seq[Seq[RDFValue]]) extends RDFElement
 {
   
   def apply(vals:RDFValue*) = copy(values = values :+ vals)

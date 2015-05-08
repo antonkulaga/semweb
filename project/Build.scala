@@ -1,8 +1,7 @@
 import sbt.Keys._
 import sbt._
-import bintray.Opts
-import bintray.Plugin.bintraySettings
-import bintray.Keys._
+import bintray._
+import BintrayPlugin.autoImport._
 import org.scalajs.sbtplugin.ScalaJSPlugin
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 import org.scalajs.sbtplugin.cross.CrossProject
@@ -19,10 +18,10 @@ object Build extends sbt.Build
 
 
 
-  lazy val publishSettings: Seq[Setting[_]] =  bintraySettings ++ Seq(
-    repository in bintray :=  "denigma-releases",
+  lazy val publishSettings: Seq[Setting[_]] =   Seq(
+    bintrayRepository  :=  "denigma-releases",
 
-    bintrayOrganization in bintray := Some("denigma"),
+    bintrayOrganization := Some("denigma"),
 
     licenses += ("MPL-2.0", url("http://opensource.org/licenses/MPL-2.0")),
 
@@ -42,10 +41,9 @@ object Build extends sbt.Build
 
   val sameSettings:Seq[Setting[_]] = Seq(
     organization := "org.denigma",
-    scalaVersion :="2.11.6",
+    resolvers += Resolver.sonatypeRepo("releases"),
+    scalaVersion := Versions.scala,
     version := Versions.semWeb,
-    resolvers += "bintray-alexander_myltsev" at "http://dl.bintray.com/alexander-myltsev/maven/",
-    resolvers += "Sonatype OSS Releases" at "https://oss.sonatype.org/content/repositories/releases",
     parallelExecution in Test := false,
     initialCommands in console := """
                                     |import org.denigma.semweb.rdf._
@@ -76,11 +74,32 @@ object Build extends sbt.Build
   //val semwebModule = XModule(id = "semweb",  defaultSettings = publishSettings ++ sharedSettings ++ XScalaSettings )
   lazy val semweb = CrossProject("semweb",new File("."),CrossType.Full).
     settings(sharedSettings: _*).
+    enablePlugins(BintrayPlugin).
     jsSettings(jsSettings: _* ).
     jvmSettings( jvmSettings: _* )
 
   lazy val semwebJs = semweb.js
   lazy val semwebJvm   = semweb.jvm
+
+  lazy val schemas = CrossProject("schemas",new File("schemas"),CrossType.Full)
+    .settings(sameSettings: _*)
+    .settings(
+      name := "schemas",
+      version := "0.1",
+      scalaVersion := Versions.scala
+    )
+    .dependsOn(semweb)
+    .enablePlugins(BintrayPlugin)
+    .jvmSettings(
+      libraryDependencies ++= Dependencies.schemasJVM.value
+      // Add JVM-specific settings here
+    )
+    .jsSettings(
+      // Add JS-specific settings here
+    )
+
+  lazy val schemasJVM = schemas.jvm //I know it is bad to do this way
+  lazy val schemasJS = schemas.js
 
 
   lazy val sesame = Project(
@@ -110,7 +129,7 @@ object Build extends sbt.Build
                                     |import org.denigma.semweb.sesame._
                                     |""".stripMargin
 
-  )).dependsOn(semwebJvm)
+  )).enablePlugins(BintrayPlugin).dependsOn(semwebJvm).dependsOn(schemasJVM  % "test")
 
 
 }

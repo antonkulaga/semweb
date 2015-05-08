@@ -1,5 +1,6 @@
-package org.denigma.semweb.sesame.test.classes
+package org.denigma.semweb.sesame.test.data
 
+import org.denigma.semweb.sesame.test.classes.BigData
 import org.openrdf.model.impl.{StatementImpl, URIImpl}
 import org.openrdf.model.{Resource, URI, Value}
 

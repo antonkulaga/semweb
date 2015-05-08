@@ -1,10 +1,11 @@
-package org.denigma.semweb.sesame.test.data.genes
+package org.denigma.schemas.common
 
-import org.denigma.semweb.rdf.{IRI, Res, vocabulary}
-import org.denigma.semweb.shex.{PropertyModel, Shape, ShapeBuilder}
+import org.denigma.semweb.rdf.{IRI, vocabulary}
+import org.denigma.semweb.shex.ShapeBuilder
 
 trait ItemsMock
 {
+  self:BasicSchema=>
   protected var properties = List.empty[IRI]
 
   def addProperty(iri:IRI): IRI = {
@@ -14,7 +15,6 @@ trait ItemsMock
 
   def addProperty(label:String): IRI = this.addProperty(de / label)
 
-  protected val de = IRI("http://denigma.org/resource/")
   protected val dc = IRI(vocabulary.DCElements.namespace)
   protected val pmid = de / "Pubmed"
 
@@ -30,25 +30,6 @@ trait ItemsMock
   protected val published =addProperty( de / "is_published_in")
   protected val title = addProperty(de / "title")
   protected val excerpt = addProperty(de / "excerpt")
-
-
-}
-
-
-trait Items {
-
-  var properties = List.empty[IRI]
-
-
-  var items = Map.empty[Res,List[PropertyModel]]
-
-  var shapes:Map[Res,Shape] = Map.empty
-
-  def addShape(shape:Shape) = {
-    val res: Res = shape.id.asResource
-    items = items + (res -> List.empty)
-    shapes  = shapes + (res->shape)
-  }
 
 
 }

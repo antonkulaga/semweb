@@ -1,10 +1,10 @@
-package org.denigma.semweb.sesame.test.data.genes
+package org.denigma.schemas.genes
 
+import org.denigma.schemas.common.BasicSchema
 import org.denigma.semweb.rdf.IRI
 import org.denigma.semweb.rdf.vocabulary._
 
-trait GeneSchemaData {
-  lazy val gero = IRI("http://gero.longevityalliance.org/")
+trait GeneSchemaData extends BasicSchema {
 
   lazy val (entrezId:IRI,adb:IRI,objId:IRI,symbol:IRI, qualifier:IRI, go:IRI,
   ref:IRI, code:IRI , from:IRI, aspect:IRI,  dbObjectName:IRI, synonym:IRI, tp:IRI,

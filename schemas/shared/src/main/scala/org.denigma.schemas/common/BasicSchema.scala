@@ -1,10 +1,10 @@
-package org.denigma.semweb.sesame.test.data.schemas
+package org.denigma.schemas.common
 
-import org.denigma.semweb.rdf.{vocabulary, IRI}
-import org.denigma.semweb.rdf.vocabulary.{WI, XSD, RDFS, RDF}
+import org.denigma.semweb.rdf.vocabulary.{RDF, RDFS, WI, XSD}
+import org.denigma.semweb.rdf.{IRI, vocabulary}
 
 
-class BasicSchema {
+trait BasicSchema {
   val de = IRI("http://denigma.org/resource/")
   val gero = IRI("http://gero.longevityalliance.org/")
   val entrez = IRI("http://ncbi.nlm.nih.gov/gene/")
