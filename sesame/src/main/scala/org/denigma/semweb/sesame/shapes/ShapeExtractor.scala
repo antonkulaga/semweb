@@ -18,6 +18,7 @@ import org.denigma.semweb.shex.validation.{Failed, Valid, ValidationResult}
 import org.denigma.semweb.sparql
 import org.denigma.semweb.sparql.SELECT
 import org.denigma.semweb.sparql._
+import scala.annotation.tailrec
 import scala.util.Try
 
 
@@ -32,11 +33,48 @@ ArcExtractor[ReadConnection]
 {
   lazy val fieldRulesExtractor = new FieldRulesExtractor[ReadConnection]
 
+  /**
+   * Recursive function that extracts shape together with subshapes
+   * @param refs
+   * @param con
+   * @param cache
+   * @param contexts
+   * @return
+   */
+  @tailrec
+  final def shapesFrom(refs:List[Res],con:ReadConnection,cache:Map[Res,Shape] = Map.empty)
+                (implicit contexts:Seq[Resource] = List.empty[Resource]): List[Shape] =
+  refs match
+  {
+    case Nil=>cache.values.toList
+    case head::tail=>
+      if(cache.contains(head)) shapesFrom(tail,con,cache)(contexts) else{
+        val sh = getShape(head,con)(contexts)
+        shapesFrom(sh.shapeRefs.toList++refs,con,cache + (head->sh))(contexts)
+      }
+  }
+
+  /**
+   * Extracts Shape Expressions from the database
+   * @param shapeRes
+   * @param con
+   * @param prefixes
+   * @param contexts
+   * @return
+   */
+  def getShEx(shapeRes:Res,con:ReadConnection,prefixes:Seq[(String,String)] = Seq.empty)
+             (implicit contexts:Seq[Resource] = List.empty[Resource]): ShEx =
+  {
+    val rules: List[Shape] = shapesFrom(shapeRes::Nil,con)(contexts)
+    val label:Label = shapeRes
+    ShEx(label,rules,Some(label),prefixes = prefixes)
+  }
+
   def getShape(shapeRes:Res,con:ReadConnection)(implicit contexts:Seq[Resource] = List.empty[Resource]): Shape =
   {
 
     val arcs = for{
-      res<- con.resources(shapeRes:Resource,ArcRule.property:URI,contexts).toSeq
+      res<- con.resources(shapeRes:Resource,ArcRule.property:URI,contexts)
       arc <- getArc(res,con)(contexts)
     } yield arc
 
@@ -100,6 +138,10 @@ ArcExtractor[ReadConnection]
       //lg.error(s"\n${stem.s.stringValue} IS start OF ${obj.stringValue} EQUALS ${stem.matches(obj)} ")
       stem.matches(obj)
     }
+
+    case ValueReference(ref)=>
+      lg.error("value reference is not yet supported")
+      ???
 
     case _ =>
       lg.error("another unknown ARC case")

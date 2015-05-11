@@ -12,6 +12,7 @@ object WI extends PrefixConfig("http://webintelligence.eu/"){
 
   val PAGES = this /+ "pages"
 
+  val CONFIG = this /+ "conf"
   /**
    * Useful properties for Web projects
    */
@@ -40,14 +41,11 @@ object WI extends PrefixConfig("http://webintelligence.eu/"){
 
   }
 
+  var IRIs: Set[IRI] = Set.empty[IRI]
 
-  val POLICY: PrefixConfig = this /+"policy"
+  val root: IRI= this set "root"
 
-  val SETTINGS: PrefixConfig =  this /+ "settings"
-
-  val CLASSES: PrefixConfig = this /+ "classes"
-
-  val PROPERTIES: PrefixConfig = this /+ "properties"
+  val context: IRI = this set "context"
 
   def re(str:String): IRI = IRI(RESOURCE / str)
 
@@ -55,21 +53,15 @@ object WI extends PrefixConfig("http://webintelligence.eu/"){
 
   def pg(page:String): IRI = IRI(PAGES / page)
 
-  val CONFIG = this /+ "conf"
-
   def conf(name:String): IRI = IRI(CONFIG / name)
 
-  def po(str:String): IRI = IRI(POLICY /str)
+  def set(name:String): IRI= conf(name)
 
   def set(res:IRI): IRI = { IRIs=IRIs+res; res}
 
-  def set(name:String): IRI= this set IRI(SETTINGS / name)
 
-  var IRIs: Set[IRI] = Set.empty[IRI]
 
-  val root: IRI= this set "root"
 
-  val context: IRI = this set "context"
 }
 
 

@@ -1,11 +1,11 @@
 /**
- * Created by antonkulaga on 5/8/15.
+ * Library versions
  */
 object Versions {
 
   val scala = "2.11.6"
 
-  val semWeb = "0.7.3"
+  val semWeb = "0.7.4"
 
   val bigData =  "1.5.1"
 

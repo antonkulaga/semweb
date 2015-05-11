@@ -62,7 +62,14 @@ trait ArcPropertiesQueryExtractor extends QueryExtractor
     Seq(FILTER(STR_CONTAINS(STR(obj),typed)))
   }
 
-  def arcValuePatterns(arc:ArcRule,sub:Variable = Variable("subject"),obj:Variable = ?("object")) =  arc.value match {
+  def arcValueVarPatterns(arc:ArcRule,sub:Variable)(implicit shexp:ShEx) = {
+    val cap = arcCaption(arc)
+    val (p,o) = (?("p_"+cap),?("o_"+cap))
+    (sub,p,o) -> arcValuePatterns(arc,sub,o)(shexp)
+  }
+
+
+  def arcValuePatterns(arc:ArcRule,sub:Variable = Variable("subject"),obj:Variable)(implicit shexp:ShEx) =  arc.value match {
     case ValueStem(stem) =>
       Seq(
         FILTER(IsIRI(obj)),
@@ -75,7 +82,8 @@ trait ArcPropertiesQueryExtractor extends QueryExtractor
       )
 
     case ValueType(tp) if tp == vocabulary.RDF.VALUE=>
-      Seq(Pat(sub,?("anyproperty"),obj))
+      //Seq(Pat(sub,?("anyproperty"),obj))
+      Seq.empty
 
     case ValueType(tp) if tp == vocabulary.RDFS.RESOURCE =>
       Seq(
@@ -91,7 +99,17 @@ trait ArcPropertiesQueryExtractor extends QueryExtractor
       Seq(
         FILTER(IN(obj,set.map(v=>v:RDFElement)))
       )
+
+    case ValueReference(ref)=> valueReferencePatterns(ref.asResource,sub,obj,shexp)
+
   }
+
+  protected def valueReferencePatterns(res:Res,sub:Variable,obj:Variable, shapeExp:ShEx): Seq[RDFElement] =
+  {
+    println("Value Reference patterns are not yet supported!")
+    Seq.empty[RDFElement]
+  }
+
 
   def arcQuery(arc:ArcRule,sub:Variable = Variable("sub"),pred:Variable = ?("pred"),obj:Variable = ?("obj")):SelectQuery = {
 

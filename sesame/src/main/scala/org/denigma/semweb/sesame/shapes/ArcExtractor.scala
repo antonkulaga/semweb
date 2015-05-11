@@ -68,6 +68,11 @@ trait ArcExtractor[ReadConnection<: RepositoryConnection] extends Logged {
       ValueSet(con.objects(id,ValueSet.property,contexts).map(v=>v:RDFValue).toSet)
     }
     else
+    if(con.hasObjectFor(id,ValueReference.property,contexts)){ //todo:unsafe, rewrite!
+      import org.denigma.semweb.sesame._
+      ValueReference(con.resources(id,ValueReference.property,contexts).map(v=>v:Res).head)
+    }
+    else
     {
       if(con.hasObjectFor(id,ValueStem.property,contexts))  con.firstURI(id,ValueStem.property:URI,contexts) match {
         case Some(uri)=>ValueStem(uri)

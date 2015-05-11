@@ -3,8 +3,8 @@ package org.denigma.semweb.composites
 import org.denigma.semweb.messages.{Read, ShapeMessages, StringQueryMessages}
 import prickle.{CompositePickler, Pickler, Unpickler}
 
-/**
- * Created by antonkulaga on 4/17/15.
+/**Created by antonkulaga on 4/17/15.
+  * Picklers and unpicklers for some models that are used to exchange data from server and client
  */
 trait MessagesComposites {
   self:ShapePicklers=>

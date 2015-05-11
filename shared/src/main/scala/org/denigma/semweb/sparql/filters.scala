@@ -53,24 +53,24 @@ case class EXISTS(gr:GP) extends FilterElement
   def stringValue = s"EXISTS {${gr.toString}}"
 }
 
-case class IsIRI(v:Variable) extends FilterElement {
+case class IsIRI(v:CanBeObject) extends FilterElement {
   def stringValue = s"isIRI(${v.toString})"
 }
 
 
-case class IsBlank(v:Variable) extends FilterElement {
+case class IsBlank(v:CanBeObject) extends FilterElement {
   def stringValue = s"isBlank(${v.toString})"
 }
 
-case class IsLiteral(v:Variable) extends FilterElement {
+case class IsLiteral(v:CanBeObject) extends FilterElement {
   def stringValue = s"isLiteral(${v.toString})"
 }
 
-case class IsNumeric(v:Variable) extends FilterElement {
+case class IsNumeric(v:CanBeObject) extends FilterElement {
   def stringValue = s"isNumeric(${v.toString})"
 }
 
-case class DATATYPE(v:Variable,tp:Res) extends FilterElement {
+case class DATATYPE(v:CanBeObject,tp:Res) extends FilterElement {
   override def stringValue =s"( datatype(${v.toString}) = ${tp.toString} )"
   
 }

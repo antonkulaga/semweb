@@ -11,6 +11,11 @@ import scala.annotation.tailrec
 
 trait QueryExtractor {
 
+  /**
+   * Makes a union of elements
+   * @param elems
+   * @return
+   */
   def foldUnion(elems:Seq[RDFElement]):RDFElement = elems.size match {
     case 1 =>elems.head
     case 2 => Union(elems.head,elems.tail.head)

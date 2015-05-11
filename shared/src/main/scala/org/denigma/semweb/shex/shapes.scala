@@ -14,7 +14,10 @@ object ShEx {
   val start = se / "start"
 
   val startTitle = se / "start_title" //in this way we define how the start resource will be called
+
+  implicit lazy val empty = new ShEx(IRILabel(WI.PLATFORM.EMPTY),rules = Seq.empty)
 }
+
 
 /**
  * Shape expressions that contains different shapes
@@ -23,6 +26,11 @@ object ShEx {
  * @param title title of subject
  */
 case class ShEx(id:Label,rules:Seq[Shape], start: Option[Label] = None, title:Option[String] = None, prefixes:Seq[(String,String)] = Seq.empty)   extends Labeled
+{
+  def findShape(lb:Label) = rules.find(sh=>sh.id==lb) //finds shape
+
+  lazy val headOption: Option[Shape] = start.map{case st=>findShape(st)}.getOrElse(rules.headOption)
+}
 
 object Shape {
 
@@ -87,6 +95,11 @@ case class Shape(id: Label, rule: Rule)  extends Labeled
   }
 
   lazy val arcSorted = this.arcRules(this.rule).sortBy(f=>f.priority)
+
+  /**
+   * Unique shape refs
+   */
+  lazy val shapeRefs = arcSorted.collect{   case ArcRule(_,_,ValueReference(ref),_,_,_,_,_)=> ref.asResource   }.toSet
 
   def expand[T](fun:PartialFunction[Rule,List[T]]):PartialFunction[Rule,List[T]] = {
     case  and:AndRule=> and.conjoints.flatMap(v=>fold[T](v)(fun)).toList

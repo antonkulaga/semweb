@@ -82,7 +82,7 @@ object Build extends sbt.Build
   lazy val semwebJvm   = semweb.jvm
 
   lazy val schemas = CrossProject("schemas",new File("schemas"),CrossType.Full)
-    .settings(sameSettings: _*)
+    .settings((sameSettings++publishSettings): _*)
     .settings(
       name := "schemas",
       version := "0.1",

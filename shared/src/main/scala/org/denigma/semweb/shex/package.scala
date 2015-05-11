@@ -1,6 +1,6 @@
 package org.denigma.semweb
 
-import org.denigma.semweb.rdf.{Res, BlankNode, IRI}
+import org.denigma.semweb.rdf._
 import org.denigma.semweb.rdf.vocabulary._
 
 /**
@@ -42,12 +42,13 @@ package object shex {
    */
   implicit def res2ValueType(res:Res): ValueType = ValueType(res)
 
-  implicit def res2Label(res:Res): Label with Product with Serializable = res match
+  implicit def res2Label(res:Res): Label = res match
   {
     case iri:IRI=>this.iri2Label(iri)
     case bnode:BlankNode=>this.bNode2Label(bnode)
   }
 
+  implicit def quad2Trip(quad:Quad): Trip = Trip(quad.sub,quad.pred,quad.obj)
 
 
 

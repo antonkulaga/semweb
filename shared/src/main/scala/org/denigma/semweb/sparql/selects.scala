@@ -7,11 +7,17 @@ object SELECT
 {
   //def apply(params:SelectElement*): SelectQuery = new SelectQuery(params = params.toList)
 
+  def DISTINCT(params:SelectElement*): SelectQuery = SelectQuery(params)
+
   def apply(params:SelectElement*): SelectQuery = SelectQuery(params)
 }
 
+case object Distinct extends Modifier{
+  override def stringValue: String = "DISTINCT"
+}
+trait Modifier extends RDFElement
 
-case class SelectQuery(params:Seq[SelectElement],from:String = "") extends WithWhere with Sliced
+case class SelectQuery(params:Seq[SelectElement],modifiers:Seq[RDFElement] = Seq.empty,from:String = "") extends WithWhere with Sliced
 {
   lazy val vars: Map[String, Variable] = params.collect{case v:Variable=>v.name->v}.toMap
 
@@ -22,7 +28,7 @@ case class SelectQuery(params:Seq[SelectElement],from:String = "") extends WithW
   def FROM_NAMED(iri:IRI):SelectQuery  =  this.copy(from= from + s"FROM NAMED ${iri.toString} ")
 
 
-  def stringValue = s"SELECT $selection $from\n${WHERE.stringValue}\n ${LIMIT.stringValue} ${OFFSET.stringValue}"
+  def stringValue = s"SELECT ${modifiers.map(_.stringValue).mkString(" ")} $selection $from\n${WHERE.stringValue}\n ${LIMIT.stringValue} ${OFFSET.stringValue}"
 
 }
 

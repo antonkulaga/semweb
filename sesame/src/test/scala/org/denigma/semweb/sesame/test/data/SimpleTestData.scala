@@ -10,7 +10,7 @@ import scala.collection.immutable.List
 /**
  * Just creates some test data to be mixed into TestSpec
  */
-trait SimpleTestData
+trait SimpleTestData extends JustTestData
 {
 
   type Triple = (Resource,URI,Value)
@@ -36,7 +36,7 @@ trait SimpleTestData
   /**
    * Test data, arbitary statements to test on
    */
-  val testData =
+  lazy val testData:List[(Resource,URI,Value)] =
     List(
       (Daniel, loves, RDF),
       (Anton, hates, RDF),
@@ -46,21 +46,6 @@ trait SimpleTestData
       (Ilia, loves, Immortality),
       (Edouard, loves, Immortality))
 
-
-
-
-  def add(statements:List[(Resource,URI,Value)])(db:BigData) = {
-    db.write{
-      implicit con=>
-        statements.foreach{case (s,p,o)=>
-          val st = new StatementImpl(s, p, o)
-          con.add(st)
-        }
-
-    }
-  }
-
-  def addTestData(db:BigData) = add(testData)(db)
 
 
 }

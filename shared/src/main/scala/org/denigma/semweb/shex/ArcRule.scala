@@ -65,4 +65,9 @@ case class ArcRule(
     aboutMe++ tlt ++ prior   ++  name.toTriplets(me) ++ value.toTriplets(me) ++  occurs.toTriplets(me)
   }
 
+  lazy val visible = priority match {
+    case Some(v) if v<0 && default.isDefined=>false
+    case other => true
+  }
+
 }

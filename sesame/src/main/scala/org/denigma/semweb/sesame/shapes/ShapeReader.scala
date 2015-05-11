@@ -40,8 +40,8 @@ trait ShapeQueryReader extends SelectReader {
         this.modelStatementsExtractor.extractFromStatements(i.evaluate().toList,valid = false).toSeq
       }   else Seq.empty[PropertyModel]
       vs++vi
-
     }
+
   }
 
 }
@@ -73,10 +73,15 @@ trait ShapeReader extends SesameReader with ShapeQueryReader{
       sts.map{st=>   extractor.getShape(st.getSubject,con)(contexts)   }
   }
 
+
+  def loadShEx(resource:Res,prefixes:Seq[(String,String)])(implicit contexts:Seq[Resource] = List.empty[Resource]): Try[ShEx] =this.read{con=>
+    extractor.getShEx(resource,con,prefixes)(contexts)
+  }
+
+
   def loadShape(resource:Res)(implicit contexts:Seq[Resource] = List.empty[Resource]): Try[Shape] =this.read{con=>
     extractor.getShape(resource,con)(contexts)
   }
-
 
   def loadPropertyModelsByShape(sh:Shape,res:Set[Resource])(implicit contexts:Seq[Resource] = List.empty[Resource]):Try[Set[PropertyModel]] =
     this.read{ con=> for(r<-res) yield modelByShape(sh,r,con)(contexts)
