@@ -36,9 +36,10 @@ object Build extends sbt.Build
     publishArtifact := false
   )
 
-  val sameSettings:Seq[Setting[_]] = Seq(
+  lazy val sameSettings:Seq[Setting[_]] = Seq(
     organization := "org.denigma",
     resolvers += Resolver.sonatypeRepo("releases"),
+    resolvers += Resolver.bintrayRepo("pellucid","maven"),
     scalaVersion := Versions.scala,
     version := Versions.semWeb,
     parallelExecution in Test := false,
@@ -49,29 +50,28 @@ object Build extends sbt.Build
                                     |""".stripMargin
   )
 
-  val sharedSettings: Seq[Setting[_]] = sameSettings++Seq(
+  lazy val sharedSettings: Seq[Setting[_]] = sameSettings++Seq(
       name := "semweb",
       version := Versions.semWeb,
-      scalaVersion := Versions.scala,
       libraryDependencies ++= Dependencies.shared.value
   )
 
-  val jsSettings: Seq[Setting[_]] = publishSettings++ Seq(
+  lazy val jsSettings: Seq[Setting[_]] = publishSettings++ Seq(
     name := "semweb",
     libraryDependencies ++=  Dependencies.semWebJS.value,
     testFrameworks += new TestFramework("utest.runner.Framework"),
     jsDependencies += RuntimeDOM % "test"
   )
 
-  val jvmSettings : Seq[Setting[_]] =  publishSettings++Seq(
+  lazy val jvmSettings : Seq[Setting[_]] =  publishSettings++Seq(
     name := "semweb",
     libraryDependencies ++=  Dependencies.semWebJVM.value,
     testFrameworks += new TestFramework("utest.runner.Framework")
   )
 
-  //val semwebModule = XModule(id = "semweb",  defaultSettings = publishSettings ++ sharedSettings ++ XScalaSettings )
   lazy val semweb = CrossProject("semweb",new File("."),CrossType.Full).
     settings(sharedSettings: _*).
+    settings(scalaVersion:=Versions.scala).
     enablePlugins(BintrayPlugin).
     jsSettings(jsSettings: _* ).
     jvmSettings( jvmSettings: _* )
@@ -83,8 +83,7 @@ object Build extends sbt.Build
     .settings(sameSettings ++ publishSettings: _*)
     .settings(
       name := "schemas",
-      version := Versions.schemas,
-      scalaVersion := Versions.scala
+      version := Versions.schemas
     )
     .dependsOn(semweb)
     .enablePlugins(BintrayPlugin)

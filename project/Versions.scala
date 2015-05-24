@@ -5,7 +5,7 @@ object Versions {
 
   val scala = "2.11.6"
 
-  val semWeb = "0.7.4"
+  val semWeb = "0.7.5" //snapshots are not used due to bintray snapshot resolution problem
 
   val schemas = "0.1"
 
@@ -19,11 +19,11 @@ object Versions {
 
   val parboiled =  "2.1.0"
 
-  val utest = "0.3.1" // is totally broken for me for JS subprojects
+  val utest = "0.3.1"
 
   val scalaTest = "2.2.4"
 
-  val framian = "0.3.3"
+  val framian = "0.3.3" //csv lib for testing
 
   val quickLens = "1.3.1"
 
