@@ -2,8 +2,9 @@ package org.denigma.semweb.rdf.vocabulary
 
 import org.denigma.semweb.rdf.IRI
 
-/*
-refactor
+
+/**
+ * My own internal set of prefixes. In future I should separate it from semweb
  */
 object WI extends PrefixConfig("http://webintelligence.eu/"){
 
@@ -67,7 +68,7 @@ object WI extends PrefixConfig("http://webintelligence.eu/"){
 
 
 /**
- * Main namespace
+ * A class to construct prefixes, TODO: deprecate it
  */
 class PrefixConfig(val namespace:String)
 {

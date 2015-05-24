@@ -7,6 +7,8 @@ object Versions {
 
   val semWeb = "0.7.4"
 
+  val schemas = "0.1"
+
   val bigData =  "1.5.1"
 
   val bigDataSesame = "2.7.13" //BigData devs are lazy to update, but I have to use their sesame in order no to brake my apps that depend on sesame

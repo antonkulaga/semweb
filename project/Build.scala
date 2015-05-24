@@ -16,8 +16,6 @@ object Build extends sbt.Build
 
  protected val bintrayPublishIvyStyle = settingKey[Boolean]("=== !publishMavenStyle") //workaround for sbt-bintray bug
 
-
-
   lazy val publishSettings: Seq[Setting[_]] =   Seq(
     bintrayRepository  :=  "denigma-releases",
 
@@ -27,7 +25,6 @@ object Build extends sbt.Build
 
     bintrayPublishIvyStyle := true
   )
-
 
 
   /**
@@ -55,6 +52,7 @@ object Build extends sbt.Build
   val sharedSettings: Seq[Setting[_]] = sameSettings++Seq(
       name := "semweb",
       version := Versions.semWeb,
+      scalaVersion := Versions.scala,
       libraryDependencies ++= Dependencies.shared.value
   )
 
@@ -82,10 +80,10 @@ object Build extends sbt.Build
   lazy val semwebJvm   = semweb.jvm
 
   lazy val schemas = CrossProject("schemas",new File("schemas"),CrossType.Full)
-    .settings((sameSettings++publishSettings): _*)
+    .settings(sameSettings ++ publishSettings: _*)
     .settings(
       name := "schemas",
-      version := "0.1",
+      version := Versions.schemas,
       scalaVersion := Versions.scala
     )
     .dependsOn(semweb)
@@ -121,7 +119,7 @@ object Build extends sbt.Build
     
     libraryDependencies ++= Dependencies.semWebSesame.value,
 
-    updateOptions := updateOptions.value.withCachedResolution(true),
+    updateOptions := updateOptions.value.withCachedResolution(true), //to speed up dependency resolution
 
     initialCommands in console := """
                                     |import org.denigma.semweb.rdf._
